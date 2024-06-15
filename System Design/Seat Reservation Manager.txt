@@ -1,0 +1,66 @@
+Brute Force :-
+
+class SeatManager {
+     int[] arr;
+    public SeatManager(int n) {
+        arr=new int[n+1];
+        Arrays.fill(arr,-1);
+    }
+    
+    public int reserve() { 
+        for(int i=1;i<arr.length;i++){
+            if(arr[i]==-1){
+                arr[i]=1;
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    public void unreserve(int seatNumber) {
+        if(arr[seatNumber]==1){
+            arr[seatNumber]=-1;
+        }
+    }
+}
+
+/**
+ * Your SeatManager object will be instantiated and called as such:
+ * SeatManager obj = new SeatManager(n);
+ * int param_1 = obj.reserve();
+ * obj.unreserve(seatNumber);
+ */
+
+TC -> O(n*m)
+
+Optimal -
+
+class SeatManager {
+
+   PriorityQueue<Integer> pq=new PriorityQueue<>();
+
+    public SeatManager(int n) {
+      for(int i=1;i<=n;i++){
+          pq.add(i);
+      }     
+    }
+    
+    public int reserve() {
+        int seat=pq.peek();
+        pq.remove();
+        return seat;
+    }
+    
+    public void unreserve(int seatNumber) {
+        pq.add(seatNumber);
+    }
+}
+
+/**
+ * Your SeatManager object will be instantiated and called as such:
+ * SeatManager obj = new SeatManager(n);
+ * int param_1 = obj.reserve();
+ * obj.unreserve(seatNumber);
+ */
+
+TC -> O(nlogm)

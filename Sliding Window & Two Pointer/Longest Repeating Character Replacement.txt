@@ -1,0 +1,23 @@
+class Solution {
+    static int characterReplacement(String s, int k) {
+        // code here
+        HashMap<Character,Integer>map=new HashMap<Character,Integer>();
+        int start=0,maxCountRepeatingCh=0,maxLength=0;
+        for(int end=0;end<s.length();end++){
+            map.put(s.charAt(end),map.getOrDefault(s.charAt(end),0)+1);
+     maxCountRepeatingCh=Math.max(maxCountRepeatingCh,map.get(s.charAt(end)));
+
+            while(end-start+1-maxCountRepeatingCh>k){
+                map.put(s.charAt(start),map.get(s.charAt(start))-1);
+                start++;
+            }
+
+            maxLength=Math.max(maxLength,end-start+1);
+
+        }
+        return maxLength;
+    }
+}
+
+TC - O(N)
+SC - O(26) ~ O(1) Since hashmap will only contain maximum 26 characters

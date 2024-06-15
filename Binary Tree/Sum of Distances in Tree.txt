@@ -1,0 +1,58 @@
+class Solution {
+    int[] ans;
+    int N;
+    int root_distance=0;
+    int[] count;
+    
+    private int dfs_root_count(int node, int parent, int currDepth, List<List<Integer>> adj){
+        int curr_count=1;  //self node count
+        
+        root_distance+=currDepth;
+        
+        for(int next:adj.get(node)){
+            if(next!=parent){
+                curr_count+=dfs_root_count(next,node,currDepth+1,adj);
+            }
+        }
+        
+        count[node]=curr_count;
+        return curr_count;
+    }
+    
+    private void dfs_populate_ans(int node, int parent, List<List<Integer>> adj){ 
+        if(parent!=-1) ans[node]=ans[parent]-count[node]+(N-count[node]);
+        
+        for(int next:adj.get(node)){
+            if(next!=parent) {   
+            dfs_populate_ans(next,node,adj);
+        }
+      }
+      
+    }
+    public int[] sumOfDistancesInTree(int n, int[][] edges) {
+        ans=new int[n];
+        this.N=n;
+        count=new int[n];
+        
+        List<List<Integer>> adj=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<>());
+        }
+        
+        for(int i=0;i<edges.length;i++){
+            int u=edges[i][0];
+            int v=edges[i][1];
+            
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+        
+        dfs_root_count(0,-1,0,adj);
+        
+        ans[0]=root_distance;
+        
+        dfs_populate_ans(0,-1,adj);   //We have to do dfs to fill answer because we need to know the parent for each node
+        
+        return ans;
+    }
+}

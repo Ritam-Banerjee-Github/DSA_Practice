@@ -1,0 +1,3 @@
+Substring with K/atmost K unique characters -> 
+start, end, iterate end from 0 to str.length(), store the char, frequency in HashMap<Character,Integer>(). 
+To get the count of distinct characters -> map.keySet().size() will give the count of distinct characters. Since keys in a map are always unique.

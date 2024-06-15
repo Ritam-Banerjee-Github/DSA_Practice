@@ -1,0 +1,26 @@
+class Solution {
+    List<String> ans=new ArrayList<>();
+    
+    private void solve(int i, int n,String s,HashSet<String> wordSet,String temp){
+        if(i>=n){
+            ans.add(temp.substring(0,temp.length()-1)); //To remove the space added at last
+            return;
+        }
+        
+        for(int j=i;j<n;j++){
+            String currString=s.substring(i,j+1);
+            if(wordSet.contains(currString)){
+                solve(j+1,n,s,wordSet,temp+currString+" ");
+            }
+        }
+    }
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        HashSet<String> wordSet=new HashSet<>();
+        for(String word:wordDict){
+            wordSet.add(word);
+        }
+        int n=s.length();
+        solve(0,n,s,wordSet,"");
+        return ans;
+    }
+}

@@ -1,0 +1,24 @@
+class Solution {
+    static long maxScore(int cardPoints[], int N, int K) {
+        // code here
+        int totSum=0;
+        int minSum=0;
+        int currSum=0;
+        int rem=N-K;
+        for(int i=0;i<N-K;i++){
+            totSum+=cardPoints[i];
+            currSum+=cardPoints[i];
+        }
+        minSum=currSum;
+        for(int i=N-K;i<N;i++){
+            totSum+=cardPoints[i];
+            currSum-=cardPoints[i-rem];
+            currSum+=cardPoints[i];
+            minSum=Math.min(minSum,currSum);
+        }
+        return totSum-minSum;
+    }
+}
+
+TC - O(N)
+SC - O(1)

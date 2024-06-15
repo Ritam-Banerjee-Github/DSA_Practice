@@ -1,0 +1,36 @@
+class Solution {
+    public boolean isEvenOddTree(TreeNode root) {
+        boolean evenLevel=true;
+        Queue<TreeNode> queue=new LinkedList<>();
+        queue.add(root);
+
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            int prev;
+            if(evenLevel){
+               prev=Integer.MIN_VALUE;
+            }else{
+                 prev=Integer.MAX_VALUE;
+            }
+            
+            for(int i=0;i<size;i++){
+                TreeNode node=queue.remove();
+                if(evenLevel==true && (node.val%2==0 || node.val<=prev)) return false;
+
+                if(evenLevel==false && (node.val%2!=0 || node.val>=prev)) return false;
+
+                prev=node.val;
+
+                if(node.left!=null) queue.add(node.left);
+                if(node.right!=null) queue.add(node.right);
+
+            }
+             evenLevel=!evenLevel;
+        }
+        
+        return true;
+    }
+}
+
+TC - O(N)
+SC - O(N)

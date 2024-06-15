@@ -1,0 +1,47 @@
+Brute :
+
+class Solution {
+    public int findDuplicate(int[] nums) {
+        int n=nums.length;
+        HashMap<Integer,Integer> map=new HashMap<>();
+        
+        for(int i=0;i<n;i++){
+            map.put(nums[i],map.getOrDefault(nums[i],0)+1);
+            if(map.get(nums[i])>1) return nums[i];
+        }
+        
+        return -1;
+    }
+}
+
+Optimal : Hare and Tortoise Algorithm to detect Cycle and Start Point of Cycle used in Linked List
+Intuition : Whenever there are duplicates, and the array numbers are in the range of its indexes
+
+class Solution {
+    public int findDuplicate(int[] nums) {
+       int slow=nums[0];
+        int fast=nums[0];
+        
+        slow=nums[slow];
+        fast=nums[nums[fast]];
+        
+        //Detect Cycle
+        while(slow!=fast){
+          slow=nums[slow];
+          fast=nums[nums[fast]];
+        }
+        
+        //Find starting point
+        slow=nums[0];
+        
+        while(slow!=fast){
+            slow=nums[slow];
+            fast=nums[fast];
+        }
+        
+        return slow;
+     }
+} 
+
+
+

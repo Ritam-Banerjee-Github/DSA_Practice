@@ -1,0 +1,58 @@
+Brute :
+class Solution {
+    public int[] singleNumber(int[] nums) {
+        int[] ans=new int[2];
+        int n=nums.length;
+        HashMap<Integer,Integer> map=new HashMap<>();
+        
+        for(int i=0;i<n;i++){
+            map.put(nums[i],map.getOrDefault(nums[i],0)+1);
+        }
+        
+        int index=0;
+        
+        for(int key:map.keySet()){
+            if(map.get(key)==1){
+                ans[index]=key;
+                index++;
+            }
+        }
+        
+        return ans;
+    }
+}
+
+TC : O(N) + O(N)
+SC : O(N)
+
+Optimal :
+class Solution {
+    public int[] singleNumber(int[] nums) {
+        int n=nums.length;
+        
+        int groupA=0;
+        int groupB=0;
+        int xor=0;
+        
+        for(int i=0;i<n;i++){
+            xor=xor^nums[i];
+        }
+        
+        int mask=xor&(-xor);
+        
+        for(int i=0;i<n;i++){
+            if((mask&nums[i])==0){
+                groupA=groupA^nums[i];
+            }else{
+                groupB=groupB^nums[i];
+            }
+        }
+        
+       // int[] ans=new int[]{groupA,groupB};
+        int[] ans={groupA,groupB};
+        return ans;
+    }
+}
+
+TC : O(N) + O(N)
+SC: O(1)

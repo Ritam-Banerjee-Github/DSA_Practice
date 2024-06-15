@@ -1,0 +1,88 @@
+Brute Force -
+class GfG
+{
+    int maxLen(int arr[], int n)
+    {
+        // Your code here
+        int maxi=0;
+        int count=0;
+        int sum=0;
+        for(int i=0;i<n;i++){
+            for(int j=i;j<n;j++){
+                sum+=arr[j];
+                count++;
+                if(sum==0){
+                    maxi=Math.max(maxi,count);
+                }
+            }
+             sum=0;
+            count=0;
+        }
+        return maxi;
+    }
+}
+
+TC - O(N^2)
+SC - O(1) (No extra Space)
+
+Optimal Code if both Positive and Negative elements are present (Using HashMap). But if there are only positive elements then this is a better approach.Optimal is below this.
+class GfG
+{
+    int maxLen(int arr[], int n)
+    {
+        // Your code here
+        int maxi=0;
+        int sum=0;
+        HashMap<Integer,Integer> prefixSum=new HashMap<Integer,Integer>();
+        
+        for(int i=0;i<n;i++){
+            sum+=arr[i];
+            if(sum==0) maxi=Math.max(maxi,i+1);
+            int rem=sum-0;
+            if(prefixSum.containsKey(rem)){
+                maxi=Math.max(maxi,i-prefixSum.get(rem));
+            }
+            if(!prefixSum.containsKey(sum)) prefixSum.put(sum,i); // Because we need the longest so we if we dont add the check then the existing one will be updated if a match is found in future iterations.
+                
+            }
+        return maxi;
+    }
+}
+Time Complexity: O(N) or O(N*logN) depending on which map data structure we are using, where N = size of the array.
+Reason: For example, if we are using an unordered_map data structure in C++ the time complexity will be O(N)(though in the worst case, unordered_map takes O(N) to find an element and the time complexity becomes O(N2)) but if we are using a map data structure, the time complexity will be O(N*logN). The least complexity will be O(N) as we are using a loop to traverse the array.
+
+Space Complexity: O(N) as we are using a map data structure.
+
+Optimal Code if only positive elements are present
+
+int getLongestSubarray(vector<int>& a, long long k) {
+    int n = a.size(); // size of the array.
+
+    int left = 0, right = 0; // 2 pointers
+    long long sum = a[0];
+    int maxLen = 0;
+    while (right < n) {
+        // if sum > k, reduce the subarray from left
+        // until sum becomes less or equal to k:
+        while (left <= right && sum > k) {
+            sum -= a[left];
+            left++;
+        }
+
+        // if sum = k, update the maxLen i.e. answer:
+        if (sum == k) {
+            maxLen = max(maxLen, right - left + 1);
+        }
+
+        // Move forward thw right pointer:
+        right++;
+        if (right < n) sum += a[right];
+    }
+
+    return maxLen;
+}
+
+Time Complexity: O(2*N), where N = size of the given array.
+Reason: The outer while loop i.e. the right pointer can move up to index n-1(the last index). Now, the inner while loop i.e. the left pointer can move up to the right pointer at most. So, every time the inner loop does not run for n times rather it can run for n times in total. So, the time complexity will be O(2*N) instead of O(N2).
+
+Space Complexity: O(1) as we are not using any extra space.

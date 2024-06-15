@@ -1,0 +1,24 @@
+class Solution {
+    public int compareVersion(String version1, String version2) {
+        String[] token1=version1.split("\\.");
+        String[] token2=version2.split("\\.");
+        
+        int n=token1.length;
+        int m=token2.length;
+        
+        int i=0;
+        
+        while(i<n || i<m){
+            int num1=i<n?Integer.parseInt(token1[i]):0;
+            int num2=i<m?Integer.parseInt(token2[i]):0;
+            
+            if(num1>num2) return 1;
+            
+            if(num1<num2) return -1;
+            
+            i++;
+        }
+        
+        return 0;
+    }
+}

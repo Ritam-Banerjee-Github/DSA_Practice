@@ -1,0 +1,117 @@
+Solution with 3D memoization. Test Cases : 539/542
+
+class Solution {
+    HashMap<String,Integer> dp=new HashMap<>();
+    
+    private int dfs(int node, int parent, List<List<Integer>> adj, int[] coins, int k, int power){
+        String key=""+node+parent+power;
+        if(dp.containsKey(key)) return dp.get(key);
+        
+        int ans=0;
+        
+        int option1=((coins[node])/(int)Math.pow(2,power))-k;
+        int option2=coins[node]/(int)(Math.pow(2,power+1));
+        
+        for(int next:adj.get(node)){
+            if(next!=parent){
+                option1+=dfs(next,node,adj,coins,k,power);
+                option2+=dfs(next,node,adj,coins,k,power+1);
+            }
+        }
+        ans=Math.max(option1,option2);
+        dp.put(key,ans);
+        return ans;
+    }
+    public int maximumPoints(int[][] edges, int[] coins, int k) {
+        int m=edges.length;
+        List<List<Integer>> adj=new ArrayList<>();
+        
+        for(int i=0;i<=m;i++){
+            adj.add(new ArrayList<>());
+        }
+        
+        for(int i=0;i<m;i++){
+            int u=edges[i][0];
+            int v=edges[i][1];
+            
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+        
+        int power=0;
+        return dfs(0,-1,adj,coins,k,power);
+    }
+}
+
+All test cases pass soltuion:
+Intuition from Observation :
+ I have printed all the states (i, parent, power) of every recursive call for a test case
+  edges = [[0,1],[1,2],[2,3]], coins = [10,10,3,3], k = 5
+  
+  State = 0,  -1, 0
+  State = 1,  0, 0
+  State = 2,  1, 0
+  State = 3,  2, 0
+  State = 3,  2, 1 <-------
+  State = 2,  1, 1
+  State = 3,  2, 1 <-------
+  State = 3,  2, 2 <-------
+  State = 1,  0, 1
+  State = 2,  1, 1
+  State = 2,  1, 2
+  State = 3,  2, 2 <-------
+  State = 3,  2, 3
+
+  If you notice, i and power itself can uniquely identify the state of a recursive call.
+  Noteice whenever i and power are same for any ther recursive call, then parent is always same (which is obvious - Parent for a node will never change)
+  Example : 
+  State = 3,  2, 1
+  State = 3,  2, 1
+  Or, 
+  State = 3,  2, 2
+  State = 3,  2, 2
+
+  So, you can skip parent in memoization map. You can simply use 2-d array to memoize.
+(Using Recursion + Memoization of 2 parameters - 2D Memoization)
+T.C : O(V+E) - Just traversing the Graph using DFS
+S.C : O(V + E) - adj
+class Solution {
+    int N;
+    List<Integer>[] G;
+    Integer dp[][];
+    public int maximumPoints(int[][] edges, int[] coins, int k) {
+        N = coins.length; 
+        G = new ArrayList[N];
+        dp = new Integer[N+1][14];
+        for (int i = 0; i < N; i++) {
+            G[i] = new ArrayList<>();
+        }
+        for (int[] e : edges) {
+            G[e[0]].add(e[1]);
+            G[e[1]].add(e[0]);
+        }
+        
+        return getMax(0, -1, 0, coins, k);
+    }
+    
+    public int getMax(int i, int parent, int pow, int[] coins, int k) {
+        if (pow >= 14) {
+            return 0;
+        }
+        if  (dp[i][pow] != null) {
+            return dp[i][pow];
+        }
+        
+        int res1 = (coins[i] >> pow) - k;
+        int res2 = (int)Math.floor((coins[i] >> (pow+1)));
+        for (int u : G[i]) {
+            if (u == parent) {
+                continue;
+            }
+            res1 += getMax(u, i, pow, coins, k);
+            res2 += getMax(u, i, pow+1, coins, k);
+        }
+
+        return dp[i][pow] = Math.max(res1, res2);
+    }
+}

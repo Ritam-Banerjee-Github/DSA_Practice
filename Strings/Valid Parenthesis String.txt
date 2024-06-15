@@ -1,0 +1,74 @@
+class Solution {
+    public boolean checkValidString(String s) {
+        int n=s.length();
+
+        Stack<Integer> openStack=new Stack<>();
+        Stack<Integer> starStack=new Stack<>();
+        
+        for(int i=0;i<n;i++){
+            if(s.charAt(i)=='*'){
+                starStack.push(i);
+            }else if(s.charAt(i)=='('){
+                openStack.push(i);
+            }else{
+                if(!openStack.isEmpty()){
+                    openStack.pop();
+                    continue;
+                }else{
+                    if(!starStack.isEmpty()){
+                        starStack.pop();
+                        continue;
+                    }
+                    return false;
+                }    
+            }
+        }
+        
+        while(!openStack.isEmpty() && !starStack.isEmpty()){           // Need to store index, because in the end if there are open bracket at index after star then it is not valid as we cannot make star as open or closed bracket in the end
+
+           if(starStack.peek() < openStack.peek()) return false;
+            
+            openStack.pop();
+            starStack.pop();
+        }
+        
+        return openStack.isEmpty();
+    }
+}
+
+//Approach-2 (Using Bottom Up)
+//T.C : O(n*n)
+//S.C : O(n*n)
+class Solution {
+    public boolean checkValidString(String s) {
+        int n = s.length();
+        boolean[][] t = new boolean[n + 1][n + 1];
+
+       //t[i][j] => String from i to n-1 with j open brackets
+
+        t[n][0] = true;  // To take care of edge case if empty string  : "" -> Empty string with 0 open bracket will be true
+
+        for (int i = n - 1; i >= 0; i--) {
+            for (int open = 0; open < n; open++) {
+                boolean isValid = false;
+
+                if (s.charAt(i) == '*') {
+                    isValid |= t[i + 1][open + 1];
+                    if (open > 0) {
+                        isValid |= t[i + 1][open - 1];
+                    }
+                    isValid |= t[i + 1][open];
+                } else {
+                    if (s.charAt(i) == '(') {
+                        isValid |= t[i + 1][open + 1];
+                    } else if (open > 0) {
+                        isValid |= t[i + 1][open - 1];
+                    }
+                }
+                t[i][open] = isValid;
+            }
+        }
+
+        return t[0][0];
+    }
+}

@@ -1,0 +1,24 @@
+In BST, searching is performed in O(logN) time, whereas for BT, it is O(N) time.
+In BST, inOrder traversal will traverse the tree in ascending order. To find k'th small element, we can do inorder traversal and keep count++, and return value when count ==k.
+Kth Largest element in BST. Do traversal to count number of nodes. Then do inorder traversal for (N-k)th element 
+
+
+Delete Node from BST ->
+If root is null return null
+if root.val==key, then call helper function for root
+TtreeNode dumm=root;
+while(root!=null){
+If root.val is greater than key. Then check if (root.left is not null and root.left.val==key), then root.left=helper(root.left)
+                                                Else root=root.left;
+Else If (root.right is not null and root.right.val==key), then root.right=helper(root.right)
+                       Else root=root.right;
+}
+
+Helper(root){
+if root.right==null return root.left
+else, if root.left==null, return root.right;
+
+lastRight=findlastRight(root.left)
+lasrRight.right=root.right;
+return root.left;
+}

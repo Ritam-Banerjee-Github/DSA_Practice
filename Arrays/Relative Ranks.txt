@@ -1,0 +1,63 @@
+class Pair{
+    int num;
+    int index;
+    
+    public Pair(int num, int index){
+        this.num=num;
+        this.index=index;
+    }
+}
+class Solution {
+    public String[] findRelativeRanks(int[] score) {
+        int n=score.length;
+        String[] ans=new String[n];
+        
+        PriorityQueue<Pair> pq=new PriorityQueue<>(new Comparator<Pair>(){
+           public int compare(Pair a, Pair b){
+               if(a.num>b.num){
+                   return -1;
+               }else if(a.num<b.num){
+                   return 1;
+               }else{
+                   return 0;
+               }
+           } 
+        });
+        
+        for(int i=0;i<n;i++){
+            pq.add(new Pair(score[i],i));
+        }
+        
+        int rank=0;
+        
+        while(!pq.isEmpty()){
+            Pair p=pq.remove();
+            int num=p.num;
+            int index=p.index;
+            rank++;
+            
+            if(rank==1){
+                ans[index]="Gold Medal";
+                }else if(rank==2){
+                ans[index]="Silver Medal";
+            }else if(rank==3){
+                ans[index]="Bronze Medal";
+            }else{
+                ans[index]=""+rank;
+            }
+        }
+        
+        return ans;
+    }
+}
+
+
+
+
+
+The time complexity of the provided code can be analyzed as follows:
+
+Creating Priority Queue (pq): The priority queue is initialized with the given Comparator. Initializing a priority queue takes O(n) time because each element is inserted individually, and the insertion operation in a priority queue takes O(log n) time. So, overall, initializing the priority queue takes O(n * log n) time.
+Inserting elements into Priority Queue: In the for loop, all elements from the score array are inserted into the priority queue. This operation takes O(n * log n) time because inserting each element takes O(log n) time in a priority queue, and there are 'n' elements.
+Removing elements from Priority Queue: The while loop runs 'n' times, where 'n' is the number of elements in the priority queue. Inside the loop, one element is removed from the priority queue (pq.remove()), which takes O(log n) time. So, this loop also takes O(n * log n) time.
+Therefore, the overall time complexity of the provided code is O(n * log n), where 'n' is the length of the score array.

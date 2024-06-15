@@ -1,0 +1,36 @@
+class Solution {
+    int result=Integer.MIN_VALUE;
+    int m;
+    private void solve(int index, int count, int[] resultant,int[][] requests){
+      if(index>=m){
+          boolean allZero=true;
+          for(int i:resultant){
+              if(i!=0) allZero=false;
+          }
+
+          if(allZero){
+              result=Math.max(result,count);
+          }
+
+          return;
+      }
+
+       int from=requests[index][0];
+       int to=requests[index][1];
+       
+       resultant[from]--;
+       resultant[to]++;
+       solve(index+1,count+1,resultant,requests);
+
+       resultant[from]++;
+       resultant[to]--;
+       solve(index+1,count,resultant,requests);
+    }
+    public int maximumRequests(int n, int[][] requests) {
+        m=requests.length;
+        int[] resultant=new int[n];
+
+        solve(0,0,resultant,requests);
+        return result;
+    }
+}

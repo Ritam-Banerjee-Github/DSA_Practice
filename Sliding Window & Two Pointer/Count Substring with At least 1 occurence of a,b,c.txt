@@ -1,0 +1,20 @@
+class Solution {
+    public static int countSubstring(String s) {
+        // code here
+        int a=-1,b=-1,c=-1;
+        int count=0;
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)=='a') a=i;
+            if(s.charAt(i)=='b') b=i;
+            if(s.charAt(i)=='c') c=i;
+            
+            if(i>1){
+                count+=Math.min(a,Math.min(b,c))+1;
+            }
+        }
+        return count;
+    }
+}
+
+TC - O(N)
+SC - O(1)

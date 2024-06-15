@@ -1,0 +1,20 @@
+class Solution {
+    public int partitionString(String s) {
+        int[] lastSeen=new int[26];
+        Arrays.fill(lastSeen,-1);
+
+        int startCurrSubstring=0;
+        int ans=0;
+
+        for(int i=0;i<s.length();i++){
+            if(lastSeen[s.charAt(i)-'a']>=startCurrSubstring){
+                startCurrSubstring=i;
+                ans++;
+            }
+
+            lastSeen[s.charAt(i)-'a']=i;
+        }
+
+        return ans+1; //for loop will end ans last substring will not be counted. 
+    }
+}

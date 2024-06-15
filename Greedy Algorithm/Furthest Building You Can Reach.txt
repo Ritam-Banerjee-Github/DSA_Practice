@@ -1,0 +1,44 @@
+class Solution {
+    public int furthestBuilding(int[] heights, int bricks, int ladders) {
+        int n=heights.length;
+        int i=0;
+        
+        PriorityQueue<Integer> pq=new PriorityQueue<Integer>(Collections.reverseOrder());  //Max heap, as by default its min heap. Operations : add,peek,poll(to remove first), remove(o)- to remove specific object
+        
+        for(;i<n;i++){
+            if(i==n-1) return i;
+            
+            if(heights[i]>=heights[i+1]){
+                continue;
+            }else{
+                int diff=heights[i+1]-heights[i];
+                  
+                  if(bricks>=diff){
+                      bricks-=diff;
+                      pq.add(diff);
+                  }else if(ladders>0){
+                     if(!pq.isEmpty()){
+                         int maxBricksPast=pq.peek();
+                         
+                         if(maxBricksPast>diff){
+                             bricks+=maxBricksPast;
+                             pq.poll();
+                             bricks-=diff;
+                             pq.add(diff);
+                             ladders--;
+                         }else{
+                             ladders--;
+                         }
+                    }else{
+                         ladders--;
+                     } 
+                      
+                  }else{
+                      return i;
+                   }
+            }
+        }
+        
+        return -1;
+    }
+}

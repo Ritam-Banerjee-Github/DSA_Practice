@@ -1,0 +1,226 @@
+https://takeuforward.org/data-structure/dynamic-programming-introduction/
+
+Top Down is just Opposite of Bottom Up (But always think logically, its not just from n-1 to 0 for one and 0 to n-1 for another)
+Top Down -> Bigger Problem -> Break into Smaller Problems -> Reach till Base Case
+Bottom Up -> Smaller Problems -> Combine them to form result of the bigger problem asked originally.
+
+What is the use of DP array? To store past computed results. If in case the values are negative then instead of array simply use some other Data Structure. Ex - HashMap(for 2D DP)
+
+For House Robber 2(Circular Road Houses) - Create 2 arraylists(arr1 excluding first house, arr2 excluding last house) as we know that first and last house will be adjacent so they will never be in the ans list. Perform Max Sum of Non Adjacent Elements on both arr1 and arr2 and return the maximum.When idex==0, we will pick that item since we need to get maximum value.
+
+For Ninja's Training Problem(Striver's Playlist) -
+In order to keep a track of last performed task, we need to declare a variable called 'last' and passing it in recursion. Hence we need a 2D DP for index and last performed task, 'last'.
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+For Minimum Path Sum in Grid -
+while trying all possible paths for minimum path, if there is any path which lead to index out of bounds like(i<rows or j<columns) then that path cannot be the answer. So we have to make sure that we never choose that path by returning INT_MAX(for Minimum) and INT_MIN(for maximum).
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+DP on Subsequences (Pick and NotPick)
+
+Subsequences with Target Sum K- 
+When asked to find Min/Max/True values, always set 'TAKE' to MAX/MIN/False initially.
+
+Two changing indexes - Array Index and Target
+
+Base Cases
+if(target==0) return true
+if(arr[0]<=target) return (arr[0]==target)
+
+ dp[ind][target]=notTaken||taken?1:0;
+    return notTaken||taken;
+
+
+    if(dp[ind][target]!=-1)
+        return dp[ind][target]==0?false:true;
+
+Count Number of Subsequences with target Sum=k (The above base case works if array contains positive integers. But if array contains 0 then the base case will be)
+
+Base Case-
+if(index==0){     // Travel till last index
+ if(target==0 && arr[index]==0) return 2;
+ else if(target==0 || arr[index]==target) return 1;
+  return 0;
+}
+0/1 Knapsack -
+Two changing indexes - Array Index and Bag Weight(W)
+
+Take(Initially keep as Integer_MIN_VALUE and check if weight[index]<=W)& Not Take
+
+Base Case -
+if(index==0){
+      if(weight[0]<=W) return weight[0];
+      return 0;
+     }
+
+Coin Change - (If given infinite supply of coins)
+Base Case-
+// Count minimum number of coins
+if(index==0){
+    if(target%coins[0]==0) return target/coins[0];
+     return (int)(1e9); // Not Integer.MAX_VALUE because once this is returned we are adding +1 in prev function so the value might overflow MAX_VALUE.
+}
+
+take =Initially 0(for count minimim number of coins)
+if(coins[index]<=target) take=1+utility(index(same index as we are given infinite supply so we can choose multiple times),target-coins[index])
+
+Time Complexity- Here, since we have infinite supply and standing at same index in case of 'TAKE' so the TC is more than 2^n. Lets call it exponential. But after adding memoization it becomes O(N*M)
+
+
+Rod Cutting ->
+(index,length)
+Base Case-> length*price[0];
+
+ int notTaken = 0 + cutRodUtil(price,ind-1,length,dp);
+    
+    int taken = Integer.MIN_VALUE;
+    int rodLength = ind+1;
+    if(rodLength <= length)
+        taken = price[ind] + cutRodUtil(price,ind,length-rodLength,dp);[Stay at same index]
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+DP on Strings (Match or Not Match)
+
+Longest Common Subsequence 
+
+Given Two Strings(S1,S2) of length n and m
+
+Base Case
+if(i<0 || j<0){
+return 0;
+}
+
+if(S1.charAt(index)==S2.charAt(index)
+return 1+f(i-1,j-1,S1,S2)
+// If not matches, then we take maximum out from shifting the indexes by 1.
+return Math.max(f(i,j-1,S1,S2),f(i-1,j,S1,S2))
+
+For tabulation, since the base case is when i||j becomes negative, we cant store negative index in a dp[][] matrix. 
+So we shift the indexes by 1. Now, f(i,j,S1,S2) will point to i-1,j-1
+
+Base Case
+if(i==0||j==0){
+return 0;
+}
+
+if(S1.charAt(i-1)==S2.charAt(j-1){
+return 1+f(i-1,j-1,S1,S2)
+// If not matches, then we take maximum out of shifting them 1 by 1.
+return Math.max(f(i,j-1,S1,S2),f(i-1,j,S1,S2))
+
+Longest Common Substring - (Substring is continuous)
+
+Modified Tabulation
+If we use recursion, then we have to take third variable
+
+Minimum Insertions to Make String Palindrome -> (String Length - (Longest Palindromic Subsequence of String))
+
+Minimum Insertions/Deletion to Convert String A to B -> 
+Deletion = (Length of String A - (LCS of A and B))
+Insertion = (Length of String B - (LCS of A and B))
+//Since the question asked is Minimum
+Total = Deletion + Insertion
+
+
+Longest Palindromic Subsequence 
+
+ String t = s;
+    String ss=new StringBuilder(s).reverse().toString();
+    return lcs(ss,t);
+
+
+
+Shortest Common Supersequence of String 1 and String 2 -
+
+Length of String 1 + Length of String 2 - LCS of String 1 & 2
+ 
+
+Count number of Distinct Subsequences of String 2 in String 1- (String Matching)
+Base case
+if(j==0) return 1;  // After shifting indexes by 1
+if(i==0 && j!=0) return 0;
+
+if matches(make two calls, 1 by moving both indexes by 1 and another by only moving i by 1)
+if not match (move i by 1)
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+Longest Increasing Subsequence (LIS)-
+
+Approach 1 -
+Two parameters(index,prev_index) - Initially (0,-1)
+
+Earlier for recursion we were moving backwards from (n-1) to 0. But for this we will move from 0 to (n-1) for Recursion and (n-1) to 0 for Tabulation(We return dp[0][0])
+Note - For Tabulation, prev_index will be from index-1 -> for (int prev_index = ind-1; prev_index >=-1; prev_index --)
+
+Base Case 
+if(index==n) return 0;
+
+if(dp[index][prev_index+1]!=-1) return dp[index][prev_index+1];
+
+int notTake=0+f(index+1,prev_index)
+
+int take=0;
+
+if(prev_indx==-1 || arr[index]>arr[prev_index]){
+
+take=1+f(index+1,index);
+
+}
+
+return dp[index][prev_index+1]=Math.max(take,notTake);
+
+
+Now to memoize this, we use DP array. But we need to shift the index by 1 to take care of (prev_index=-1)
+
+dp[n][n];
+
+Approach 2-
+
+We use binary search to given the length of LIS. This will not store the correct LIS, so we only use this for finding length. 
+TC - O(N*logN)
+SC - O(N)
+
+Approach 3-
+Use dp[n](Initially all values should be 1) array which stores the count of longest increasing subsequence at index i till index i.
+Most Followed approach for -> Printing, Divisible, Bitonic, Count number of LIS
+
+Longest Divisible Subset -
+
+To make sure divisibility condition prevails for all elements, we will sort the Array(Subset) in increasing order first, no need to sort if Subsequence is given.
+And change the condition for divisibility in Print LIS logic.  
+
+TC - O(N*N)+O(N)[Print]
+
+Longest String Chain -
+
+If the question is given as sequence/subset(not Subsequence) then first sort the array by word length(Use custom comparator)
+Use Approach 3 of LIS by changing the condition to compare both strings and check if they differ by only 1 length & 1 character(other characters should be same).
+
+Longest Bitonic Subsequence -
+
+Bitonic - Only Increasing OR Only Decreasing OR (Increasing, then Decreasing)
+
+Use Approach 3 for LIS and compute dp1(start from front) and dp2(start from back) amd return the max value in dp array -> dp1+dp2 -1(One element will be common)  
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+Buy and Sell Stocks (Two Options Buy OR Sell, not both)-
+After one transaction is completed(Buy+Sell) then only we can move to next transaction.
+We define a variable buy=(0 -> cannot buy, 1 -> buy)
+
+This time Recursion + Memoization we go 0 to n-1 and while tabulation, we go n-1 to 0. But in main function, return (0,1,k) will be same
+Base Case ->
+if(index==n) return 0(Max Profit will be Zero then);
+* in case Transaction limit is given then add
+if(limit==0) return 0;
+int profit=0;
+if(buy==1)
+profit=Math.max([buy] -> -price[i]{Since we are buying, so we give money to market} + f(index+1,0{cannot buy now unless sell},limit,prices,dp),[not Buy] -> 0+f(index+1,1,limit,prices,dp);
+}
+else
+if(buy==0) {We have to Sell}{
+profit=Math.max(price[i]{Sell, and take money out of market) +f(index+1,1,limit-1{1 transasction is completed},prices,dp),0+f(index+1,0,limit,prices,dp));
+}
+return profit;
+
+-------------------------------------------------------------------------------------------

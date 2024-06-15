@@ -1,0 +1,32 @@
+class Solution 
+{
+    //Function to find minimum number of attempts needed in 
+    //order to find the critical floor.
+  
+    private static int utility(int e, int f, int[][] dp){
+        if(e==1) return f;
+        if(f==0 || f==1) return f;
+        
+        if(dp[e][f]!=-1) return dp[e][f];
+        int ans=Integer.MAX_VALUE;
+        int breaks=0;
+        int notBreak=0;
+        
+        for(int k=1;k<=f;k++){
+            breaks=1+utility(e-1,k-1,dp);
+            notBreak=1+utility(e,f-k,dp);
+            ans=Math.min(ans,Math.max(breaks,notBreak));
+            }
+            
+            return dp[e][f]=ans;
+    }
+    static int eggDrop(int n, int k) 
+	{
+	    // Your code here
+	     int[][] dp=new int[n+1][k+1];
+	    for(int[] row:dp){
+	        Arrays.fill(row,-1);
+	    }
+	    return utility(n,k,dp);
+	}
+}

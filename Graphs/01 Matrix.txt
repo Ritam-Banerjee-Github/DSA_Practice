@@ -1,0 +1,52 @@
+import java.util.*;
+
+class Data{
+	int row;
+	int col;
+	int step;
+	public Data(int row,int col,int step){
+		this.row=row;
+		this.col=col;
+		this.step=step;
+	}
+}
+public class Solution {
+	public static ArrayList<ArrayList<Integer>> nearest(ArrayList<ArrayList<Integer>> mat, int n, int m) {
+		// Write your code here.
+		ArrayList<ArrayList<Integer>> dist=mat;
+		Queue<Data> q=new LinkedList<>();
+		int[][] vis=new int[n][m];
+		for(int i=0;i<n;i++){
+			for(int j=0;j<m;j++){
+				if(mat.get(i).get(j)==1){
+					vis[i][j]=1;
+					dist.get(i).set(j,0);
+                                        q.add(new Data(i,j,0));
+				}
+			}
+		}
+	
+                int[] delrow={-1,0,1,0};
+		int[] delcol={0,1,0,-1};
+
+		while(!q.isEmpty()){
+                  Data d=q.peek();
+		  int row=d.row;
+		  int col=d.col;
+		  int step=d.step;
+		  dist.get(row).set(col,step);
+		  q.remove();
+
+		  for(int i=0;i<4;i++){
+			  int nrow=row+delrow[i];
+			  int ncol=col+delcol[i];
+			  if(nrow<n && nrow>=0 && ncol<m && ncol>=0 && vis[nrow][ncol]!=1){
+				  vis[nrow][ncol]=1;
+				  q.add(new Data(nrow,ncol,step+1));
+			  }
+		      }
+		}
+
+		return dist;
+	}
+}

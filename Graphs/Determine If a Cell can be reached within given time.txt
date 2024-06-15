@@ -1,0 +1,15 @@
+Brute force is normal BFS/DFS, but this wont work due to such high constraints give for 't'. Thats why we find the time taken in shortest path (which is max of hor distance and ver distance) and return true if 't' >=minTime. This is O(1) solution. 
+
+class Solution {
+    public boolean isReachableAtTime(int sx, int sy, int fx, int fy, int t) {
+        if(sx==fx && sy==fy && t==1) return false;
+        int hor=Math.abs(fx-sx);
+        int ver=Math.abs(fy-sy);
+
+        int minTime=Math.max(hor,ver);
+
+        if(t<minTime) return false;
+
+        return true;
+    }
+}

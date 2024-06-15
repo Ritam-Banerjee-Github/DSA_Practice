@@ -1,0 +1,38 @@
+class Solution {
+    private int countMinSteps(int ringIndex,int currStep,int n){
+        int antiClockWise=Math.abs(currStep-ringIndex);  //forward direction
+        int clockWise=n-antiClockWise;  //wrap around
+        
+        return Math.min(antiClockWise,clockWise);
+    }
+    private int solve(int ringIndex, int keyIndex, String ring, String key,int[][] dp){
+        if(keyIndex>=key.length()) return 0;
+        
+        if(dp[ringIndex][keyIndex]!=-1) return dp[ringIndex][keyIndex];
+        
+        int ans=Integer.MAX_VALUE;
+        
+        for(int i=0;i<ring.length();i++){                       //we use for loop because therecan be two occurence of same character, and the answer for subsequent indexes will vary based on the previous ringIndex we choose. So we need to calculate the minimum from all possible options
+
+            if(ring.charAt(i)==key.charAt(keyIndex)){
+                int minSteps=countMinSteps(ringIndex,i,ring.length());
+                
+                ans=Math.min(ans,minSteps+solve(i,keyIndex+1,ring,key,dp)+1);
+            }
+        }
+        
+        return dp[ringIndex][keyIndex]=ans;
+    }
+    public int findRotateSteps(String ring, String key) {
+        int[][] dp=new int[102][102];
+     for(int[] row:dp){
+             Arrays.fill(row,-1);
+            }
+        return solve(0,0,ring,key,dp);
+    }
+}
+
+//T.C : Without Memoization : O(n^m), where n is the length of the ring string and m is the length of the key string. This is because for each character in the key, 
+                             //the algorithm will explore all possible positions in the ring string recursively, without reusing any previous results.
+        //With Memoization  : O(n^2 * m)
+//S.C : O(101*101) ~ O(1)

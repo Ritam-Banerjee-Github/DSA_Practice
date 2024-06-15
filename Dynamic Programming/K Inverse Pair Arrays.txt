@@ -1,0 +1,26 @@
+class Solution {
+    int mod=(int)(1e9+7);
+    
+    private int solve(int n,int k,int[][] dp){
+        if(n==0) return 0;
+        if(k==0) return 1;
+        
+        if(dp[n][k]!=-1) return dp[n][k];
+        
+        int result=0;
+        for(int inv=0;inv<=Math.min(n-1,k);inv++){  //Note: For an array of size n and numbers from 1 to n. There can be max (n-1) inverse pairs.
+            result=(result+solve(n-1,k-inv,dp))%mod;
+        }
+            
+        return dp[n][k]=result;    
+    }
+    public int kInversePairs(int n, int k) {
+        int[][] dp =new int[n+1][k+1];
+        for(int[] row:dp){
+            Arrays.fill(row,-1);
+        }
+        return solve(n,k,dp);
+    }
+}
+
+TC - O(n*k*(n-1))

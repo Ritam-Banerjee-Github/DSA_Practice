@@ -1,0 +1,20 @@
+class Solution {
+    public String breakPalindrome(String palindrome) {
+        int n=palindrome.length();
+        if(n==1) return ""; // Any string with only 1 char will always be a palindrome
+        
+        StringBuilder str=new StringBuilder(palindrome);
+        
+        for(int i=0;i<n/2;i++){  //Since it is palindrome so we only need to traverse half of the string. Bcz the other half will be same.
+
+            if(palindrome.charAt(i)!='a'){
+                str.setCharAt(i,'a');
+                return str.toString();
+            }
+        }
+        
+        str.setCharAt(n-1,'b'); //This means all the characters are 'a'. So we replace the last char wiht 'b' for lexicographically smallest.
+
+        return str.toString();
+    }
+}

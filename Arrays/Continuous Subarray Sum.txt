@@ -1,0 +1,47 @@
+Brute :
+class Solution {
+    public boolean checkSubarraySum(int[] nums, int k) {
+        int n=nums.length;
+        
+        for(int i=0;i<n-1;i++){
+            int sum=nums[i];
+            for(int j=i+1;j<n;j++){
+                sum+=nums[j];
+                if(sum%k==0) return true;
+            }
+        }
+        return false;
+    }
+}
+
+TC - O(N^2)
+
+Optimal : Modulo Maths
+
+class Solution {
+    public boolean checkSubarraySum(int[] nums, int k) {
+        int n=nums.length;
+        if(n==1) return false;
+        
+        Map<Integer,Integer> map=new HashMap<>();
+        int sum=0;
+        map.put(sum,-1);
+        
+        for(int i=0;i<n;i++){
+          sum+=nums[i];
+          int remainder=sum%k;
+            
+          if(map.containsKey(remainder)){
+              int key=map.get(remainder);
+              int size=i-key;
+              if(size>=2) return true;
+          }
+            
+          if(!map.containsKey(remainder))map.put(remainder,i);  //As we need to store only first index, to get longest size 
+             
+        }
+        return false;
+    }
+}
+
+TC : O(N)

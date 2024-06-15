@@ -1,0 +1,43 @@
+class Solution {
+    HashMap<String,Integer> map=new HashMap<>();
+    
+    private boolean hasDuplicate(String s1, String s2){
+        int[] ch=new int[26];
+        
+        for(int i=0;i<s1.length();i++){   //First Check if the current string itself contains duplicate characters
+ 
+           if(ch[s1.charAt(i)-'a']>0){
+                return true;
+            }
+            ch[s1.charAt(i)-'a']++;
+        }
+        
+        for(int i=0;i<s2.length();i++){
+            if(ch[s2.charAt(i)-'a']>0) return true;
+        }
+        
+        return false;
+    }
+    private int solve(int i,String temp, int n, List<String> arr){
+        if(i>=n) return temp.length();
+        
+        if(map.containsKey(temp)) return map.get(temp);
+        
+        int exclude=solve(i+1,temp,n,arr);
+        int include=Integer.MIN_VALUE;
+        
+        if(!hasDuplicate(arr.get(i),temp)){
+            include=solve(i+1,temp+arr.get(i),n,arr);
+        }
+        
+        int res=Math.max(exclude,include);
+        map.put(temp,res);
+        return res;
+    }
+    public int maxLength(List<String> arr) {
+        int n=arr.size();
+        String temp="";
+        
+        return solve(0,temp,n,arr);
+    }
+}

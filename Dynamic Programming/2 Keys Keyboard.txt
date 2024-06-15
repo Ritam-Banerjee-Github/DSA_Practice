@@ -1,0 +1,62 @@
+Intuition
+We can think of an intutive recursive approach.We have two possible options at every step we can either copy all the characters of our current string or we can paste the earlier copied characters which in turn increases the length of our current string.
+So by checking every such possiblity if our current string length becomes equal to the given length so we can surely make the string and otherwise we can't make the given string and we can calculate the min steps needed.
+
+Approach
+In our code we have taken 3 parameters currLen,copyLen,flag which indicates:
+1.currLen - current length of our string and its initial value is 1 as initially we have only 1 'A' in our string.
+copyLen - it indicates the length of copied characters after we have copied some characters in the previous step.
+flag - it indicates wheter you have to copy or paste the characters in the string at any particular moment .
+Some facts about flag :
+->flag=0 means we have both options to copy and paste but initially when currLen =1 we have to copy as earlier we have copied nothing so we cannot paste
+->flag=1 means you have only one option i.e to paste as in previous step you have copied some characters and now if you do same you will go into an infinite neverending loop and will result in TLE.
+->We we copy charachers then our currLen remains same and the copyLen changes to currLen as we copy all characters of our current string and flag value changes to 1 as 1 indicates copying of characters
+->When we paste characters out currLen changes to currLen+copyLen, copyLen and flag value remains same
+
+Here the naive recursive code can be optimized using memoization using a 3-d dp array
+
+Code
+Java
+
+class Solution {
+    long [][][]dp;
+    private long solve(int n,int currLen,int copyLen,int flag)
+    {
+        if(currLen==n)
+            return 0;
+        if(currLen>n)
+            return Integer.MAX_VALUE;
+        if(dp[currLen][copyLen][flag]!=-1)
+            return dp[currLen][copyLen][flag];
+
+        //at every step we can either copy entire currLen or we can paste the chars but initially as we have 1 char so we have to copy it as we can't paste once we have copied characters so we have to paste chars in the next move
+
+        if(currLen==1 && flag==0) //this condition is only true for the first time
+            return dp[currLen][copyLen][flag]=1+solve(n,currLen,1,1);
+        else
+        {
+            // only 1 option to paste as earlier we have copied
+            if(flag==1)
+            {
+                return dp[currLen][copyLen][flag]=1+solve(n,currLen+copyLen,copyLen,0);
+            }
+            else    // when flag==0 we have both options
+            {
+                long y=solve(n,currLen+copyLen,copyLen,flag)+1; //paste 
+                long z=solve(n,currLen,currLen,1)+1;        //copy
+                return dp[currLen][copyLen][flag]=Math.min(y,z);
+
+            }
+        }
+
+    }
+    public int minSteps(int n) {
+        dp=new long[n+1][n+1][2];
+        for(int i=0;i<=n;i++)
+            for(int j=0;j<=n;j++)
+                Arrays.fill(dp[i][j],-1);
+        long ans= solve(n,1,0,0);
+        return (int)ans;
+        
+    }
+}

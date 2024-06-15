@@ -1,0 +1,70 @@
+ Approach 1 - But since n ranges form 1 t 500, at worst case 2^500 will exceed max allowed value for both int and long. ans ans will be wrong (0)
+ class Solution {
+     public int numSteps(String s) {
+        int ans=0;
+        long num=0;
+        int factor=0;
+        int n=s.length();
+        
+         for(int i=n-1;i>=0;i--){
+             num+=(long)((s.charAt(i)-'0')*(Math.pow(2,factor)));
+             factor++;
+         }
+        
+        while(num>1){
+             if(num%2==0){
+                num=num/2;
+                ans++;
+            }else{
+               num=num+1;
+                 ans++;
+           }
+        }
+        return ans;
+    }
+ }
+
+// Approach 2 -
+// import java.math.BigInteger;
+
+// class Solution {
+//     public int numSteps(String s) {
+//         int steps = 0;
+//         BigInteger num = new BigInteger(s, 2); // Create a BigInteger from the binary string
+        
+//         while (!num.equals(BigInteger.ONE)) {
+//             if (num.mod(BigInteger.TWO).equals(BigInteger.ZERO)) {
+//                 // If the number is even, divide by 2
+//                 num = num.divide(BigInteger.TWO);
+//             } else {
+//                 // If the number is odd, add 1
+//                 num = num.add(BigInteger.ONE);
+//             }
+//             steps++;
+//         }
+        
+//         return steps;
+//     }
+// }
+
+Approach 3 - Bits : Add one(Odd) -> If least significant bit is 1, then num is odd.To add 1 means, make all bits 0 from left till we reach a bit value with 0, and add 1 to that bit
+                    Divide 2(Even) -> If least significant bit is 0, then num is even. Remove or right shift the last bit
+class Solution {
+    public int numSteps(String s) {
+        int ans = 0;
+        int carry=0;
+        
+        int n=s.length();
+        
+        for(int i=n-1;i>=1;i--){
+            if(((s.charAt(i)-'0')+carry)%2!=0){
+                ans+=2;
+                carry=1;
+            }else{
+                ans+=1;
+            }
+        }
+        
+        return ans+carry;
+    }
+} 

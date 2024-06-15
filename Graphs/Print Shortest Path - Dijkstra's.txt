@@ -1,0 +1,74 @@
+class Pair{
+    int node;
+    int distance;
+    
+    public Pair(int node, int distance){
+        this.node=node;
+        this.distance=distance;
+    }
+}
+
+class Solution {
+    public static List<Integer> shortestPath(int n, int m, int edges[][]) {
+        // code here
+        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+        for(int i=0;i<n+1;i++){
+            adj.add(new ArrayList<Pair>());
+        }
+
+        for(int i=0;i<m;i++){
+            adj.get(edges[i][0]).add(new Pair(edges[i][1],edges[i][2]));
+            adj.get(edges[i][1]).add(new Pair(edges[i][0],edges[i][2]));
+        }
+
+        PriorityQueue<Pair> pq=new PriorityQueue<>((x,y) -> x.distance - y.distance);
+        int[] dist = new int[n+1];
+        int[] parent = new int[n+1];
+
+        for(int i=0;i<n+1;i++){
+            dist[i]=(int)(1e9);
+            parent[i]=i;
+        }
+
+        dist[1]=0;
+
+        pq.add(new Pair(1,0));
+
+        while(!pq.isEmpty()){
+            int node=pq.peek().node;
+            int distance=pq.peek().distance;
+            pq.remove();
+
+            for(Pair p:adj.get(node)){
+                int next = p.node;
+                int weight=p.distance;
+
+                if(distance+weight<dist[next]){
+                    dist[next]=distance+weight;
+                    pq.add(new Pair(next,dist[next]));
+                    parent[next]=node;
+                }
+            }
+        }
+
+        List<Integer> ans=new ArrayList<>();
+        if(dist[n]==1e9){
+            ans.add(-1);
+            return ans;
+        }
+        
+        int node=n;
+        while(parent[node]!=node){
+            ans.add(node);
+            node=parent[node];
+        }
+
+        ans.add(1);
+        Collections.reverse(ans);
+        return ans;
+    }
+}
+
+Time Complexity: O( E log(V) ) { for Dijkstra’s Algorithm } + O(V) { for backtracking in order to find the parent for each node } Where E = Number of edges and V = Number of Nodes.
+
+Space Complexity: O( |E| + |V| ) { for priority queue and dist array } + O( |V| ) { for storing the final path } Where E = Number of edges and V = Number of Nodes.

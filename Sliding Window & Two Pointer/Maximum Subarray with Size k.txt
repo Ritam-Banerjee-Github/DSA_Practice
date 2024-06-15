@@ -1,0 +1,20 @@
+class Solution{
+    static long maximumSumSubarray(int K, ArrayList<Integer> Arr,int N){
+        // code here
+        long ans=0;
+        int start=0;
+        long sum=0;
+        for(int end=0;end<N;end++){
+            sum+=Arr.get(end);
+            if(end==K-1){
+                ans=Math.max(ans,sum);
+            }
+            if(end>K-1){
+                sum=sum-Arr.get(start);
+                ans=Math.max(ans,sum);
+                start++;
+            }
+        }
+        return ans;
+    }
+}

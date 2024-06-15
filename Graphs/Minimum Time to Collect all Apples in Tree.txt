@@ -1,0 +1,31 @@
+class Solution {
+    private int solve(List<List<Integer>> adj,int node, int parent,List<Boolean> hasApple){
+        int time=0;
+
+        for(int next:adj.get(node)){
+            if(next==parent)continue;
+            
+            int timeForChild=solve(adj,next,node,hasApple);
+            if(hasApple.get(next) || timeForChild>0 ){    //Only 2 possibilities, if the child node(next) has apple or the children of child node has apples
+                time+=timeForChild+2;
+            }
+        }
+        return time;
+    }
+    public int minTime(int n, int[][] edges, List<Boolean> hasApple) {
+        List<List<Integer>> adj=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<>());
+        }
+        int m=edges.length;
+        for(int i=0;i<m;i++){
+            int u=edges[i][0];
+            int v=edges[i][1];
+
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        return solve(adj,0,-1,hasApple);
+    }
+}

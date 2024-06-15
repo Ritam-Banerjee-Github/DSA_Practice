@@ -1,0 +1,42 @@
+class Pair{
+    int plantTime;
+    int growTime;
+
+    public Pair(int plantTime,int growTime){
+        this.plantTime=plantTime;
+        this.growTime=growTime;
+    }
+}
+class Solution {
+    public int earliestFullBloom(int[] plantTime, int[] growTime) {
+       int n=plantTime.length;
+       ArrayList<Pair> list=new ArrayList<>();
+       for(int i=0;i<n;i++){
+           list.add(new Pair(plantTime[i],growTime[i]));
+       }
+
+       Collections.sort(list,new Comparator<Pair>(){
+         public int compare(Pair a, Pair b){
+             if(a.growTime<b.growTime) return 1;
+             else if(a.growTime>b.growTime) return -1;
+             else return 0;
+         }
+       });
+       
+       int maxBloomDays=0;
+       int totalPlantDays=0;
+
+       for(int i=0;i<n;i++){
+            int currPlantDays=list.get(i).plantTime;
+            int currGrowTime=list.get(i).growTime;
+
+            totalPlantDays+=currPlantDays;
+
+            int currPlantBloomTime=totalPlantDays + currGrowTime; //currGrowTime will keep changing and decid ethe maximum final value
+
+            maxBloomDays=Math.max(maxBloomDays,currPlantBloomTime);
+       }
+
+       return maxBloomDays;
+    }
+}

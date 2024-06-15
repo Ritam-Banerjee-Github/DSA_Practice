@@ -1,0 +1,44 @@
+class Solution {
+    static boolean lemonadeChange(int N, int bills[]) {
+        // code here
+    
+        if(bills[0]!=5) return false;
+        int five=0;
+        int ten=0;
+        int twenty=0;
+        for(int i=0;i<N;i++){
+            if(bills[i]==5){
+                five++;
+            }
+            else
+            if(bills[i]==10){
+                if(five<1) return false;
+                else{
+                    ten++;
+                    five--;
+                }
+                   
+            }
+            else
+            if(bills[i]==20){
+                if((ten>=1 && five<1) || (ten==0 && five<3)) return false;
+                else{
+                    twenty++;
+                    if(ten>=1){
+                        ten--;
+                        five--;
+                    }
+                    else{
+                        five=five-3;
+                    }
+                    
+                }
+            }
+        }
+        return true;
+    }
+}
+
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(1)

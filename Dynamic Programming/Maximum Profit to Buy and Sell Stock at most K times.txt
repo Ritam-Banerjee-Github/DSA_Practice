@@ -1,0 +1,32 @@
+
+class Solution {
+    static int maxProfit(int K, int n, int price[]) {
+        // code here
+         int[][][] dp =new int[n+1][2][K+1];
+        for(int i=n-1;i>=0;i--){
+            for(int buy=0;buy<2;buy++){
+                for(int cap=1;cap<=K;cap++){
+                    if(buy==1){
+                        int take=-price[i] + dp[i+1][0][cap];
+                        int notTake=dp[i+1][1][cap];
+                        dp[i][buy][cap]= Math.max(take, notTake);
+                }
+                else{
+                        int sold=price[i]+dp[i+1][1][cap-1];
+                        int notSold=dp[i+1][0][cap];
+                        dp[i][buy][cap]=Math.max(sold,notSold);
+                    }
+                }
+            }
+        }
+        return dp[0][1][K];
+    }
+}
+
+Time Complexity: O(N*2*k) 
+
+Reason: There are three nested loops that account for O(N*2*K) complexity.
+
+Space Complexity: O(N*2*k)
+
+Reason: We are using an external array of size ‘N*2*K’. Stack Space is eliminated.

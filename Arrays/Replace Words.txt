@@ -1,0 +1,28 @@
+class Solution {
+    public String replaceWords(List<String> dictionary, String sentence) {
+        Set<String> set=new HashSet<>();
+        for(String str:dictionary){
+            set.add(str);
+        }
+        
+        String[] words=sentence.split(" ");
+        int n=words.length;
+        String ans="";
+        
+        for(int i=0;i<n;i++){
+            String word=words[i];
+            
+            String currWord="";
+            for(int j=0;j<word.length();j++){
+                currWord=currWord+word.charAt(j);
+                if(set.contains(currWord)){
+                    break;
+                }
+            }
+            
+            ans=ans+currWord+" ";
+        }
+        
+        return ans.substring(0,ans.length()-1); //Removing extra space at end
+    }
+}

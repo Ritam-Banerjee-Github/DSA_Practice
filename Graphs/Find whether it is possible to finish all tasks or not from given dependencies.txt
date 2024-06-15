@@ -1,0 +1,51 @@
+Using Topological Sort with BFS(Kahn's Algorithm)
+
+class Solution {
+    public boolean isPossible(int N, int[][] prerequisites)
+    {
+        // Your Code goes here
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<ArrayList<Integer>>();
+        for(int i=0;i<N;i++){
+            adj.add(new ArrayList<Integer>());
+        }
+        int p=prerequisites.length;
+        for(int i=0;i<p;i++){
+            adj.get(prerequisites[i][1]).add(prerequisites[i][0]);
+        }
+        Queue<Integer> q= new LinkedList<Integer>();
+        int[] inDegree=new int[N];
+        
+        for(int i=0;i<N;i++){
+            for(int next:adj.get(i)){
+                inDegree[next]++;
+            }
+        }
+        
+        for(int i=0;i<inDegree.length;i++){
+            if(inDegree[i]==0){         // This is where DFS will fail for checking for prerequisite tasks. Hencce inDegree concept is important.
+                q.add(i);
+            }
+        }
+        
+        ArrayList<Integer> topoSort=new ArrayList<Integer>();
+        
+        while(!q.isEmpty()){
+            int node=q.peek();
+            q.remove();
+            topoSort.add(node);
+            
+            for(int next:adj.get(node)){
+                inDegree[next]--;
+                if(inDegree[next]==0){   //This replaces vis[] array in DFS
+                    q.add(next);
+                }
+            }
+        }
+        if(topoSort.size()==N) return true;
+        return false;
+    }
+    
+}
+
+TC-O(N+P)
+SC-O(N+P)

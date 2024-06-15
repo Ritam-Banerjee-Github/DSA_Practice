@@ -1,0 +1,22 @@
+class Solution {
+    List<Integer> dfs=new ArrayList<>();
+    
+    private void traverse(int node, List<List<Integer>> rooms, int[] visited){
+        visited[node]=1;
+        dfs.add(node);
+        
+        for(int next:rooms.get(node)){
+            if(visited[next]!=1){
+                traverse(next,rooms,visited);
+            }
+        }
+    }
+    public boolean canVisitAllRooms(List<List<Integer>> rooms) {
+        int roomsSize=rooms.size();
+        int[] visited=new int[roomsSize];
+        
+        traverse(0,rooms,visited);
+        
+        return (dfs.size()==roomsSize);
+    }
+}

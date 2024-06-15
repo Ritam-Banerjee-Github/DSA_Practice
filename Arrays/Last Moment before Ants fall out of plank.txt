@@ -1,0 +1,18 @@
+Note: Dont even think about collision. Think like all ants collide and pass ech other(magical ants :)). The answer will remain unchanged.
+
+class Solution {
+    public int getLastMoment(int n, int[] left, int[] right) {
+        int ans=0;
+        for(int i=0;i<left.length;i++){
+            int len=left[i];
+            ans=Math.max(ans,len);
+        }
+
+        for(int i=0;i<right.length;i++){
+            int len=n-right[i];
+            ans=Math.max(ans,len);
+        }
+
+        return ans;
+    }
+}

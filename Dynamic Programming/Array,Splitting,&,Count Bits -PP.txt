@@ -1,0 +1,42 @@
+import java.util.*;
+public class MyClass {
+    static int mod=(int)(1e9+7);
+    private static int arrValue(int left, int right, ArrayList<Integer> list){
+        int leftans=list.get(left);
+        left++;
+        
+        while(left<=right){
+        leftans=leftans&list.get(left);
+        left++;
+        }
+        int count=0;
+        while(leftans>0){
+            count+=leftans&1;
+            leftans=leftans>>1;
+        }
+        return count*list.get(right);
+    }
+    private static int utility(int i,int n,ArrayList<Integer> list){
+        if(i==n)return 0;
+        int ans=Integer.MIN_VALUE;
+        for(int k=i;k<n;k++){
+            ans=Math.max(ans,(arrValue(i,k,list)%mod+utility(k+1,n,list)%mod))%mod;
+        }
+        return ans;
+    }
+    public static void main(String args[]) {
+      int x=10;
+      int y=25;
+      int z=x+y;
+      ArrayList<Integer> list=new ArrayList<>();
+      
+      list.add(-5);
+      list.add(0);
+      list.add(1);
+      list.add(0);
+      list.add(5);
+      
+
+      System.out.println(utility(0,5,list));
+    }
+}

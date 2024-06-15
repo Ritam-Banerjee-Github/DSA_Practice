@@ -1,0 +1,25 @@
+Brute -
+class Solution {
+    public int maxProduct(int[] nums) {
+        int max=0;
+        if(nums.length==1){
+            return max=nums[0];
+        }
+        for(int i=0;i<nums.length;i++){
+         int prod=1;
+            for(int j=i;j<nums.length;j++){
+                if(nums[j]==0){
+                    prod=0;
+                    max=Math.max(max,prod); 
+                    break;
+                }
+                    prod=prod*nums[j];
+                    max=Math.max(max,prod);
+            }
+        }
+        return max;
+    }
+}
+
+TC - O(n*2)
+SC - No extra Space

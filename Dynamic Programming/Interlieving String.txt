@@ -1,0 +1,36 @@
+class Solution {
+    private HashMap<String, Boolean> dp=new HashMap<>();
+    
+    private boolean solve(int i, int j, int k, String s1, String s2, String s3, int n, int m, int z){
+        if(i==n && j==m && k==z) return true;
+        
+        if(k>=z) return false;
+        
+        String key=""+i+j+k;
+        if(dp.containsKey(key)) return dp.get(key);
+        
+        boolean take_first=false;
+        boolean take_second=false;
+        
+        if(i<n && s1.charAt(i)==s3.charAt(k)){
+            take_first=solve(i+1,j,k+1,s1,s2,s3,n,m,z);
+        }
+        
+        if(j<m && s2.charAt(j)==s3.charAt(k)){
+            take_second=solve(i,j+1,k+1,s1,s2,s3,n,m,z);
+        }
+        
+        dp.put(key,take_first||take_second);
+        
+        return take_first||take_second;
+    }
+    public boolean isInterleave(String s1, String s2, String s3) {
+        int n=s1.length();
+        int m=s2.length();
+        int z=s3.length();
+        
+        if(n+m!=z) return false;
+        
+        return solve(0,0,0,s1,s2,s3,n,m,z);
+    }
+}

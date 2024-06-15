@@ -1,0 +1,13 @@
+class Solution{
+    public String removeConsecutiveCharacter(String S){
+        String ans=""+S.charAt(0);  // Creating new String for answer as we should never manipulate on the data provided as per industry standards
+        for(int i=1;i<S.length();i++){
+            if(S.charAt(i)==S.charAt(i-1)) continue;
+            ans+=S.charAt(i);
+        }
+        return ans;
+    }
+}
+
+TC - O(N)
+SC - O(1)

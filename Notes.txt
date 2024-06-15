@@ -1,0 +1,59 @@
+Collections.sort(abc, new Comparator<>(){
+public int compare(){
+Internal Logic - If returns 1(or +ve), then swaps. Else if returns -1(or -ve), then won't swap
+}
+});
+
+
+Stack -> stack.pop() & stack.push() & stack.peek()
+Queues/PriorityQueues -> queue.add() & queue.remove() & queue.peek()
+
+// To convert list to array[]. Pass the new array to avoid compatibility errors. Default return type is Object []
+        Integer arr[] = new Integer[ArrLis.size()];
+        arr = ArrLis.toArray(arr);
+TC - O(N)
+
+ // Convert Arrays to List
+Integer a[] = new Integer[] { 10, 20, 30, 40 };
+  List<Integer> list = Arrays.asList(a);
+
+TC - O(1)
+
+// To create a list which stores array and add new array with elements like this.
+
+List<int[]> list=new ArrayList<>();
+list.add(new int[]{start,end});
+
+
+
+
+//To add hashmap in PQ
+PriorityQueue<HashMap<Character, Integer>> pq = new PriorityQueue<>((a, b) -> {
+        char keyInA = a.keySet().iterator().next(); // key of a
+        char keyInB = b.keySet().iterator().next(); // key of b
+        return b.get(keyInB) - a.get(keyInA);
+    });
+For Insertion of the value in the priority queue.
+
+pq.add(new HashMap<>() {
+            {
+                put('a', 0);
+            }
+        });
+
+
+//To iterate over HashMap -
+ for (String name : gfg.keySet()) 
+            System.out.println("key: " + name);
+          
+        // using values() for iteration over values
+        for (String url : gfg.values()) 
+            System.out.println("value: " + url);
+
+To convert int to String ->
+
+int num=5;
+
+String str=String.valueOf(num);
+
+System.out.println(Integer.toBinaryString(31)); 

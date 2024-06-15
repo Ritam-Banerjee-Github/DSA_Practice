@@ -1,0 +1,37 @@
+
+class Solution{
+    static int maxLength(String S){
+        // code here
+        int n=S.length();
+        Stack<Integer> stack=new Stack<>();
+        stack.push(-1);
+        int ans=0;
+        int i=0;
+        int count=0;
+       
+        while(i<n){
+            char ch=S.charAt(i);
+            if(ch=='('){
+                stack.push(i);
+                i++;
+            }
+            else{
+                 stack.pop();
+                 if(stack.isEmpty()){
+                     stack.push(i);
+                     i++;
+                 }
+                 else{
+                     ans=Math.max(ans,i-stack.peek());
+                     i++;
+                 }
+                 
+                }
+                
+            }
+             return ans;
+        }
+        
+       
+    
+}

@@ -1,0 +1,44 @@
+class Solution{
+    static List<Integer> nextPermutation(int N, int arr[]){
+        // code here
+        int ind=-1;
+        List<Integer> ans =new ArrayList<Integer>();
+        for(int i=N-2;i>=0;i--){
+            if(arr[i]<arr[i+1]) {
+                ind=i;
+                break;
+            }
+        }
+        if(ind==-1){
+            Arrays.sort(arr);
+            for(int i=0;i<N;i++){
+                ans.add(arr[i]);
+            }
+            return ans;
+        }
+        int next_greater=Integer.MAX_VALUE;
+        int next_greater_index=-1;
+
+        for(int i=N-1;i>ind;i--){
+            if(arr[i]>arr[ind] && arr[i]<next_greater){
+                next_greater=arr[i];
+                next_greater_index=i;
+            }
+        }
+
+        int temp=arr[next_greater_index];
+        arr[next_greater_index]=arr[ind];
+        arr[ind]=temp;
+
+        Arrays.sort(arr,ind+1,N);  // To sort array between given range. ind+1(inclusive) and N(exclusive, till N-1)--- Remember
+        for(int i=0;i<N;i++){
+                ans.add(arr[i]);
+            }
+            return ans;
+    }
+}
+
+Time Complexity: O(3N), where N = size of the given array
+Finding the break-point, finding the next greater element, and reversal at the end takes O(N) for each, where N is the number of elements in the input array. This sums up to 3*O(N) which is approximately O(3N).
+
+Space Complexity: Since no extra storage is required. Thus, its space complexity is O(1).

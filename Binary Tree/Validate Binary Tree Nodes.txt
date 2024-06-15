@@ -1,0 +1,61 @@
+Binary Tree properties:
+
+Every child must have only one parent -- childToParentMap
+There should only be one valid root i.e, only one node with no parent
+Traverse DFS/BFD from root and match the number of nodes visited, there should be only one component -- This is required for a test case if there are cycles
+
+class Solution {
+    int count=0;
+    
+    private void dfs(int node, List<List<Integer>> adj){
+        count++;
+        
+        for(int next:adj.get(node)){   //No need to keep track of parent as that is already checked if there are doubly directed edge between parent and child nodes
+            dfs(next,adj);
+        }
+    }
+    public boolean validateBinaryTreeNodes(int n, int[] leftChild, int[] rightChild) {
+        HashMap<Integer,Integer> childToParentMap=new HashMap<>();
+        List<List<Integer>> adj=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<Integer>());
+        }
+        
+        for(int i=0;i<n;i++){
+            int node=i;
+            int lChild=leftChild[i];
+            int rChild=rightChild[i];
+            
+            
+            if(lChild!=-1){
+                if(childToParentMap.get(lChild)!=null) return false;
+                
+                adj.get(node).add(lChild);
+                childToParentMap.put(lChild,node);
+            }
+            
+            if(rChild!=-1){
+                if(childToParentMap.get(rChild)!=null) return false;
+                
+                adj.get(node).add(rChild);
+                childToParentMap.put(rChild,node);
+            }
+        }
+        
+        int root=-1;
+        
+        for(int i=0;i<n;i++){
+            if(!childToParentMap.containsKey(i)){
+                if(root!=-1) return false;
+                
+                root=i;
+            }
+        }
+        
+        if(root==-1) return false;
+        
+        dfs(root,adj);
+        
+        return count==n;
+    }
+}

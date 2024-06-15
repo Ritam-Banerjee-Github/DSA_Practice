@@ -1,0 +1,86 @@
+class Tree {
+    // Function to delete a node from BST.
+    public static Node deleteNode(Node root, int X) {
+        // code here.
+        if(root==null)return null;
+        if(root.data==X){
+            return helper(root);
+        }
+        Node curr=root;
+        
+ 
+// if we don't give curr!=null then if element is not present in entire BST then last value of curr will be null and if while is set to true then it will keep on executing and throw nullPointerException
+
+       while(curr!=null){
+            if(curr.data>X){
+                if(curr.left != null && curr.left.data==X){
+                    curr.left=helper(curr.left);
+                    break;
+                }
+                else{
+                    curr=curr.left;
+                }
+            }
+            else
+            if(curr.data<X){
+                if(curr.right != null && curr.right.data==X){
+                    curr.right=helper(curr.right);
+                    break;
+                }
+                else{
+                    curr=curr.right;
+            
+                }    
+            }
+        }
+        
+        return root;
+    }
+    
+   public static Node helper(Node root){
+       if(root.left==null && root.right==null){
+           return null;
+       }
+       else
+        if(root.left==null && root.right!=null){
+            return root.right;
+        }
+        else
+        if(root.right==null && root.left!=null){
+            return root.left;
+        }
+        else{
+            Node lastRootLeft=lastRightChild(root.left);
+            lastRootLeft.right=root.right;
+            return root.left;
+        }
+    }
+   public static Node lastRightChild(Node node){
+        if(node.right==null){
+            return node;
+        }
+        return lastRootLeft(node.right);
+    }
+} 
+
+//
+Another way of implementing helper function (in earlier method, leaf node was by default returning null in 1st match of if block) -
+
+ public static Node helper(Node root){
+       if(root.left==null && root.right==null){
+           return null;
+       }
+       else
+        if(root.left==null && root.right!=null){
+            return root.right;
+        }
+        else
+        if(root.right==null && root.left!=null){
+            return root.left;
+        }
+        else{
+            Node lastRootLeft=lastRootLeft(root.left);
+            lastRootLeft.right=root.right;
+            return root.left;
+        }
+    }

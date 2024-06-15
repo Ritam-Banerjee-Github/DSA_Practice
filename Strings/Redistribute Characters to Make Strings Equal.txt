@@ -1,0 +1,20 @@
+class Solution {
+    public boolean makeEqual(String[] words) {
+        int n=words.length;
+        
+        int[] frequency=new int[26];
+        
+        for(int i=0;i<n;i++){
+            int size=words[i].length();
+            for(int j=0;j<size;j++){
+                frequency[words[i].charAt(j)-'a']++;     
+            }
+        }
+        
+        for(int i=0;i<26;i++){
+            if(frequency[i]%n!=0) return false;
+        }
+        
+        return true;
+    }
+}

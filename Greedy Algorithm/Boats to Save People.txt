@@ -1,0 +1,24 @@
+class Solution {
+    public int numRescueBoats(int[] people, int limit) {
+        int n=people.length;
+        int i=0;
+        int j=n-1;
+        int boats=0;
+
+        Arrays.sort(people);
+
+         while(i<=j){
+             if(people[i]+people[j]<=limit){
+                 boats++;
+                 i++;
+                 j--;
+             }
+             else{
+                j--;  //Each index people weight is definitely less than limit, so if array is sorted, last weight will be maximum. So we greedily chose maximum weight
+                boats++;  
+             }
+         }
+
+         return boats;
+    }
+}

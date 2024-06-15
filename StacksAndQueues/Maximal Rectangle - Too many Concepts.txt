@@ -1,0 +1,88 @@
+class Solution {
+    int ans=0;
+    
+    private int[] getNSL(int[] heights){
+        int length=heights.length;
+        int[] NSL=new int[length];
+        Stack<Integer> stack=new Stack<>();
+        
+        for(int i=0;i<length;i++){
+            
+            while(!stack.isEmpty() && heights[stack.peek()] >= heights[i]){
+                stack.pop();
+            }
+            
+            if(stack.isEmpty()){
+                NSL[i]=-1;
+                stack.push(i);
+                continue;
+              }    
+            
+            NSL[i]=stack.peek();
+            
+            stack.push(i);
+        }
+
+        return NSL;
+    }
+    
+    private int[] getNSR(int[] heights){
+        int length=heights.length;
+        int[] NSR=new int[length];
+        Stack<Integer> stack=new Stack<>();
+        
+        for(int i=length-1;i>=0;i--){
+            while(!stack.isEmpty() && heights[stack.peek()] >= heights[i]){
+                stack.pop();
+            }
+            
+            if(stack.isEmpty()){
+                NSR[i]=length;
+                stack.push(i);
+                continue;
+              }    
+            
+            NSR[i]=stack.peek();
+            
+            stack.push(i);
+        }
+
+        return NSR;
+    }
+    
+    private void calculateArea(int[] heights){
+        int length=heights.length;
+        int[] width=new int[length];
+        
+        int[] NSR=getNSR(heights);
+        int[] NSL=getNSL(heights);
+        
+        for(int i=0;i<length;i++){
+            width[i]=NSR[i]-NSL[i]-1;
+        }
+        
+        for(int i=0;i<length;i++){
+            int currArea=width[i]*heights[i];
+            ans=Math.max(ans,currArea);
+        }
+        
+    }
+    public int maximalRectangle(char[][] matrix) {
+        int rows=matrix.length;
+        int cols=matrix[0].length;
+        
+        int[] heights=new int[cols];
+        
+        for(int row=0;row<rows;row++){
+            for(int col=0;col<cols;col++){
+                heights[col]=matrix[row][col]=='1'?(1+heights[col]):0;
+            }
+            
+            calculateArea(heights);
+        }
+        
+        return ans;
+    }
+}
+
+O(m*n *n)

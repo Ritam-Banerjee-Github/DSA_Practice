@@ -1,0 +1,24 @@
+// To check whether s is a subsequnece of t, find the longest common subsequence of 2 strings and return true if the length is equal to s.length().If s is a subsequence of t, then the length will be m
+
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        int n=t.length();
+        int m=s.length();
+
+        int[][] dp=new int[n+1][m+1];
+    
+        for(int i=1;i<=n;i++){
+          for(int j=1;j<=m;j++){
+              if(t.charAt(i-1)==s.charAt(j-1)){
+               dp[i][j]=1+dp[i-1][j-1];
+               }
+              
+              else{
+                dp[i][j]=Math.max(dp[i-1][j],dp[i][j-1]);
+              }
+          }
+                    
+        }
+    return (m==dp[n][m]); 
+    }
+} 

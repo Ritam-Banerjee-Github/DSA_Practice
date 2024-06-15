@@ -1,0 +1,44 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+
+class Solution {
+
+    Map<String,Integer> map=new HashMap<>();
+    List<TreeNode> res=new ArrayList<>();
+
+    public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+        helper(root);
+        return res;
+    }
+    public String helper(TreeNode root)
+    {
+        if(root==null) return "N";
+        String left= helper(root.left);
+        String right= helper(root.right);
+
+        String curr= root.val +","+left +","+ right;
+        map.put(curr, map.getOrDefault(curr, 0)+ 1);
+        if(map.get(curr) == 2)
+            res.add(root);
+        return curr;
+    }
+}
+
+Complexity
+Time complexity: O(n^2)
+Creating each serialization(Integer to String) therefore costs up to O(n), and we find string representations for all O(n) subtrees during the traversal.
+Space complexity: O(n^2)
+We store all string representations in the hash map. There are O(n) subtrees, and each subtree representation has the length of O(n).

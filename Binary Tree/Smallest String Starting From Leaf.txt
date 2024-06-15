@@ -1,0 +1,74 @@
+
+class Solution {
+    List<String> list=new ArrayList<>();
+    private void traverse(TreeNode root, String temp){
+        if(root==null) return;
+        
+        if(root.left==null && root.right==null){
+            char ch=((char)(root.val+(int)('a')));
+            temp=temp+ch;
+            String reverseTemp=new StringBuilder(temp).reverse().toString();
+            list.add(reverseTemp);
+            return;
+        }
+        
+        char ch=((char)(root.val+(int)('a')));
+        if(root.left!=null) traverse(root.left,temp+ch);
+        if(root.right!=null) traverse(root.right,temp+ch);
+    }
+    public String smallestFromLeaf(TreeNode root) {
+        traverse(root,"");
+        Collections.sort(list);
+        return list.get(0);
+    }
+}
+
+Appending in Reverse way directly from traversal start point :
+ class Solution {
+    List<String> list=new ArrayList<>();
+    private void traverse(TreeNode root, String temp){
+        if(root==null) return;
+        
+        if(root.left==null && root.right==null){
+            char ch=((char)(root.val+(int)('a')));
+            temp=ch+temp;
+            list.add(temp);
+            return;
+        }
+        
+        char ch=((char)(root.val+(int)('a')));
+        if(root.left!=null) traverse(root.left,ch+temp);
+        if(root.right!=null) traverse(root.right,ch+temp);
+    }
+    public String smallestFromLeaf(TreeNode root) {
+        traverse(root,"");
+        Collections.sort(list);
+        return list.get(0);
+    }
+}
+
+Without using List :
+
+class Solution {
+    String ans="";
+    private void traverse(TreeNode root, String temp){
+        if(root==null) return;
+        
+        if(root.left==null && root.right==null){
+            char ch=((char)(root.val+(int)('a')));
+            temp=ch+temp;
+            if(ans=="" || temp.compareTo(ans)<0){
+                ans=temp;
+            }
+            return;
+        }
+        
+        char ch=((char)(root.val+(int)('a')));
+        if(root.left!=null) traverse(root.left,ch+temp);
+        if(root.right!=null) traverse(root.right,ch+temp);
+    }
+    public String smallestFromLeaf(TreeNode root) {
+        traverse(root,"");
+        return ans;
+    }
+}

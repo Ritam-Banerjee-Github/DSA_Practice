@@ -1,0 +1,53 @@
+Note : Forest means nodes which have been deleted
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+
+class Solution {
+    private TreeNode delNodesHelper(TreeNode root,Set<Integer> set,List<TreeNode> ans){
+        if(root==null) return null;
+
+        root.left=delNodesHelper(root.left,set,ans);
+        root.right=delNodesHelper(root.right,set,ans);
+
+        if(set.contains(root.val)){
+            if(root.left!=null){
+                ans.add(root.left);
+            }
+            if(root.right!=null){
+                ans.add(root.right);
+            }
+            return null;  //Both left and right are null
+        }        
+        return root;     
+    }
+       
+    public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
+        Set<Integer> set=new HashSet<>();
+        for(int i:to_delete){
+            set.add(i);
+        }
+        
+        List<TreeNode> ans=new ArrayList<>();
+        
+         delNodesHelper(root,set,ans);
+        
+         if(!set.contains(root.val)){
+            ans.add(root);
+        }
+        return ans;
+    }
+}

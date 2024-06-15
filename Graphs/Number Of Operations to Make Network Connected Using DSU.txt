@@ -1,0 +1,71 @@
+class DisjointSet{
+ List<Integer> ultimateParent=new ArrayList<Integer>();
+ List<Integer> size=new ArrayList<Integer>();
+ int components;   
+    
+    public DisjointSet(int n){
+        for(int i=0;i<n;i++){
+            ultimateParent.add(i);
+            size.add(1);
+        }
+        this.components=n;
+    }
+    public int findUltimateParent(int node){
+        if(ultimateParent.get(node)==node){
+            return node;
+        }
+        int par=findUltimateParent(ultimateParent.get(node));
+        return par;
+    }
+    
+    public void UnionBySize(int u, int v){
+        int ultimateParentU=findUltimateParent(u);
+        int ultimateParentV=findUltimateParent(v);
+        if(ultimateParentU==ultimateParentV) return;
+
+        if(size.get(ultimateParentU)<size.get(ultimateParentV)){
+            size.set(ultimateParentV, size.get(ultimateParentU)+size.get(ultimateParentV));
+            ultimateParent.set(ultimateParentU,ultimateParentV);
+        }
+        else{
+            size.set(ultimateParentU, size.get(ultimateParentU)+size.get(ultimateParentV));
+            ultimateParent.set(ultimateParentV,ultimateParentU);
+        }
+        
+        this.components--;
+    }
+    
+    public int getComponentsCount(){
+        return this.components;
+    }
+}
+
+class Solution {
+
+   public int makeConnected(int n, int[][] edge)  {
+        // Code here
+        DisjointSet ds = new DisjointSet(n);
+        int m=edge.length;
+        int cntExtras=0;
+        for(int i=0;i<m;i++){
+            int u=edge[i][0];
+            int v=edge[i][1];
+            if(ds.findUltimateParent(u)==ds.findUltimateParent(v)){
+                cntExtras++;
+            }
+            else{
+                ds.UnionBySize(u,v);
+            }
+        }
+        
+
+        int ans=ds.components -1;
+        if(cntExtras>=ans) return ans;
+        return -1;
+    }
+}
+
+
+Time Complexity: O(E*4α)+O(N*4α) where E = no. of edges and N = no. of nodes. The first term is to calculate the number of extra edges and the second term is to count the number of components. 4α is for the disjoint set operation we have used and this term is so small that it can be considered constant.
+
+Space Complexity: O(2N) where N = no. of nodes. 2N for the two arrays(parent and size) of size N we have used inside the disjoint set.

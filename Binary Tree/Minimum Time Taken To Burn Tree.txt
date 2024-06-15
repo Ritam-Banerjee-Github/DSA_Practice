@@ -1,0 +1,63 @@
+import java.util.*;
+
+public class Solution
+
+{
+	private static BinaryTreeNode<Integer> markParent(BinaryTreeNode<Integer> root,HashMap<BinaryTreeNode<Integer>,BinaryTreeNode<Integer>> map,int start){
+		BinaryTreeNode<Integer> target=null;
+		Queue<BinaryTreeNode<Integer>> queue=new LinkedList<>();
+		queue.add(root);
+		while(!queue.isEmpty()){
+          BinaryTreeNode<Integer> node=queue.remove();
+		  if(node.data==start)target=node;
+
+		  if(node.left!=null){
+			  queue.add(node.left);
+			  map.put(node.left,node);
+		  }
+		  if(node.right!=null){
+			  queue.add(node.right);
+			  map.put(node.right,node);
+		  }
+		}
+		return target;
+	}
+public static int timeToBurnTree(BinaryTreeNode<Integer> root, int start)
+    {
+        // Write your code here.
+		HashMap<BinaryTreeNode<Integer>,BinaryTreeNode<Integer>> parentMap=new HashMap<>();
+		BinaryTreeNode<Integer> target=markParent(root,parentMap,start);
+		int ans=0;
+		
+		Queue<BinaryTreeNode<Integer>> queue=new LinkedList<>();
+		HashMap<BinaryTreeNode<Integer>,Integer> vis=new HashMap<>();
+        queue.add(target);
+		vis.put(target,1);
+		while(!queue.isEmpty()){
+			int flag=0;
+			int size=queue.size();
+			for(int i=0;i<size;i++){
+                           BinaryTreeNode<Integer> node=queue.remove();
+			   if(node.left!=null && vis.get(node.left)==null){
+				   queue.add(node.left);
+				   vis.put(node.left,1);
+				   flag=1;
+			   }
+			   if(node.right!=null && vis.get(node.right)==null){
+				   queue.add(node.right);
+				   vis.put(node.right,1);
+				   flag=1;
+			   }
+			   if(parentMap.get(node)!=null && vis.get(parentMap.get(node))==null){
+				   queue.add(parentMap.get(node));
+				   vis.put(parentMap.get(node),1);
+				   flag=1;
+			   }
+
+			}
+			if(flag==1) ans++;
+			
+		}
+		return ans;
+    }
+}

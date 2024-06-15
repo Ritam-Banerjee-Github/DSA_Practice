@@ -1,0 +1,58 @@
+class Solution {
+    private int findParent(int node, int[] ultimateParent){
+        if(ultimateParent[node]==node) return node;
+        
+        return ultimateParent[node]=findParent(ultimateParent[node],ultimateParent);
+    }
+    public int[] minimumCost(int n, int[][] edges, int[][] query) {
+  
+        int m=query.length;
+        int[] ans=new int[m];
+        
+        int[] ultimateParent=new int[n];
+        int[] cost=new int[n];
+        
+        for(int i=0;i<n;i++){
+            ultimateParent[i]=i;
+            cost[i]=-1;
+        }
+        
+        
+        for(int i=0;i<edges.length;i++){
+            int u=edges[i][0];
+            int v=edges[i][1];
+            int w=edges[i][2];
+            
+            int parent1=findParent(u,ultimateParent);
+            int parent2=findParent(v,ultimateParent);
+            
+            if(parent1!=parent2){
+                cost[parent1]=cost[parent1]&cost[parent2];
+                ultimateParent[parent2]=parent1;
+            }
+
+            cost[parent1]=cost[parent1]&w;
+            
+        }
+        
+        int j=0;
+        
+        for(int i=0;i<m;i++){
+            int u=query[i][0];
+            int v=query[i][1];
+            
+            int parent1=findParent(u,ultimateParent);
+            int parent2=findParent(v,ultimateParent);
+            
+            if(parent1!=parent2){
+                ans[j]=-1;
+            }else{
+                ans[j]=cost[parent1];  // Only one component, so only 1 ultimate parent
+            }
+            
+            j++;
+        }
+        
+        return ans;
+    }
+}

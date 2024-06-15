@@ -1,0 +1,137 @@
+Recursion + Memoization -
+
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+	 private static boolean utility(int index,int target, int[] nums, int[][] dp){
+
+        if(index==0){
+            return (nums[0]==target);
+        }
+		if(dp[index][target]!=-1) return dp[index][target]==1?true:false;
+        boolean notTake= utility(index-1,target,nums,dp);
+        boolean take=false;
+        if(nums[index]<=target){
+            take=utility(index-1,target-nums[index],nums,dp);
+        }
+         dp[index][target]=take||notTake?1:0;
+        return take||notTake;
+    }
+	public static int minSubsetSumDifference(int[] nums, int n) {
+		// Write your code here.
+        int totSum=0;
+        for(int i=0;i<n;i++){
+            totSum+=nums[i];
+        }
+        int ans=Integer.MAX_VALUE;
+         int[][] dp=new int[n][totSum+1];
+		 for(int[] row:dp){
+			 Arrays.fill(row,-1);
+		 }
+        for(int i=0;i<=totSum;i++){
+            if(utility(n-1,i,nums,dp)){
+                int S1=i;
+                int S2=totSum-S1;
+                ans=Math.min(ans,Math.abs(S1-S2));
+            }
+        }
+        return ans;
+	}
+
+}
+
+Using Subset Sum Tabulation - 
+
+class Solution
+{
+
+	public int minDifference(int arr[], int n) 
+	{ 
+	    // Your code goes here
+	    int totSum=0;
+	    for(int i=0;i<n;i++){
+	        totSum+=arr[i];
+	    }
+	    int[][] dp=new int[n][totSum+1];
+	    for(int i=0;i<n;i++){
+	        dp[i][0]=1;
+	    }
+	     if(arr[0]<=totSum) dp[0][arr[0]]=1;
+	    for(int i=1;i<n;i++){
+	        for(int k=1;k<=totSum;k++){
+	                int notTake=dp[i-1][k];
+	                int take=0;
+	                if(arr[i]<=k){
+	                    take=dp[i-1][k-arr[i]];
+	                }
+	                dp[i][k]= (take == 1 || notTake == 1)?1:0;
+	           
+	        }
+	    }
+	    int min = (int)1e9;
+	    for(int i=0;i<=totSum/2;i++){
+	        if(dp[n-1][i]==1){
+	            min=Math.min(min,Math.abs(i-(totSum-i)));
+	        }
+	    }
+	    
+	    return min;
+	} 
+}
+
+Time Complexity: O(N*totSum) +O(N) +O(N)
+
+Reason: There are two nested loops that account for O(N*totSum), at starting we are running a for loop to calculate totSum, and at last a for loop to traverse the last row.
+
+Space Complexity: O(N*totSum)
+
+Reason: We are using an external array of size ‘N * totSum’. Stack Space is eliminated.
+
+
+ My Solution to understand base cases in tabulation -
+class Solution
+{
+
+	public int minDifference(int arr[], int n) 
+	{ 
+	    // Your code goes here
+	    int totSum=0;
+	    for(int i=0;i<n;i++){
+	        totSum+=arr[i];
+	    }
+	    int[][] dp=new int[n][totSum+1];
+
+	   // Base Case = target/sum=0
+
+	    for(int i=0;i<n;i++){
+	        dp[i][0]=1;
+	    }
+
+	    //Base Case = (Index =0) 
+
+	     for(int i=0;i<=totSum;i++){
+	         if(i==arr[0]){
+	             dp[0][i]=1;
+	         }
+	     }
+	    for(int i=1;i<n;i++){
+	        for(int k=1;k<=totSum;k++){
+	                int notTake=dp[i-1][k];
+	                int take=0;
+	                if(arr[i]<=k){
+	                    take=dp[i-1][k-arr[i]];
+	                }
+	                dp[i][k]= (take == 1 || notTake == 1)?1:0;
+	           
+	        }
+	    }
+	    int min = (int)1e9;
+	    for(int i=0;i<=totSum/2;i++){
+	        if(dp[n-1][i]==1){
+	            min=Math.min(min,Math.abs(i-(totSum-i)));
+	        }
+	    }
+	    
+	    return min;
+	} 
+}

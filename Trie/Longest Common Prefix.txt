@@ -1,0 +1,67 @@
+class Node{
+    Node links[]=new Node[26];
+    boolean flag;
+    public boolean containsKey(char ch){
+        return (links[ch-'a']!=null);
+    }
+    public Node get(char ch){
+        return links[ch-'a'];
+    }
+    public void put(char ch, Node node){
+        links[ch-'a']=node;
+    }
+    public void setFlag(){
+        flag=true;
+    }
+    public boolean getFlag(){
+        return flag;
+    }
+}
+class Trie{
+    Node root;
+    int index;
+    public Trie(){
+        root=new Node();
+    }
+    public void insert(String word){
+        Node node=root;
+        for(int i=0;i<word.length();i++){
+            if(node.containsKey(word.charAt(i))==false){
+                node.put(word.charAt(i),new Node());
+            }
+            node=node.get(word.charAt(i));
+        }
+        node.setFlag();
+    }
+    public int countChars(Node node){
+        int count=0;
+        for(int i=0;i<26;i++){
+            if(node.links[i]!=null){
+                count++;
+                index=i;
+            }
+        }
+        return count;
+    }
+    public String commonPrefix(){
+        String prefix="";
+        Node node=root;
+        while(countChars(node)==1 && node.getFlag()==false){
+            prefix+=(char)(index+'a');
+            node=node.links[index];
+        }
+        return prefix;
+    }
+}
+class Solution{
+    String longestCommonPrefix(String arr[], int n){
+        // code here
+        Trie trie=new Trie();
+        for(String str1:arr){
+            trie.insert(str1);
+        }
+        String ans=trie.commonPrefix();
+        if(ans.equals(""))return "-1";
+        return ans;
+    }
+}

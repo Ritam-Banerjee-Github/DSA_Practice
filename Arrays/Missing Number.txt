@@ -1,0 +1,51 @@
+Brute Force -
+class Compute {
+    
+    public static int missingNumber(int A[], int N)
+    {
+         // Your code goes here
+         HashSet<Integer> set=new HashSet<Integer>();
+         
+         for(int i=0;i<N;i++){
+             set.add(A[i]);
+         }
+         for(int i=1;i<=N;i++){
+             if(!set.contains(i)) return i;
+         }
+         return -1;
+    }
+}
+
+Optimal - 1 (Basic Maths for sum of N natural numbers)
+
+class Compute {
+    
+    public static int missingNumber(int A[], int N)
+    {
+         // Your code goes here
+      int sum=(N*(N+1))/2;
+      int total=0;
+      for(int i=0;i<N;i++){
+          total+=A[i];
+      }
+      return sum-total;
+    }
+}
+
+Optimal - 2 (XOR of two same numbers is 0, 2^2=0 and XOR of any number with 0 is the number iself, 2^0=2, 2^2^2=0^2=2)
+class Compute {
+    
+    public static int missingNumber(int A[], int N)
+    {
+         // Your code goes here
+      int xor1=0;
+      for(int i=1;i<=N;i++){
+          xor1=xor1^i;
+      }
+      int xor2=0;
+      for(int i=0;i<A.length;i++){
+          xor2=xor2^A[i];
+      }
+      return xor1^xor2;
+    }
+}

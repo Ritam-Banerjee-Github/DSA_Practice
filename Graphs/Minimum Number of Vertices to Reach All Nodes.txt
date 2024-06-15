@@ -1,0 +1,22 @@
+class Solution {
+    public List<Integer> findSmallestSetOfVertices(int n, List<List<Integer>> edges) {
+        int m=edges.size();
+        List<Integer> ans=new ArrayList<>();
+        int[] inDegree=new int[n];
+        
+        for(int i=0;i<m;i++){
+            int u=edges.get(i).get(0);
+            int v=edges.get(i).get(1);
+            
+            inDegree[v]++;
+        }
+        
+        for(int i=0;i<n;i++){
+            if(inDegree[i]==0) ans.add(i);
+        }
+        
+        return ans;
+    }
+}
+
+Whenever ther is DAG think about inDegree. Simple DFS didn't work because the for loop will run from 0 to n-1 and what if there is already an edge to 0 or any lower number

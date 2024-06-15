@@ -1,0 +1,36 @@
+Brute -
+class Solution {
+    
+    private int solve(int i, int n, int k, int[] nums, List<Integer> temp){
+        if(i==n){
+            if(temp.size()==0) return 0;
+            return 1;
+        }
+        
+        boolean flag=false;
+        int notTake=solve(i+1,n,k,nums,temp);
+        int take=0;
+        
+        for(int j=0;j<temp.size();j++){
+            if(Math.abs(temp.get(j)-nums[i])==k){
+                flag=true;
+            }
+        }
+        
+        if(flag==false){
+            temp.add(nums[i]);
+            take=solve(i+1,n,k,nums,temp);
+            temp.remove(temp.size()-1);
+        }
+        
+        return take+notTake;
+        
+    }
+    public int beautifulSubsets(int[] nums, int k) {
+     int n=nums.length;
+     if(n==1) return 1;
+     List<Integer> temp=new ArrayList<>();   
+     return solve(0,n,k,nums,temp);
+    
+    }
+}

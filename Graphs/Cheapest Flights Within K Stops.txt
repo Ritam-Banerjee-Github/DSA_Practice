@@ -1,0 +1,77 @@
+class Pair{
+    int node;
+    int cost;
+    
+    public Pair(int node, int cost){
+        this.cost=cost;
+        this.node=node;
+    }
+}
+class Tuple{
+    int stops;
+    int node;
+    int cost;
+    
+    public Tuple(int stops, int node, int cost){
+        this.stops=stops;
+        this.node=node;
+        this.cost=cost;
+    }
+}
+class Solution {
+    
+    public int findCheapestPrice(int n,int flights[][],int src,int dst,int k) {
+        // Code here
+        ArrayList<ArrayList<Pair>> adj = new ArrayList<ArrayList<Pair>>();
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<Pair>());
+        }
+        
+        for(int i=0;i<flights.length;i++){
+            adj.get(flights[i][0]).add(new Pair(flights[i][1],flights[i][2]));
+        }
+
+        // Create a queue which stores the node and their distances from the
+        // source in the form of {stops, {node, cost}} with ‘stops’ indicating 
+        // the no. of nodes between src and current node.A queue will suffice 
+        //as every time the stops gets inceased by 1.
+
+        Queue<Tuple> q=new LinkedList<Tuple>();
+        q.add(new Tuple(0,src,0));
+        int[] costs = new int[n];
+        for(int i=0;i<n;i++){
+            costs[i]=(int)(1e9);
+        }
+        costs[src]=0;
+        
+        while(!q.isEmpty()){
+            int node=q.peek().node;
+            int stops=q.peek().stops;
+            int cost=q.peek().cost;
+            q.remove();
+            
+              // We stop the process as soon as the limit for the stops reaches.
+            if(stops > k) continue; 
+            
+            for(Pair p:adj.get(node)){
+                int next=p.node;
+                int nextCost=p.cost;
+                if(cost+nextCost < costs[next]){
+                    costs[next]=cost+nextCost;
+                    q.add(new Tuple(stops+1,next,costs[next]));
+                }
+            }
+        }
+
+        if(costs[dst]==1e9) return -1;
+        return costs[dst];
+    }
+}
+
+Time Complexity: O( N ) { Additional log(N) of time eliminated here because we’re using a simple queue rather than a priority queue which is usually used in Dijkstra’s Algorithm }.
+
+Where N = Number of flights / Number of edges.
+
+Space Complexity:  O( |E| + |V| ) { for the adjacency list, priority queue, and the dist array }.
+
+Where E = Number of edges (flights.size()) and V = Number of Airports.

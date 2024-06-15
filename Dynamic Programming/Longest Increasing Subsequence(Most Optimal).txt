@@ -1,0 +1,39 @@
+class Solution 
+{
+    //Function to find length of longest increasing subsequence.
+    static int longestSubsequence(int n, int arr[])
+    {
+        // code here
+        int len=1;
+        List<Integer> list=new ArrayList<Integer>();
+        list.add(arr[0]);
+        for(int i=1;i<n;i++){
+            if(arr[i]>list.get(list.size()-1)){
+                list.add(arr[i]);
+                len++;
+            }
+            else{
+                int pos=Collections.binarySearch(list,arr[i]); 
+
+//Collections.binarySearch returns the index of the search key, if it is contained in the list; otherwise, (-(insertion point) - 1). The insertion point is defined as the point at which the key would be inserted into the list: the index of the first element greater than the key, or list.size() if all elements in the list are less than the specified key. Note that this guarantees that the return value will be >= 0 if and only if the key is found.
+
+                if(pos<0){
+                    pos=Math.abs(pos)-1; // To reduce the one additional index due to -1 in above comment and replace at the index of first element greater than key. 
+                }
+                list.set(pos,arr[i]);
+            }
+        }
+        return len;
+        
+    }
+} 
+
+Here, we only need to return the leng of longest increasing subsequence. No need to compute the subsequence. So we use binary search and find length only. This will not store any subsequence. 
+
+Time Complexity: O(N*logN)
+
+Reason: We iterate over the array of size N and in every iteration, we perform a binary search which takes logN time.
+
+Space Complexity: O(N)
+
+Reason: We are using an extra array of size N to store the list variable.

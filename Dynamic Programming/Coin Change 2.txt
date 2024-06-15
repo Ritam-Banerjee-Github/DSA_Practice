@@ -1,0 +1,33 @@
+class Solution {
+    long f(int i, int target, int[] coins, long[][] dp){
+        if(i==0){
+            if(target%coins[0]==0) return 1;
+            return 0;
+        }
+        if(dp[i][target]!=-1) return dp[i][target];
+        long notTake=f(i-1,target,coins,dp);
+        long take=0;
+        if(coins[i]<=target){
+            take=f(i,target-coins[i],coins,dp);
+        }
+        return dp[i][target]=take+notTake;
+    }
+    public long count(int coins[], int N, int sum) {
+        // code here.
+        long[][] dp=new long[N][sum+1];
+        for(int i=0;i<N;i++){
+            for(int j=0;j<=sum;j++){
+                dp[i][j]=-1;
+            }
+        }
+        return f(N-1,sum,coins,dp);
+    }
+}
+
+Time Complexity: O(N*T)
+
+Reason: There are N*W states therefore at max ‘N*T’ new problems will be solved.
+
+Space Complexity: O(N*T) + O(N)
+
+Reason: We are using a recursion stack space(O(N)) and a 2D array ( O(N*T)).

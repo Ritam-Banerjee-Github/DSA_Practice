@@ -1,0 +1,21 @@
+class Solution {
+    int ans=0;
+    
+    private int solve(TreeNode root){
+        if(root==null) return 0;
+        
+        int leftExtra=solve(root.left);
+        
+        int rightExtra=solve(root.right);
+        
+        ans+=Math.abs(leftExtra)+Math.abs(rightExtra);  //In one move, we may choose two adjacent nodes and move one coin from one node to another. And we use mod, because the move can be from parent to child, or chld to parent. (if it is opposite it will return negative)
+            
+        return root.val+leftExtra+rightExtra-1;
+         
+    
+    }
+    public int distributeCoins(TreeNode root) {
+        solve(root);
+        return ans;
+    }
+}

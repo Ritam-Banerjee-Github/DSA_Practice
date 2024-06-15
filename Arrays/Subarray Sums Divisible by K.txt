@@ -1,0 +1,25 @@
+class Solution {
+    public int subarraysDivByK(int[] nums, int k) {
+        int n=nums.length;
+        int ans=0;
+        Map<Integer,Integer> map=new HashMap<Integer,Integer>();
+        map.put(0,1);
+        
+        int sum=0;
+        for(int i=0;i<n;i++){
+            sum+=nums[i];
+            int remainder=((sum%k)+k)%k;  //Handling negative remainder, Do not take Math.abs()
+            
+            if(map.containsKey(remainder)){
+                ans+=map.get(remainder);
+            }
+            
+            map.put(remainder,map.getOrDefault(remainder,0)+1);
+        }
+        
+        return ans;
+    }
+}
+
+TC - O(N)
+SC - O(N)

@@ -1,0 +1,46 @@
+Note -
+preorder and inorder consist of unique values.
+Each value of inorder also appears in preorder.
+
+Solution does not work for duplicate values(ques in GeeksForGeeks)
+
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+         // code here 
+        Map<Integer,Integer> hashmap=new HashMap<Integer,Integer>();
+        for(int i=0;i<inorder.length;i++){
+            hashmap.put(inorder[i],i);
+        }
+        TreeNode root=buildTreeUtility(inorder,preorder,0,preorder.length-1,0,inorder.length-1,hashmap);
+        return root;
+    }
+        public static TreeNode buildTreeUtility(int inorder[], int preorder[], int preStart, int preEnd,
+    int inStart, int inEnd, Map<Integer,Integer> hashmap){
+        if(preStart>preEnd || inStart>inEnd ) return null;
+        TreeNode root = new TreeNode(preorder[preStart]);
+        
+     int inRoot = hashmap.get(root.val);
+     int numsLeft = inRoot - inStart;
+
+    root.left = buildTreeUtility(inorder, preorder, preStart + 1, preStart + numsLeft, inStart, inRoot - 1, hashmap);
+    root.right = buildTreeUtility(inorder, preorder, preStart + numsLeft + 1, preEnd, inRoot + 1, inEnd, hashmap);
+    
+        return root;
+    }
+}

@@ -1,0 +1,24 @@
+Brute -
+class Sol
+{
+    public static int search(int A[], int N)
+    {
+        // your code here
+        int xor1=0;
+        for(int i=0;i<N;i++){
+            xor1=xor1^A[i];
+        }
+        return xor1;
+    }
+}
+
+TC - O(N)
+SC - O(1)
+
+Optimal (Binary Search) -
+Observation - 
+1.Find a breakpoint such that all elements with count twice should be at left half and the one with count 1 should be at right half and the the other elements later
+2.In left thalf, 1st instance of element is at even index and 2nd instance is at odd index.
+3.In right half,1st instance of element is at odd index and 2nd instance is at even index.
+Return Low(as this will be pointing to that index just at start of right half)
+Initially, low =0, high=N-2(because, if ans is at last index then low should be pointing to that index and high will be one index before which is end of left half) 

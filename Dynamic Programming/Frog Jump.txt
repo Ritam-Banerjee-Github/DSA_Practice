@@ -1,0 +1,33 @@
+import java.util.* ;
+import java.io.*; 
+public class Solution {
+    private static int utility(int index,int heights[], int n,int[] dp){
+        if(index<=0){
+            return 0;
+        }
+        if(index==1){
+            return Math.abs(heights[1]-heights[0]);
+        }
+        if(dp[index]!=-1) return dp[index];
+        int one=Math.abs(heights[index]-heights[index-1])+utility(index-1,heights,n,dp);
+        int two=Math.abs(heights[index]-heights[index-2])+utility(index-2,heights,n,dp);
+
+        return dp[index]=Math.min(one,two);
+    } 
+    public static int frogJump(int n, int heights[]) {
+
+        // Write your code here..
+        int[] dp=new int[n];
+        Arrays.fill(dp,-1);
+        return utility(n-1,heights,n,dp);
+    }
+
+}
+
+Time Complexity: O(N)
+
+Reason: The overlapping subproblems will return the answer in constant time O(1). Therefore the total number of new subproblems we solve is ‘n’. Hence total time complexity is O(N).
+
+Space Complexity: O(N)
+
+Reason: We are using a recursion stack space(O(N)) and an array (again O(N)). Therefore total space complexity will be O(N) + O(N) ≈ O(N)

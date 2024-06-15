@@ -1,0 +1,35 @@
+We cannot directly find for exactly K different integers using sliding window, we can only fidn atMost K. So we do (atMost K - atMost (K-1)) to get ans form exactly K
+
+class Solution {
+    private int atMostK(int[] nums, int k){
+        int n=nums.length;
+        int ans=0;
+        int start=0;
+        int end=0;
+        
+        HashMap<Integer,Integer> map=new HashMap<>();
+        
+        while(end<n){
+            map.put(nums[end],map.getOrDefault(nums[end],0)+1);
+            
+            while(map.size()>k){
+                if(map.get(nums[start])==1){
+                    map.remove(nums[start]);
+                }else{
+                    map.put(nums[start],map.get(nums[start])-1);
+                }
+                
+                start++;
+            }
+            
+            ans+=end-start+1; // To get all subarrays count ending at j -> j-i+1
+            end++;
+        }
+        
+        return ans;
+    }
+    public int subarraysWithKDistinct(int[] nums, int k) {
+        
+        return atMostK(nums,k)-atMostK(nums,k-1);
+    }
+}

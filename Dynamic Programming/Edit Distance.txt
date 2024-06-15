@@ -1,0 +1,76 @@
+class Solution {
+    int f(int i, int j, String s1, String s2, int dp[][]){
+        if(i==0) return j;
+        if(j==0) return i;
+        if(dp[i][j]!=-1) return dp[i][j];
+        if(s1.charAt(i-1)==s2.charAt(j-1)) return dp[i][j]=f(i-1,j-1,s1,s2,dp);
+        
+        int delete=1+f(i-1,j,s1,s2,dp);
+        int insert=1+f(i,j-1,s1,s2,dp);
+        int replace=1+f(i-1,j-1,s1,s2,dp);
+    
+        return dp[i][j]=Math.min(delete,Math.min(insert,replace));
+    }
+    public int editDistance(String s, String t) {
+        // Code here
+        int n=s.length();
+        int m=t.length();
+        int[][] dp=new int[n+1][m+1];
+        for(int[] row : dp){
+            Arrays.fill(row,-1);
+        }
+        return f(n,m,s,t,dp);
+    }
+}
+
+Time Complexity: O(N*M)
+
+Reason: There are N*M states therefore at max ‘N*M’ new problems will be solved.
+
+Space Complexity: O(N*M) + O(N+M)
+
+Reason: We are using a recursion stack space(O(N+M)) and a 2D array ( O(N*M)).
+
+Tabulation -
+
+class Solution {
+    public int editDistance(String s, String t) {
+        // Code here
+        int n=s.length();
+        int m=t.length();
+        int[][] dp=new int[n+1][m+1];
+        for(int[] row : dp){
+            Arrays.fill(row,-1);
+        }
+        for(int i=0;i<=m;i++){
+            dp[0][i]=i;
+        }
+        for(int i=1;i<=n;i++){
+            dp[i][0]=i;
+        }
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=m;j++){
+            if(s.charAt(i-1)==t.charAt(j-1)){
+            dp[i][j]=dp[i-1][j-1];
+            }
+            else{
+                    
+            int delete=1+dp[i-1][j];
+            int insert=1+dp[i][j-1];
+            int replace=1+dp[i-1][j-1];
+            dp[i][j]=Math.min(delete,Math.min(insert,replace));
+            }
+                
+            }
+        }
+        return dp[n][m];
+    }
+}
+Time Complexity: O(N*M)
+
+Reason: There are two nested loops
+
+Space Complexity: O(N*M)
+
+Reason: We are using an external array of size ‘N*M’. Stack Space is eliminated.
+

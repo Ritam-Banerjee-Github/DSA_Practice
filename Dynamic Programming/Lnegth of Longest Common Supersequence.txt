@@ -1,0 +1,27 @@
+class Solution
+{
+    //Function to find length of shortest common supersequence of two strings.
+    static int f(int i, int j, String s1, String s2,int dp[][]){
+        if(i==0 || j==0){
+            return 0;
+        }
+        if(dp[i][j]!=-1) return dp[i][j];
+        if(s1.charAt(i-1)==s2.charAt(j-1)){
+            return dp[i][j]=1+ f(i-1,j-1,s1,s2,dp);
+        }
+        return dp[i][j]=Math.max(f(i,j-1,s1,s2,dp),f(i-1,j,s1,s2,dp));
+    }
+    public static int shortestCommonSupersequence(String X,String Y,int m,int n)
+    {
+        //Your code here
+        int[][] dp=new int[m+1][n+1];
+        for(int[] rows: dp){
+            Arrays.fill(rows,-1);
+        }
+        int lcs=f(m,n,X,Y,dp);
+        return m+n-lcs;
+    }
+}
+
+Expected Time Complexity: O(Length(X) * Length(Y)).
+Expected Auxiliary Space: O(Length(X) * Length(Y)) + O(Length(X) + Length(Y))[Recursion Stack Space]

@@ -1,0 +1,24 @@
+import java.util.* ;
+import java.io.*; 
+import java.util.ArrayList;
+
+public class Solution 
+{
+    public static void reverseArray(ArrayList<Integer> arr, int m)
+    {
+        // Write your code here.
+        int n=arr.size();
+        int left=m+1;
+        int right=n-1;
+        while(left<right){
+            int temp=arr.get(left);
+            arr.set(left,arr.get(right)); // set is use to replace, while add method will add new element at index and push all other foprward elements by 1 indexes
+            arr.set(right,temp);
+            left++;
+            right--;
+        }
+    }
+}
+
+TC - O(N), at worst case
+SC - O(1)

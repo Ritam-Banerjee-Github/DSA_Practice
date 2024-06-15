@@ -1,0 +1,46 @@
+class Solution {
+    private void relaxation(ArrayList<ArrayList<Integer>> adj, Queue<Integer> q, int[] dist){
+         while(!q.isEmpty()){
+            int node=q.peek();
+            q.remove();
+            for(int next:adj.get(node)){
+                if(dist[node]+1<dist[next]){
+                    dist[next]=dist[node]+1;
+                    q.add(next);
+                }
+            }
+        }
+    }
+    public int[] shortestPath(int[][] edges,int n,int m ,int src) {
+        // Code here
+        ArrayList<ArrayList<Integer>> adj= new ArrayList<ArrayList<Integer>>();
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<Integer>());
+        }
+        for(int i=0;i<m;i++){
+            int u=edges[i][0];
+            int v=edges[i][1];
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+        Queue<Integer> q=new LinkedList<Integer>();
+        int[] dist=new int[n];
+        for(int i=0;i<n;i++){
+            dist[i]=(int)1e9;
+        }
+        dist[src]=0;
+        q.add(src);
+
+        relaxation(adj,q,dist);  //Modular coding for BFS
+        
+        for(int i=0;i<n;i++){
+            if(dist[i]==(int)1e9){
+                dist[i]=-1;
+            }
+        }
+        return dist;
+    }
+}
+
+Expected Time Complexity: O(N + E), where N is the number of nodes and E is edges
+Expected Space Complexity: O(N)

@@ -1,0 +1,30 @@
+class Solution {
+    public String maximumOddBinaryNumber(String s) {
+        int n=s.length();
+        int countOne=0;
+        for(int i=0;i<n;i++){
+            if(s.charAt(i)=='1') countOne++;
+        }
+
+        String ans="";
+
+        countOne--;
+        int remLength=n-countOne;
+        remLength--;
+
+        while(countOne>0){
+            ans=ans+1;
+            countOne--;
+        }
+
+        while(remLength>0){
+            ans=ans+0;
+            remLength--;
+        }
+
+        ans=ans+1;
+
+        return ans;
+    }
+}
+

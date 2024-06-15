@@ -1,0 +1,47 @@
+class Pair{
+    int profit;
+    int capital;
+    
+    public Pair(int profit,int capital){
+        this.profit=profit;
+        this.capital=capital;
+    }
+}
+class Solution {
+    public int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
+        int n=profits.length;
+        
+        List<Pair> list=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            list.add(new Pair(profits[i],capital[i]));
+        }
+        
+        Collections.sort(list,new Comparator<Pair>(){
+           public int compare(Pair a,Pair b){
+               if(a.capital<b.capital) return -1;
+               if(a.capital>b.capital) return 1;
+               return 0;
+           } 
+        });
+        
+        int i=0;
+        PriorityQueue<Integer> pq=new PriorityQueue<>(Collections.reverseOrder());
+        while(k>0){
+            while(i<n && list.get(i).capital<=w){
+                pq.add(list.get(i).profit);
+                i++;
+            }
+            
+            if(pq.isEmpty()) break;
+            
+            w+=pq.poll();
+            k--;
+        }
+        
+        return w;
+    }
+}
+
+//Using heap and greedily picking up projects
+//T.C : O(nlogn)
+//S.C : O(n)

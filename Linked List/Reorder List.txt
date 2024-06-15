@@ -1,0 +1,35 @@
+class Solution {
+    public void reorderList(ListNode head) {
+        ListNode temp=head;
+        ArrayList<Integer> list=new ArrayList<>();
+        
+        while(temp!=null){
+            list.add(temp.val);
+            temp=temp.next;
+        }
+        
+        if(list.size()==1) return ; // Edge Case
+        
+        int i=1;
+        int j=list.size()-1;
+        
+        temp=head;
+        
+        temp.next=new ListNode(list.get(j));
+        temp=temp.next;
+        j--;
+        
+        
+        while(i<j){
+            temp.next=new ListNode(list.get(i));
+            i++;
+            temp=temp.next;
+            temp.next=new ListNode(list.get(j));
+            j--;
+            temp=temp.next;
+        }
+        
+        if(i==j) temp.next=new ListNode(list.get(i));
+        
+    }
+}

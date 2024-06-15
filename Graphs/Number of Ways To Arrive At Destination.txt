@@ -1,0 +1,74 @@
+Java Accepted Solution For Leetcode :
+class Pair{
+    long node;
+    long time;
+    
+    public Pair(long node, long time){
+        this.node=node;
+        this.time=time;
+    }
+}
+class Solution {
+    int mod=(int)(1e9+7);
+    
+    public int countPaths(int n, int[][] roads) {
+        ArrayList<ArrayList<Pair>> adj=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<Pair>());
+        }
+        
+        long[] dist=new long[n];
+        Arrays.fill(dist,(long)1e18);
+        
+        long[] ways=new long[n];
+        
+        dist[0]=0;
+        ways[0]=1;
+        
+        for(int i=0;i<roads.length;i++){
+            long u=roads[i][0];
+            long v=roads[i][1];
+            long time=roads[i][2];
+            
+            adj.get((int)u).add(new Pair(v,time));
+            adj.get((int)v).add(new Pair(u,time));
+        }
+        
+        PriorityQueue<Pair> pq=new PriorityQueue<>(new Comparator<Pair>(){
+           public int compare(Pair a, Pair b){
+               if(a.time>b.time) return 1;
+               else if(a.time < b.time) return -1;
+               else{
+                   if(a.node>b.node) return 1;
+                   return -1;
+               }
+           } 
+        });
+        
+        pq.add(new Pair(0,0));
+        
+        while(!pq.isEmpty()){
+            long node=pq.peek().node;
+            long currTime=pq.peek().time;
+            
+            pq.poll();
+            
+            for(Pair p:adj.get((int)node)){
+                long next=p.node;
+                long time=p.time;
+                
+                if(currTime+time<dist[(int)next]){
+                    dist[(int)next]=currTime+time;
+                    ways[(int)next]=ways[(int)node];
+                    pq.add(new Pair(next,currTime+time));
+
+                }else if(currTime+time==dist[(int)next]){
+                    ways[(int)next]=(ways[(int)next]+ways[(int)node])%mod;
+                }
+            }
+        }
+        
+        return (int)ways[n-1]%mod;
+    }
+}
+

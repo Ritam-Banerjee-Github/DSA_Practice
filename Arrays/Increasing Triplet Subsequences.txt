@@ -1,0 +1,28 @@
+We can do this with LIS. But below solution is linear ans uses constant space
+
+
+ class Solution {
+    public boolean increasingTriplet(int[] nums) {
+        int n=nums.length;
+        
+        int n2=Integer.MAX_VALUE;
+        int n1=Integer.MAX_VALUE;
+        
+        for(int i=0;i<n;i++){
+            int n3=nums[i];
+            
+            if(n3<=n1){  //We give = to take care of repeated values
+                n1=n3;
+            }else if(n3<=n2){
+                n2=n3;
+            }else{
+                return true;
+            }
+        }
+        
+        return false;
+    }
+}
+
+TC - O(N)
+SC - O(1)

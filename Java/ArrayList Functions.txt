@@ -1,0 +1,45 @@
+Note:
+The remove method in Java's List interface is overloaded, meaning it has multiple versions with different parameter types. There are two main versions:
+
+remove(int index): Removes the element at the specified index.
+
+remove(Object obj): Removes the first occurrence of the specified element.
+
+        // Remove by index
+        numbers.remove(2); // Removes the element at index 2
+
+        // Remove by value
+        numbers.remove(Integer.valueOf(2)); // Removes the first occurrence of the value 2
+
+In this example, the first call to remove removes the element at index 2, and the second call removes the first occurrence of the value 2. The type of the argument determines which version of the remove method is invoked.
+
+class RandomizedSet {
+    List<Integer> list=new ArrayList<>();
+    
+    public RandomizedSet() {
+        
+    }
+    
+    public boolean insert(int val) {
+        if(!list.contains(val)){ 
+           list.add(val);
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean remove(int val) {
+        if(list.contains(val)){
+            list.remove(Integer.valueOf(val));
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public int getRandom() {
+        int index=(int)(Math.random()*list.size());  //Math.random(): This method returns a pseudorandom double value between 0.0 (inclusive) and 1.0 (exclusive).
+
+        return list.get(index);
+    }
+}

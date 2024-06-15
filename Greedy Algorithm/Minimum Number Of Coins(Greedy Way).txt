@@ -1,0 +1,25 @@
+class Solution{
+    static List<Integer> minPartition(int N)
+    {
+        // code here
+        int[] denominations = {1,2,5,10,20,50,100,200,500,2000};
+        int len=denominations.length;
+        List<Integer> ans=new ArrayList<>();
+        int rem=N;
+        for(int i=len-1;i>=0;i--){
+           if(rem==0){
+                 return ans;
+                }
+         while(rem>=denominations[i]){
+             rem=rem-denominations[i];
+             ans.add(denominations[i]);
+                  
+            }
+         }
+         return ans;
+       }
+
+}
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(N)

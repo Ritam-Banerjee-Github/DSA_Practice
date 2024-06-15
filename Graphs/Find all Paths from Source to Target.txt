@@ -1,0 +1,76 @@
+Approach 1:
+class Solution {
+    List<List<Integer>> ans=new ArrayList<>();
+
+    private void dfs(List<List<Integer>> adj, int node, int target, List<Integer> temp){
+        temp.add(node);
+        
+        if(node==target){
+           ans.add(new ArrayList<>(temp));
+           temp.remove(temp.size()-1);
+           return; 
+        }
+
+        for(int node:adj.get(source)){
+            solve(adj,node,target,temp);
+        }
+
+        temp.remove(temp.size()-1);  //Backtracking
+    }
+    public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
+       int n=graph.length;
+       List<List<Integer>> adj=new ArrayList<>();
+       for(int i=0;i<n;i++){
+           adj.add(new ArrayList<>());
+       }
+       for(int i=0;i<n;i++){
+           int m=graph[i].length;
+           for(int j=0;j<m;j++){
+               adj.get(i).add(graph[i][j]);
+           }
+       }
+       List<Integer> temp=new ArrayList<>();
+       dfs(adj,0,n-1,temp);
+       return ans;
+      
+
+    }
+}
+
+Approach 2: Not returning after finding target
+
+class Solution {
+    List<List<Integer>> ans=new ArrayList<>();
+    private void solve(List<List<Integer>> adj, int source, int target, List<Integer> temp){
+        temp.add(source);
+        
+        if(source==target){
+           ans.add(new ArrayList<>(temp));
+//We did not give return after this, as we need to pop this node for backtracking at the end to find other paths
+        }
+
+        for(int node:adj.get(source)){
+            solve(adj,node,target,temp);
+        }
+
+        temp.remove(temp.size()-1);  //Backtracking
+    }
+    public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
+       int n=graph.length;
+       List<List<Integer>> adj=new ArrayList<>();
+       for(int i=0;i<n;i++){
+           adj.add(new ArrayList<>());
+       }
+       for(int i=0;i<n;i++){
+           int m=graph[i].length;
+           for(int j=0;j<m;j++){
+               adj.get(i).add(graph[i][j]);
+           }
+       }
+       List<Integer> temp=new ArrayList<>();
+        solve(adj,0,n-1,temp);
+       return ans;
+      
+
+    }
+}

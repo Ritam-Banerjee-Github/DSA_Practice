@@ -1,0 +1,48 @@
+class Solution {
+    private int solve(int i, int j, int[] nums){
+        if(i>j) return 0;
+        if(i==j) return nums[i];
+
+        int takei=nums[i]-solve(i+1,j,nums); // Recursion will find compute and return the score of player 2/Bob using the same optimal strategy
+        int takej=nums[j]-solve(i,j-1,nums);
+
+        return Math.max(takei,takej);
+    }
+    public boolean predictTheWinner(int[] nums) {
+        return solve(0,nums.length-1,nums)>=0; (Returns difference of score of Alice/Player 1 - Bob/Player 2)
+    }
+}
+
+OR 
+Approach 2 -
+
+class Solution {
+    private int solve(int i, int j, int[] nums,int player,int[][][] dp){
+        if(i>j) return 0;
+        if(i==j) return nums[i];
+        
+        if(dp[i][j][player]!=-1) return dp[i][j][player];
+
+        if(player==0){
+            return dp[i][j][player]=Math.max(nums[i]+solve(i+1,j,nums,1,dp),nums[j]+solve(i,j-1,nums,1,dp));
+        }else{
+            return dp[i][j][player]=Math.min(solve(i+1,j,nums,0,dp),solve(i,j-1,nums,0,dp));
+        }
+
+    }
+    public boolean predictTheWinner(int[] nums) {
+        int total=0;
+        for(int i=0;i<nums.length;i++){
+             total+=nums[i];
+        }
+        int[][][] dp=new int[nums.length][nums.length][2];
+        for(int[][] rows:dp){
+            for(int[] row:rows){
+                Arrays.fill(row,-1);
+            }
+        }
+        int one= solve(0,nums.length-1,nums,0,dp);
+        int second=total-one;
+        return (one>=second);
+    }
+}

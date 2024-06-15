@@ -1,0 +1,97 @@
+Approach 1->
+You can use the dependency-plugin to generate all dependencies in a separate directory before the package phase and then include that in the classpath of the manifest:
+
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-dependency-plugin</artifactId>
+    <executions>
+        <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+                <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+                <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                <overWriteReleases>false</overWriteReleases>
+                <overWriteSnapshots>false</overWriteSnapshots>
+                <overWriteIfNewer>true</overWriteIfNewer>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-jar-plugin</artifactId>
+    <configuration>
+        <archive>
+            <manifest>
+                <addClasspath>true</addClasspath>
+                <classpathPrefix>lib/</classpathPrefix>
+                <mainClass>theMainClass</mainClass>
+            </manifest>
+        </archive>
+    </configuration>
+</plugin>
+Alternatively, use ${project.build.directory}/classes/lib as OutputDirectory to integrate all JAR files into the main JAR file, but then you will need to add custom classloading code to load the JAR files.
+
+Link - https://www.baeldung.com/executable-jar-with-maven
+
+Approach 2 ->
+
+2.1. Manual Configuration
+Let's start with a manual approach with the help of the maven-dependency-plugin.
+
+We'll begin by copying all required dependencies into the folder that we'll specify:
+
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-dependency-plugin</artifactId>
+    <executions>
+        <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+                <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+                <outputDirectory>
+                    ${project.build.directory}/libs
+                </outputDirectory>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+Copy
+There are two important aspects to notice.
+
+
+freestar
+First, we specify the goal copy-dependencies, which tells Maven to copy these dependencies into the specified outputDirectory. In our case, we'll create a folder named libs inside the project build directory (which is usually the target folder).
+
+Second, we are going to create executable and classpath-aware jar, with the link to the dependencies copied in the first step:
+
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-jar-plugin</artifactId>
+    <configuration>
+        <archive>
+            <manifest>
+                <addClasspath>true</addClasspath>
+                <classpathPrefix>libs/</classpathPrefix>
+                <mainClass>
+                    com.baeldung.executable.ExecutableMavenJar
+                </mainClass>
+            </manifest>
+        </archive>
+    </configuration>
+</plugin>
+Copy
+The most important part of this is the manifest configuration. We add a classpath, with all dependencies (folder libs/), and provide the information about the main class.
+
+Please note that we need to provide a fully qualified name of the class, which means it will include package name.
+
+The advantages and disadvantages of this approach are:
+
+pros – transparent process, where we can specify each step
+cons – manual; dependencies are out of the final jar, which means that our executable jar will only run if the libs folder will be accessible and visible for a jar

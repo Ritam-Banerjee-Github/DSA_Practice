@@ -1,0 +1,54 @@
+class Range{
+    int start;
+    int end;
+    public Range(int start,int end){
+        this.start=start;
+        this.end=end;
+    }
+}
+class Solution {
+    HashMap<String,Integer> dp=new HashMap<>();
+    private int solve(int i,int n,ArrayList<Range> list,int maxEnd){
+        if(i>=list.size()){
+            if(maxEnd>=n) return 0;
+            return (int)(1e9);
+        }
+        
+        if(list.get(i).start>maxEnd) return (int)(1e9); //There should not be any breaks as we need to cover entire garden
+
+        String key=""+i+maxEnd;
+        if(dp.containsKey(key)) return dp.get(key);
+        
+        int take=1+solve(i+1,n,list,Math.max(maxEnd,list.get(i).end));
+        int notTake=solve(i+1,n,list,maxEnd);
+        
+        int res=Math.min(take,notTake);
+        dp.put(key,res);
+        return res;
+    }
+    public int minTaps(int n, int[] ranges) {
+        int m=ranges.length;
+        ArrayList<Range> list=new ArrayList<>();
+        for(int i=0;i<m;i++){
+            int start=Math.max(0,i-ranges[i]);
+            int end=Math.min(n,i+ranges[i]);
+            
+            list.add(new Range(start,end));
+        }
+        
+        Collections.sort(list,new Comparator<Range>(){   //We have to sort based on start to compare in solve method if start is exceeding maxEnd of previous. Then it is not possile so return MAX_VALUE.
+
+           public int compare(Range a,Range b){
+               if(a.start<b.start) return -1;
+               else if(a.start>b.start) return 1;
+               else{
+                   if(a.end>b.end) return 1;
+                   return -1;
+               }
+           } 
+        });
+        int ans=solve(0,n,list,0);
+        return ans==1e9?-1:ans;
+        
+    }
+}

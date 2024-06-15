@@ -1,0 +1,23 @@
+XOR -> Even number of 1's, then 0
+       Odd number of 1's, then 1
+class Solution {
+    public int minOperations(int[] nums, int k) {
+        int n=nums.length;
+        int xor=0;
+        int ans=0;
+        
+        for(int i=0;i<n;i++){
+            xor=xor^nums[i];
+        }
+        
+        if(k==xor) return 0;
+        
+      //When we do the Xor of totalXor and k, the same bits will be 0 and the different bits will be 1, so we will know the number of bits we need to fil to make them equal by counting the number of set bits
+ 
+        int differenceInBits=xor^k;  
+        
+        ans=Integer.bitCount(differenceInBits);
+        
+        return ans;
+    }
+}

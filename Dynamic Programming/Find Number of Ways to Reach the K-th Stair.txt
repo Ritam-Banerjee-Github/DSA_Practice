@@ -1,0 +1,36 @@
+class Solution {
+    HashMap<String,Integer> dp=new HashMap<>();
+    
+    private int solve(int stair, int jump, int k, boolean notConsecutiveOrZero){
+      if(stair>k+1) return 0;
+        
+        boolean addOne=false;
+        
+        if(stair==k){
+            addOne=true;
+        }
+        
+        String key=""+stair+jump+notConsecutiveOrZero;
+        if(dp.containsKey(key)) return dp.get(key);
+        
+        int optionOne=0;
+        int optionTwo=0;
+        
+        if(stair!=0 && notConsecutiveOrZero==true){
+            optionOne=solve(stair-1,jump,k,false);
+        }
+        
+        optionTwo=solve(stair+(int)Math.pow(2,jump),jump+1,k,true);
+        
+        if(addOne==true){
+            dp.put(key,1+optionOne+optionTwo);
+            return 1+optionOne+optionTwo;
+        }
+        
+        dp.put(key,optionOne+optionTwo);
+        return optionOne+optionTwo;
+    }
+    public int waysToReachStair(int k) {
+        return solve(1,0,k,true);
+    }
+}

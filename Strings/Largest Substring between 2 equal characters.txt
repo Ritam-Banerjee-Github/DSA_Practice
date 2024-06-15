@@ -1,0 +1,22 @@
+Note: We only need to store first occurence of any character, No need to update the index in case the same character is found later. Max length is the length of substring between first occurence and latest occurence
+
+class Solution {
+    public int maxLengthBetweenEqualCharacters(String s) {
+        int[] first_index=new int[26];
+    
+        int n=s.length();
+        
+        Arrays.fill(first_index,-1);
+        
+        int ans=-1;
+        for(int i=0;i<n;i++){
+            if(first_index[s.charAt(i)-'a']==-1){
+                first_index[s.charAt(i)-'a']=i;
+            }else{
+                ans=Math.max(ans,i-first_index[s.charAt(i)-'a']-1);
+            }   
+        }
+        
+        return ans;
+    }
+}

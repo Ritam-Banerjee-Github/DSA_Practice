@@ -1,0 +1,46 @@
+class Solution 
+{
+    //Function to find minimum number of pages.
+    private static boolean isPossible(int target, int[] arr,int M){
+        int allocateStudent=1;
+        int pages=0;
+        for(int i=0;i<arr.length;i++){
+            if(arr[i]>target) return false;
+            if(pages+arr[i]<=target){
+                pages=pages+arr[i];
+            }
+            else{
+                allocateStudent++;;
+                pages=arr[i];
+            }
+        }
+        if(allocateStudent>M) return false;
+        return true;
+    }
+    public static int findPages(int[]A,int N,int M)
+    {
+        //Your code here
+        if(M>N) return -1;
+        int max=0;
+        int low=0;
+        int ans=-1;
+        for(int i=0;i<N;i++){
+            max+=A[i];
+            low=Math.min(low,A[i]);
+        }
+        while(low<=max){
+            int mid=(low+max)/2;
+            if(isPossible(mid,A,M)){
+                ans=mid;
+                max=mid-1;
+            } 
+            else
+            low=mid+1;
+        }
+        return ans;
+    }
+}
+
+TC - 
+Expected Time Complexity: O(NlogN) ( (N) -> For loop * (logN) -> Binary Search)
+Expected Auxilliary Space: O(1) -> No extra Space

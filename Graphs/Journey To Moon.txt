@@ -1,0 +1,69 @@
+choose 2 people out of 5 - 5*(5-1)/2
+
+or nCr = n*(n-1)/r
+
+
+class Result {
+
+    /*
+     * Complete the 'journeyToMoon' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts following parameters:
+     *  1. INTEGER n
+     *  2. 2D_INTEGER_ARRAY astronaut
+     */
+
+    private static void dfs(int node, List<List<Integer>> adj, int[] vis, Stack<Integer> stack){
+        vis[node]=1;
+        for(int next:adj.get(node)){
+            if(vis[next]!=1){
+                dfs(next,adj,vis,stack);
+            }
+        }
+        stack.push(node);
+    }
+    public static int journeyToMoon(int n, List<List<Integer>> astronaut) {
+    // Write your code here
+    List<List<Integer>> adj=new ArrayList<>();
+    for(int i=0;i<n;i++){
+        adj.add(new ArrayList<Integer>());
+    }
+    for(int i=0;i<astronaut.size();i++){
+        adj.get(astronaut.get(i).get(0)).add(astronaut.get(i).get(1));
+        adj.get(astronaut.get(i).get(1)).add(astronaut.get(i).get(0));
+    }
+    int[] vis=new int[n];
+    Stack<Integer> stack=new Stack<>();
+    int components=0;
+    int count=0;
+    List<Integer> cc =new ArrayList<Integer>();
+    for(int i=0;i<n;i++){
+        if(vis[i]!=1){
+            components++;
+            dfs(i,adj,vis,stack);
+            while(!stack.isEmpty()){
+                int node=stack.peek();
+                count++;
+                stack.pop();
+            }
+            cc.add(count);
+            count=0;
+        }
+    }
+    int ans=n*(n-1)/2;   // Find out total number of pairs
+
+    if(components==1) return 0;
+    
+    if(components>1){
+        for(int i=0;i<cc.size();i++){
+            int x=(cc.get(i)*(cc.get(i)-1))/2;  //Find number of pairs between each separate component
+            ans=ans-x;  // Subtract from total pairs to get the ans
+        }
+    }
+    return ans;
+    }
+
+}
+
+

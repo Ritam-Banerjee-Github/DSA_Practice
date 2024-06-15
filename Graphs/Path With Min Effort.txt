@@ -1,0 +1,73 @@
+class Cell {
+    int row;
+    int col;
+    int maxEffortForCurrentRoute;
+    
+    public Cell(int row,int col,int maxEffortForCurrentRoute){
+        this.row=row;
+        this.col=col;
+        this.maxEffortForCurrentRoute=maxEffortForCurrentRoute;
+    }
+}
+
+class Solution {
+    public int minimumEffortPath(int[][] heights) {
+        int n=heights.length;
+        int m=heights[0].length;
+        
+        int[][] effort=new int[n][m];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                effort[i][j]=(int)(1e9);
+            }
+        }
+        effort[0][0]=0;
+        
+        PriorityQueue<Cell> pq=new PriorityQueue<Cell>((x,y) -> x.maxEffortForCurrentRoute - y.maxEffortForCurrentRoute);
+        pq.add(new Cell(0,0,0));
+       
+        int delrow[] = {-1, 0, 1, 0}; 
+        int delcol[] = {0, 1, 0, -1}; 
+        
+        while(!pq.isEmpty()){
+            int row=pq.peek().row;
+            int col=pq.peek().col;
+            int maxEffortForCurrentRoute=pq.peek().maxEffortForCurrentRoute;
+            pq.remove();
+       
+        // Check if we have reached the destination cell,
+        // return the current value of difference (which will be min because it is the first route to be popped from Priority Queue).
+            if(row == n-1 && col == m-1){
+                return maxEffortForCurrentRoute;
+            }
+            
+            for(int i=0;i<4;i++){
+                int nrow=row+delrow[i];
+                int ncol=col+delcol[i];
+                
+
+                if(nrow>=0 && nrow<n && ncol>=0 && ncol<m){
+                    // Effort can be calculated as the max value of abs differences 
+                    // between the heights of the node and its adjacent nodes.
+                    int currEffort=Math.max(Math.abs(heights[row][col] - heights[nrow][ncol]),maxEffortForCurrentRoute);
+                    // If the calculated effort is less than the prev value
+                    // we update as we need the min effort.
+                    if(currEffort<effort[nrow][ncol]){
+                        effort[nrow][ncol]=currEffort;
+                        pq.add(new Cell(nrow,ncol,currEffort));
+                    }
+                    
+                }
+            }
+        }
+        
+        return 0;
+    }
+}
+Time Complexity: O( 4*N*M * log( N*M) ) { N*M are the total cells, for each of which we also check 4 adjacent nodes for the minimum effort and additional log(N*M) for insertion-deletion operations in a priority queue } 
+
+Where, N = No. of rows of the binary maze and M = No. of columns of the binary maze.
+
+Space Complexity: O( N*M ) { Distance matrix containing N*M cells + priority queue in the worst case containing all the nodes ( N*M) }.
+
+Where, N = No. of rows of the binary maze and M = No. of columns of the binary maze

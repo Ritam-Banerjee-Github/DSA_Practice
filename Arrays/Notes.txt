@@ -1,0 +1,105 @@
+Remove duplicate in Array->
+Use 2 pointers (i,j) where i=0,j->1 to n. If arr[j]=arr[i] arr[i+1]=arr[j] and move i++
+
+Left Rotate Array By k ->
+Always do (k%n) first.
+Optimal -> Reverse Array from (0 to d-1), then from (d to n-1). And then reverse entire array from (0 to n-1)
+
+Move all zeroes to end ->
+Optimal -> 2 pointer approach(i & j, where i will iterate and search for non zero number and j will stay at zero).
+
+First iterate in array and find first occurance of 0 and assign the index to j and iterate i from j+1.
+
+When i is at any non zero number and j is at zero, we swap it, and move j++(while i keeps on iterating till end)
+
+
+Find missing Number from 1 to N ->
+Optimal Approach 1->Sum(N*N+1)/2 and sum of array. Missing number is answer
+Optimal Approach 2 -> XOR(1 to N) and and array[i]. Answer is missing number
+
+Max Consecutive 1's ->
+Optimal -> Iterte and do count++ when arr[i]==1 and set count=0 if arr[i]=0. Return max
+
+Find number that appear once and all other number twice -
+Optimal is using Binary Search
+But for O(N), we do XOR of all elements and answer will be the single element
+
+Longest Subarray with Sum K ->
+Optimal Approach for Positives, Zeroes and Negatives Elements -> Prefix Sum Concept using hashmap to store the indexes.
+
+Optimal Approach for Only Positive(Non Zero) Elements ->
+Two Pointer Approach -> i,j and only when the sum==k we move left pointer(i) by 1 and find the length each time sum==k. Return max length
+
+Majority Element In Array 
+Use Hashmap for Better Solution
+Optimal Approach -> (Moore's Voting Algorithm).Pick strating element and increase count if next element is same. If different then reduce count. If count is zero then set curr element a[i] as element, increase count and repeat the process. 
+If the array "always" contains majority element the that is the answer. If not iterate array again an check count of the element. If count is not more than said majority elemen count, then there will never be an answer. Otherwise return element.
+
+Maximum Subarray Sum (Kadane's Algorithm)
+Iterate and find sum. if sum<0, set sum=0
+If(sum>0), maxi=Math.max(maxi,sum)
+
+To Print the subarray, if sum==0, set start=i.
+if(sum>0) check add,
+ansStart=start,
+ansEnd=i
+
+Next Permutation ->
+Optimal Approach ->
+1.Find break point index(Initially index=-1) from back of array where arr[i]<arr[i+1] and set index=i.If there are no break points(index==-1) the just swap the array and return. That is the last array in lexicographical order
+2. Find next greater element than arr[index] from back of array till >index and swap the elements.
+3.Reverse the array from index+1 till end
+
+
+Longest Consecutive Sequence ->
+Optimal -> Store in Set.For every element check if arr[i]-1 is present in Set or not. If present then that is not starting point. If not present then that is starting point and check while(set.contains(arr[i]+1)){longest++; i=i+1}
+
+Set Matrix 0 ->
+Keep a row[m] for columns and col[n] for rows and iterate throught the matrix. If matrix[i][j]==0 then mark its corresponding col[] and row[] as 1. 
+Then againg iterate through matrix and set matrix[i][j]=0 if its corresponding row[] and col[] is marked as 1
+
+Rotate Matrix by 90 ->
+Brute -> ans[j][n-1-i]=matrix[i][j]
+Optimal -> Transpose Matrix and Reverse every Row
+Transpose -> for(i=0 to n-2) (j=i+1 to n-1), swap matrix[i][j] to matrix[j][i]
+
+Count Subarray Sum Equals K ->
+Optimal -> Prefix Sum. A hashmap which stores Sum and Count(not Index). Initially add (0,1) in map. Then iterate and check for prefix sum and add the count to ans if matches
+
+Triplet Sum =0 ->
+Optimal ->
+First Sort the array.
+Iterate (i =0 to n-1) and check if(arr[i] == arr[i-1]) continue; keep two pointers (j(i+1),k(n-1)). If sum <0 increase j else increase k.
+Else if matches then, j++,k--. Also add while(j<k && arr[j]==arr[j-1]) j++; while(j<k && arr[k]==arr[k+1]) k--;
+
+
+Number of SubArrays with XOR k ->
+Optimal -> Just like prefixSum here we use prefixXor(Xor till index i,count)
+Xr -> XOR till i
+x^k=Xr -> x^k^k=Xr^K ->x=Xr^k. We will search for this x in map
+
+
+Sort 0's,1's,2's ->
+Optimal -> Dutch National Flag Algorithm
+low=mid=0;high=n-1;
+while(mid<=high)
+if(0)
+swap(arr[low],arr[mid])
+low++;
+mid++;
+if(1)
+mid++;
+if(2)
+swap(mid,high)
+high--;
+
+
+Missing & Repeating Numbers ->
+Optimal -> S(n) - S(arr[]) -> (x-y)
+           S^2(n) - S^(arr[]) -> (x2-y2)=(x+y)(x-y). Find x+y and then solve for x(repeating) and y(missing)
+
+Max Product Subarray ->
+prefix -> 0 to n-1;
+suffix -> n-1 to 0;
+if(array contains 0) then if prefix/suffix==0 then reset back to 1
+At every step ans=Math.max(ans,Math.max(prefix,suffix))

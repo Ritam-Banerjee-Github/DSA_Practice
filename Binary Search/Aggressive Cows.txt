@@ -1,0 +1,34 @@
+class Solution {
+    private static boolean isPlaceCowUtility(int target,int stalls[], int k, int n){
+        int coordinate=stalls[0];
+        int count=1;
+        for(int i=1;i<n;i++){
+            if(stalls[i]-coordinate>=target){
+                coordinate=stalls[i];
+                count++;
+            }
+            if(count==k) return true;
+        }
+        return false;
+    }
+    public static int solve(int n, int k, int[] stalls) {
+        Arrays.sort(stalls);
+        int ans=Integer.MIN_VALUE;
+        int low=1;
+        int high=stalls[n-1]-stalls[0];
+        
+        while(low<=high){
+            int mid=(low+high)/2;
+            if(isPlaceCowUtility(mid,stalls,k,n)){
+                ans=Math.max(ans,mid);
+                low=mid+1;  //Since I need the maximum ans
+            }
+            else high=mid-1;
+            
+        }
+        return ans;
+    }
+}
+
+TC - O(N*logN) + O(N*logN)
+SC - O(1)

@@ -1,0 +1,49 @@
+class Pair {
+    int num;
+    int frequency;
+    public Pair(int num, int freq){
+        this.num=num;
+        this.frequency=freq;
+    }
+}
+class Solution {
+    public int[] topK(int[] nums, int k) {
+        // Code here
+        HashMap<Integer,Integer> map=new HashMap<>();
+        for(int i=0;i<nums.length;i++){
+            map.put(nums[i],map.getOrDefault(nums[i],0)+1);
+        }
+         ArrayList<Pair> list=new ArrayList<>();
+        for ( Integer key : map.keySet()) {
+            list.add(new Pair(key,map.get(key)));    
+                 }
+
+        Collections.sort(list,(x,y) -> {               // Implementing comparable for each element of the list
+                    if(x.frequency!=y.frequency){
+                        if(x.frequency>y.frequency){
+                            return -1; // lhs before rhs
+                        }
+                        else
+                           return 1;   // rhs before lhs
+                    }
+                    else
+                       {
+                           if(x.num>y.num){
+                               return -1;
+                           }
+                           else
+                             return 1;
+                       }
+                 });
+
+            int[] ans = new int[k];
+            for(int i=0;i<k;i++){
+                Pair p=list.get(i);
+                ans[i]=p.num;
+            }
+            return ans;
+    }
+}
+
+Expected Time Complexity : O(NlogN)
+Expected Auxilliary Space : O(N)

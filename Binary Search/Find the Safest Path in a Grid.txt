@@ -1,0 +1,113 @@
+//T.C : O(log(n) * n^2)
+//S.C : O(n^2)
+class Pair{
+    int row;
+    int col;
+    
+    public Pair(int row, int col){
+        this.row=row;
+        this.col=col;
+    }
+}
+class Solution {
+    private boolean checkforSF(int mid, int[][] minDistFromTheif){
+        int n=minDistFromTheif.length;
+        Queue<Pair> q=new LinkedList<>();
+        int[][] vis=new int[n][n];
+        
+        if(minDistFromTheif[0][0]<mid) return false;
+        
+        q.add(new Pair(0,0));
+        vis[0][0]=1;
+        
+        while(!q.isEmpty()){
+            Pair p=q.remove();
+            int row=p.row;
+            int col=p.col;
+            
+            if(row==n-1 && col==n-1) return true;
+            
+            int[] delrow={0,1,0,-1};
+            int[] delcol={1,0,-1,0};
+                
+            for(int k=0;k<4;k++){
+                int nrow=row+delrow[k];
+                int ncol=col+delcol[k];
+                    
+                if(nrow>=0 && nrow<n && ncol>=0 && ncol<n && vis[nrow][ncol]!=1 && minDistFromTheif[nrow][ncol]>=mid){
+                    q.add(new Pair(nrow,ncol));
+                    vis[nrow][ncol]=1;
+                }
+            }
+        }
+        
+        return false;
+    }
+    public int maximumSafenessFactor(List<List<Integer>> grid) {
+        int n=grid.size();
+        int[][] vis=new int[n][n];
+        int[][] minDistFromTheif=new int[n][n];
+        
+
+       //Step 1 - Precalculation of minDistFromTheif for each cell by doing multi-source BFS from each theif cell
+
+        Queue<Pair> q=new LinkedList<>();
+        
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(grid.get(i).get(j)==1){
+                    q.add(new Pair(i,j));
+                    vis[i][j]=1;
+                }
+            }
+        }
+        
+        int level=0;
+        
+        while(!q.isEmpty()){
+            int size=q.size();
+            
+            for(int i=0;i<size;i++){
+                Pair p=q.remove();
+                int row=p.row;
+                int col=p.col;
+                minDistFromTheif[row][col]=level;
+                
+                int[] delrow={0,1,0,-1};
+                int[] delcol={1,0,-1,0};
+                
+                for(int k=0;k<4;k++){
+                    int nrow=row+delrow[k];
+                    int ncol=col+delcol[k];
+                    
+                    if(nrow>=0 && nrow<n && ncol>=0 && ncol<n && vis[nrow][ncol]!=1){
+                        q.add(new Pair(nrow,ncol));
+                        vis[nrow][ncol]=1;
+                    }
+                }
+            }
+            
+            level++;
+        }
+        
+       //Step 2 - Apply BS for given range
+
+        int low=0;
+        int high=400;
+        int ans=0;
+        
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            
+            if(checkforSF(mid,minDistFromTheif)==true){
+                ans=mid;
+                low=mid+1;
+            }else{
+                high=mid-1;
+            }
+        }
+        
+        return ans;
+    }
+}

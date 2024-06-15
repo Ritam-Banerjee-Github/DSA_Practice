@@ -1,0 +1,86 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isCompleteTree(TreeNode root) {
+        Queue<TreeNode> queue=new LinkedList<>();
+        queue.add(root);
+        Boolean pastNull=false;
+
+        while(!queue.isEmpty()){
+            int n=queue.size();
+            for(int i=0;i<n;i++){
+            TreeNode node=queue.peek();
+            queue.remove();
+            
+            if(node==null){
+              pastNull=true;
+            }else{
+               if(pastNull==false){
+                   queue.add(node.left);
+                   queue.add(node.right);
+               }else{
+                   return false;
+               }
+            }
+          }
+        } 
+        return true;
+    }
+}
+
+ OR - Without taking size
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isCompleteTree(TreeNode root) {
+        Queue<TreeNode> queue=new LinkedList<>();
+        queue.add(root);
+        Boolean pastNull=false;
+
+        while(!queue.isEmpty()){
+           
+            TreeNode node=queue.peek();
+            queue.remove();
+            
+            if(node==null){
+              pastNull=true;
+            }else{
+               if(pastNull==false){
+                   queue.add(node.left);
+                   queue.add(node.right);
+               }else{
+                   return false;
+               }
+            }
+          }
+         
+        return true;
+    }
+}

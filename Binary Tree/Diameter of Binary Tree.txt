@@ -1,0 +1,22 @@
+Diameter is longest path between 2 nodes of BT
+
+class Solution {
+    // Function to return the diameter of a Binary Tree.
+    int diameter(Node root) {
+    int[] diameter = new int[1];
+        height(root, diameter);
+        return diameter[0];        
+    }
+
+    private int height(Node node, int[] diameter) {
+        if (node == null) {
+            return 0;
+        }
+        int lh = height(node.left, diameter);
+        int rh = height(node.right, diameter);
+        diameter[0] = Math.max(diameter[0], lh + rh +1); // For number of nodes along longest path - GFG
+
+// Correction - Math.max(diameter[0], lh + rh); For longest path b/w two nodes LeetCode and official definition in Google
+
+        return 1 + Math.max(lh, rh);
+    }

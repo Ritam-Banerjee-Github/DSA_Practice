@@ -1,0 +1,20 @@
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        if(n<=0) return false;
+        
+        while(n>0){
+            if(n==1) return true;
+            if(n%2!=0) return false;
+            n=n/2;
+        }
+        
+        return true;
+              
+        Approach 2 : For any number which is power of 2, there is only 1 set bit. Alternatively, n&(n-1)==0;
+        return Integer.bitCount(n)==1; 
+        
+        
+        Alternatively,
+        return  (n&(n-1))==0;
+    }
+}

@@ -1,0 +1,23 @@
+class Solution{
+    static int minJumps(int[] arr){
+        // your code here
+        int n=arr.length;
+        int maxR=0,max=0,jumps=0;
+        for(int i=0;i<n;i++){
+            max=Math.max(max,arr[i]+i);
+            if(maxR==i){
+                maxR=max;
+                jumps++;
+                if(maxR>=n-1){
+                    return jumps;
+                }
+            }
+        }
+        return -1;
+    }
+}
+
+
+Expected Time Complexity: O(N)
+Expected Space Complexity: O(1)
+

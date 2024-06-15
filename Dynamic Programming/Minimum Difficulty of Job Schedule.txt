@@ -1,0 +1,31 @@
+class Solution {
+    private int solve(int ind,int d, int[] jd,int[][] dp){
+          if(ind>=jd.length) return 0;
+          int maxi=Integer.MIN_VALUE;
+          if(d==1){
+              for(int i=ind;i<jd.length;i++){
+                  maxi=Math.max(maxi,jd[i]);
+              }
+              return maxi;
+          }
+
+          if(dp[ind][d]!=-1) return dp[ind][d];
+
+          int result=Integer.MAX_VALUE;
+          for(int i=ind;i<=jd.length-d;i++){
+             maxi=Math.max(maxi,jd[i]);
+             result=Math.min(result,maxi+solve(i+1,d-1,jd,dp));
+          }
+
+          return dp[ind][d]=result;
+    }
+    public int minDifficulty(int[] jobDifficulty, int d) {
+        if(jobDifficulty.length<d) return -1;
+        int[][] dp=new int[301][11];
+        for(int[] row:dp){
+            Arrays.fill(row,-1);
+        }
+        return solve(0,d,jobDifficulty,dp);
+
+    }
+}

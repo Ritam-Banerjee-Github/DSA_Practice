@@ -1,0 +1,20 @@
+class Solution {
+    static int canReach(int[] A, int N) {
+        // code here
+        int maxR=0,max=0,jumps=0;
+        
+        for(int i=0;i<N;i++){
+            max=Math.max(max,A[i]+i);  // This is a greedy way to make the maximum possible jump by adding the value of index A[i] to the current index to reach max distance.
+
+            if(i==maxR){
+                maxR=max;
+                if(maxR>=N-1) return 1;
+            }
+        }
+        return 0;
+    }
+}
+
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(1)

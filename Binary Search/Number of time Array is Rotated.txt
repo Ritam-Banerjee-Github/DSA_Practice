@@ -1,0 +1,33 @@
+public class Solution {
+    private static int findMin(int[] arr){
+        int low=0;
+        int n=arr.length;
+        int high=n-1;
+        int ans=Integer.MAX_VALUE;
+        int index=-1;
+        while(low<=high){
+            int mid=(low+high)/2;
+             if(arr[low]<=arr[mid]){  //Means left half is sorted, and low will be arr[low]
+                if(arr[low]<ans){
+                    ans=arr[low];
+                    index=low;
+                }
+                low=mid+1;  //Eliminate left half and move to right half
+            }
+            else
+            if(arr[mid]<=arr[high]){  //Means right half is sorted, and low will be arr[mid]
+                   if(arr[mid]<ans){ 
+                       index=mid;
+                       ans=arr[mid];
+                   }
+                   high=mid-1; Eliminate right half and move to left half
+            }
+        }
+        return index;
+    }
+    public static int findKRotation(int []arr){
+        // Write your code here.
+        int index=findMin(arr);
+        return index;
+    }
+}

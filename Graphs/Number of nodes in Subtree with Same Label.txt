@@ -1,0 +1,38 @@
+class Solution {
+
+    private void solve(List<List<Integer>> adj, int curr, int parent, String labels,int[] count, int[] ans){
+         int before =count[labels.charAt(curr)-'a'];
+         count[labels.charAt(curr)-'a']++;
+
+         for(int node:adj.get(curr)){
+             if(node==parent) continue;
+
+             solve(adj,node,curr,labels,count,ans);
+         }
+
+         int after=count[labels.charAt(curr)-'a'];
+         ans[curr]=after-before;
+    }
+    public int[] countSubTrees(int n, int[][] edges, String labels) {
+
+        List<List<Integer>> adj=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<>());
+        }
+
+        for(int[] edge:edges){
+            int u=edge[0];
+            int v=edge[1];
+
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+        
+     int[] count=new int[26];
+     int[] ans=new int[n];
+
+        solve(adj,0,-1,labels,count,ans);
+
+        return ans;
+    }
+}

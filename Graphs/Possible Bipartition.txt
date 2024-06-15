@@ -1,0 +1,46 @@
+(Self) DFS ->
+
+class Solution {
+    private boolean checkBipartite(List<List<Integer>> adj,int curr, int[] colors){     
+        for(int node:adj.get(curr)){
+            if(colors[node]==colors[curr]) return false;
+            if(colors[node]==-1){
+                colors[node]=1-colors[curr];
+                if(checkBipartite(adj,node,colors)==false)
+                return false;
+            }
+        }
+
+        return true;
+    }
+    public boolean possibleBipartition(int n, int[][] dislikes) {
+        int[] colors=new int[n+1];
+        Arrays.fill(colors,-1);
+
+        int m=dislikes.length;
+
+        List<List<Integer>> adj=new ArrayList<>();
+        for(int i=0;i<=n;i++){
+            adj.add(new ArrayList<Integer>());
+        }
+        
+        for(int i=0;i<m;i++){
+            int u=dislikes[i][0];
+            int v=dislikes[i][1];
+
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+       for(int i=1;i<=n;i++){
+           if(colors[i]==-1){
+               colors[i]=1;
+               if(checkBipartite(adj,i,colors)==false){
+                   return false;
+               }
+           }
+       }
+       return true;
+
+    }
+}

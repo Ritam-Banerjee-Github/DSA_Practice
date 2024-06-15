@@ -1,0 +1,33 @@
+class Solution {
+    // Function to return a list containing the DFS traversal of the graph.
+    public static void dfs(ArrayList<ArrayList<Integer>> adj,int curr,boolean[] vis,ArrayList<Integer> arr){
+        vis[curr]=true;
+        arr.add(curr);
+        
+        for(int i=0;i<adj.get(curr).size();i++){
+            if(vis[adj.get(curr).get(i)]==false){
+                dfs(adj,adj.get(curr).get(i),vis,arr);
+            }
+        }
+     
+    }
+    
+    public ArrayList<Integer> dfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj) {
+        // Code here
+        ArrayList<Integer> arr=new ArrayList<Integer>();
+        boolean visited[]=new boolean[V];
+        for(int i=0;i<V;i++){
+            if(visited[i]==false){
+            dfs(adj,i,visited,arr);
+            }
+        } 
+        return arr;
+    }
+}
+
+
+TC -
+1. Undirected - O(N or V) + O(2E) - Loop runs for each node once + for its neighbours, which can be computed to be the summation of degrees for each node i.e., degree of graph.
+2. Directed -  O(N or V) + O(E) - Depends  
+
+SC- O(3N) ~ O(N) - Ans list + visitied[] + recursion call stack (worst case is O(N))

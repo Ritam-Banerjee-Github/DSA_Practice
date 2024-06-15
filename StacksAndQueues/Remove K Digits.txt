@@ -1,0 +1,40 @@
+DP wont work because we need yo delete k elements, There is one case where we delete k elements and dont pick any number, so the min answer wil always be zero. It would have worked if the question had at most k elements. Greedy wont work because we will only pick and delete max element. So only solution is monotonic stack (only increasing, so monotonic)
+
+class Solution {
+    public String removeKdigits(String num, int k) {
+        int n=num.length();
+        if(n==k) return "0";
+        Stack<Integer> stack=new Stack<>();
+        
+        for(int i=0;i<n;i++){
+            int value=num.charAt(i)-'0';
+            
+            while(!stack.isEmpty() && k>0 && stack.peek()>value){
+                stack.pop();
+                k--;
+            }
+            
+            if(stack.isEmpty() && value==0) continue;  //Take care of any preceeding zeroes
+            
+            stack.push(value);
+        }
+        
+        while(k>0 && !stack.isEmpty()){  //If all numbers were given in increasing order, then we remove top k elements
+            stack.pop();
+            k--;
+        }
+        
+        if(stack.isEmpty()) return "0";
+        
+        StringBuilder sb=new StringBuilder();
+        
+        while(!stack.isEmpty()){
+            sb.append(""+stack.peek());
+            stack.pop();
+        }
+        
+        return sb.reverse().toString();
+    }
+}
+
+TC : O(2N)- At max we visit every element twice

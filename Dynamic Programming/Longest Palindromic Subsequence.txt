@@ -1,0 +1,26 @@
+Recursion + Memoization - Shifting all indexes by 1 to avoid negative indexes
+
+class Solution
+{
+    private int f(int i, int j, String s1, String s2, int dp[][]){
+        if(i==0 || j==0) return 0;
+        if(dp[i][j]!=-1) return dp[i][j];
+        if(s1.charAt(i-1)==s2.charAt(j-1)) return dp[i][j]=1+f(i-1,j-1,s1,s2,dp);
+        
+        return dp[i][j]=Math.max(f(i-1,j,s1,s2,dp),f(i,j-1,s1,s2,dp));
+    }
+    public int longestPalinSubseq(String S)
+    {
+        //code here
+        int len=S.length();
+        String rev=new StringBuilder(S).reverse().toString();
+        int[][] dp = new int[len+1][len+1];
+        for(int[] row:dp){
+            Arrays.fill(row,-1);
+        }
+        return f(len,len,S,rev,dp);
+    }
+}
+
+Expected Time Complexity : O(|str1|*|str2|)
+Expected Auxiliary Space: O(|str1|*|str2|) + O(|str1|+|str2|) (Recursion Stack Space)

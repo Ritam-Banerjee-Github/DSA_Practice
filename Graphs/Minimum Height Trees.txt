@@ -1,0 +1,106 @@
+Brute Force : 67/71 Test Cases Pass
+class Solution {
+    Map<Integer,List<Integer>> map=new HashMap<>();
+    
+    int minHeight=Integer.MAX_VALUE;
+    int[] currMaxHeight={0};
+    
+    
+    private void findHeight(int node,int parent, List<List<Integer>> adj, int height){
+        
+        for(int next:adj.get(node)){
+            if(parent!=next){
+                findHeight(next,node,adj,height+1);
+            }
+        }
+        
+        currMaxHeight[0]=Math.max(currMaxHeight[0],height);
+    }
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        List<List<Integer>> adj=new ArrayList<>();
+        
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<>());
+        }
+        
+        for(int i=0;i<edges.length;i++){
+            int u=edges[i][0];
+            int v=edges[i][1];
+            
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+        
+        for(int i=0;i<n;i++){
+            currMaxHeight[0]=0;
+            findHeight(i,-1,adj,0);
+            minHeight=Math.min(minHeight,currMaxHeight[0]);
+            
+            map.computeIfAbsent(currMaxHeight[0],k->new ArrayList()).add(i);
+        }
+        
+        return map.get(minHeight);
+    }
+}
+
+Optimal Approach : InDegree
+class Solution {
+    List<Integer> ans=new ArrayList<>();
+    
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        if(n==1) return List.of(0);
+        
+        List<List<Integer>> adj=new ArrayList<>();
+        
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<>());
+        }
+        
+        int[] inDegree=new int[n];
+        Queue<Integer> q=new LinkedList<>();
+        
+        for(int i=0;i<edges.length;i++){
+            int u=edges[i][0];
+            int v=edges[i][1];
+            
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+            
+            inDegree[u]++;
+            inDegree[v]++;
+            
+        }
+        
+        for(int i=0;i<n;i++){
+            if(inDegree[i]==1) q.add(i);
+        }
+        
+        while(n>2){
+            int size=q.size();
+            
+            n=n-size;
+            
+            for(int i=0;i<size;i++){
+                int node=q.remove();
+                
+                for(int next:adj.get(node)){
+                    inDegree[next]--;
+                    if(inDegree[next]==1){
+                        q.add(next);
+                    }
+                }
+            }
+        }
+        
+        while(!q.isEmpty()){
+            ans.add(q.remove());
+        }
+        
+        return ans;
+        
+    }
+}
+
+//Using Topological Sorting
+//T.C : O(V+E)
+//S.C : O(V+E)

@@ -1,0 +1,83 @@
+class Solution
+{
+    //Function to find number of strongly connected components in the graph.
+    private void dfs1(int node, ArrayList<ArrayList<Integer>> adj, int[] vis, Stack<Integer> stack){
+        vis[node]=1;
+        for(int next: adj.get(node)){
+            if(vis[next]!=1){
+                dfs1(next,adj,vis,stack);
+            }
+        }
+        stack.push(node);
+    }
+    private void dfs2(int node, List<List<Integer>> adjRev, int[] vis){
+        vis[node]=1;
+        for(int next:adjRev.get(node)){
+            if(vis[next]!=1){
+                dfs2(next,adjRev,vis);
+            }
+        }
+    }
+    public int kosaraju(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        //code here
+        int[] vis=new int[V];
+        Stack<Integer> stack=new Stack<>();
+        for(int i=0;i<V;i++){
+            if(vis[i]!=1){
+                dfs1(i,adj,vis,stack);
+            }
+        }
+
+        List<List<Integer>> adjRev=new ArrayList<>();
+        for(int i=0;i<V;i++){
+            adjRev.add(new ArrayList<Integer>());
+        }
+
+        // Reversing graph by reversing the adjacency list
+        for(int i=0;i<V;i++){
+            vis[i]=0;
+            for(int next: adj.get(i)){
+                adjRev.get(next).add(i);
+            }
+        }
+        
+        int ans=0;
+
+           while(!stack.isEmpty()){
+               int node=stack.peek();
+               stack.pop();
+               if(vis[node]!=1){
+                   ans++;
+                   dfs2(node,adjRev,vis);
+               }
+           }
+           
+         return ans;  
+    }
+}
+
+class Main {
+    public static void main (String[] args) {
+        int n = 5;
+        int[][] edges = {
+            {1, 0}, {0, 2},
+            {2, 1}, {0, 3},
+            {3, 4}
+        };
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<Integer>());
+        }
+        for (int i = 0; i < n; i++) {
+            adj.get(edges[i][0]).add(edges[i][1]);
+        }
+        Solution obj = new Solution();
+        int ans = obj.kosaraju(n, adj);
+        System.out.println("The number of strongly connected components is: " + ans);
+    }
+}
+
+Time Complexity: O(V+E) + O(V+E) + O(V+E) ~ O(V+E) , where V = no. of vertices, E = no. of edges. The first step is a simple DFS, so the first term is O(V+E). The second step of reversing the graph and the third step, containing DFS again, will take O(V+E) each.
+
+Space Complexity: O(V)+O(V)+O(V+E), where V = no. of vertices, E = no. of edges. Two O(V) for the visited array and the stack we have used. O(V+E) space for the reversed adjacent list.

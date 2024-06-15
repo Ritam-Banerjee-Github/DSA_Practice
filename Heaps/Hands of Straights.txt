@@ -1,0 +1,32 @@
+class Solution {
+    public boolean isNStraightHand(int[] hand, int groupSize) {
+         int n=hand.length;
+         if(n%groupSize!=0) return false;
+         PriorityQueue<Integer> pq=new PriorityQueue<>();
+         for(int i=0;i<n;i++){
+             pq.add(hand[i]);
+         }
+         Stack<Integer> stack=new Stack<Integer>();
+         while(!pq.isEmpty()){
+             int curr=pq.remove();
+             for(int i=1;i<groupSize;i++){
+             while(!pq.isEmpty() && pq.peek()==curr){
+                 stack.push(pq.peek());
+                 pq.remove();
+             }
+                 if(pq.isEmpty() || pq.peek()!=curr+1) return false;
+                 curr=pq.peek();
+                 pq.remove();
+             
+            }
+             while(!stack.isEmpty()){
+                 pq.add(stack.peek());
+                 stack.pop();
+             }
+         }
+         return true;
+
+    
+    }
+}
+

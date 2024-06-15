@@ -1,0 +1,32 @@
+public class Solution {
+    private static Node merge(Node list1, Node list2){
+        Node dummy=new Node(0);
+        Node res=dummy;
+        while(list1!=null && list2!=null){
+              if(list1.data<list2.data){
+                 res.child=list1;
+                 list1=list1.child;
+                 res=res.child;
+              }else if(list1.data>list2.data){
+                 res.child=list2; 
+                 list2=list2.child;
+                 res=res.child;
+              }
+        }
+          
+          if(list1!=null){
+              res.child=list1;
+          }else if(list2!=null){
+              res.child=list2;
+          }
+
+        return dummy.child;
+    }
+    public static Node flattenLinkedList(Node head) {
+        //Write your code here
+        if(head==null || head.next==null) return head;
+
+        Node mergedNode=flattenLinkedList(head.next);
+        return merge(head,mergedNode);
+    }
+}

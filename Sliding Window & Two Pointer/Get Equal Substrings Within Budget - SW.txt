@@ -1,0 +1,25 @@
+class Solution {
+    public int equalSubstring(String s, String t, int maxCost) {
+        int n=s.length();
+        int cost=0;
+        int ans=0;
+        int start=0;
+        
+        for(int end=0;end<n;end++){
+          int valueS=s.charAt(end)-'a';
+          int valueT=t.charAt(end)-'a';
+          cost+=Math.abs(valueS-valueT);
+            
+          while(cost>maxCost){
+              int valueStartS=s.charAt(start)-'a';
+              int valueStartT=t.charAt(start)-'a';
+              cost-=Math.abs(valueStartS-valueStartT);
+              start++;
+           } 
+               
+          ans=Math.max(ans,end-start+1);     
+        }
+        
+        return ans;
+    }
+}

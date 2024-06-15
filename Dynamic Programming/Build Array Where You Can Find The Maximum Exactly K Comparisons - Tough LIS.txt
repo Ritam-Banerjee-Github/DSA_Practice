@@ -1,0 +1,46 @@
+//Here search_cost is nothing but length of LIS. so here length of LIS is given, we need to build the array. So reverse.
+
+class Solution {
+    int N;
+    int M;
+    int K;
+    
+    int mod=(int)1e9+7;
+    //search_cost = length of LIS
+    
+    private int solve(int index, int search_cost, int maxSoFar,int[][][] dp){
+        if(index>=N){
+            if(search_cost==K) return 1;
+            return 0;
+        }
+        
+        if(maxSoFar!=-1 && dp[index][search_cost][maxSoFar]!=-1) return dp[index][search_cost][maxSoFar];
+        
+        int result=0;
+        
+        for(int i=1;i<=M;i++){
+            if(i>maxSoFar){
+                result=(result+solve(index+1,search_cost+1,i,dp))%mod;
+            }else{
+                result=(result+solve(index+1,search_cost,maxSoFar,dp))%mod;
+            }
+        }
+        
+        if(maxSoFar!=-1) dp[index][search_cost][maxSoFar]=result%mod;
+        return result%mod;
+    }
+    public int numOfArrays(int n, int m, int k) {
+        this.N=n;
+        this.M=m;
+        this.K=k;
+        
+        int[][][] dp=new int[52][52][102];
+        
+        for(int[][] rows:dp){
+            for(int[] row:rows){
+                Arrays.fill(row,-1);
+            }
+        }
+        return solve(0,0,-1,dp);
+    }
+}

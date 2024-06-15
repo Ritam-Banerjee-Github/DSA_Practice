@@ -1,0 +1,46 @@
+import java.util.*;
+
+public class Solution {
+    private static int timeTaken(int speed,int[] v){
+        int totHours=0;
+        int n=v.length;
+        for(int i=0;i<n;i++){
+            totHours=totHours+(int)Math.ceil((double)(v[i])/(double)(speed)); // If we don't typecast the values in ceil to (double) then it will return the lower integer. After computing we typecast back to (int)
+        }
+        return totHours;
+    }
+
+    private static int max(int []v){
+        int ans=Integer.MIN_VALUE;
+        int n=v.length;
+        for(int i=0;i<n;i++){
+            ans=Math.max(ans,v[i]);
+        }
+        return ans;
+    }
+
+    public static int minimumRateToEatBananas(int []v, int h) {
+        // Write Your Code Here
+        int low=1;
+        int high=max(v);
+        int ans=Integer.MAX_VALUE;
+
+        while(low<=high){
+            int mid=(low+high)/2;
+            if(timeTaken(mid,v)<=h){
+                ans=mid;
+                high=mid-1;
+            }
+            else{
+                low=mid+1;
+            }
+        }
+        return ans;
+    }
+}
+
+Time Complexity: O(N * log(max(a[]))), where max(a[]) is the maximum element in the array and N = size of the array.
+Reason: We are applying Binary search for the range [1, max(a[])], and for every value of ‘mid’, we are traversing the entire array inside the function named calculateTotalHours().
+
+Space Complexity: O(1) as we are not using any extra space to solve this problem.
+

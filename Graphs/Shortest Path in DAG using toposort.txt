@@ -1,0 +1,77 @@
+class Pair{
+    int value;
+    int weight;
+    
+    public Pair(int value,int weight){
+        this.value=value;
+        this.weight=weight;
+    }
+}
+
+class Solution {
+    
+    private void toposort(int node,ArrayList<ArrayList<Pair>> adj, int[] vis, Stack<Integer> st){
+    vis[node]=1;
+    int size=adj.get(node).size();
+    for(int i=0;i<size;i++){
+        int v=adj.get(node).get(i).value;
+        if(vis[v]==0){
+            toposort(v,adj,vis,st);
+        }
+     }
+    st.push(node);
+   }
+    private void relaxation(ArrayList<ArrayList<Pair>> adj, Stack<Integer> st, int[] dist){
+        	while(!st.isEmpty()){
+		    int node=st.peek();
+		    st.pop();
+		    int size=adj.get(node).size();
+		    for(int i=0;i<size;i++){
+		        int v=adj.get(node).get(i).value;
+		        int w=adj.get(node).get(i).weight;
+		        if(dist[node]+w<dist[v]){
+		            dist[v]=dist[node]+w;
+		        }
+		    }
+		 }
+    }
+	public int[] shortestPath(int N,int M, int[][] edges) {
+		//Code here
+		ArrayList<ArrayList<Pair>> adj = new ArrayList<ArrayList<Pair>>();
+		for(int i=0;i<N;i++){
+		    ArrayList<Pair> temp=new ArrayList<Pair>();
+		    adj.add(temp);
+		}
+		for(int i=0;i<M;i++){
+		    int u=edges[i][0];
+		    int v=edges[i][1];
+		    int w=edges[i][2];
+		    Pair p = new Pair(v,w);
+		    adj.get(u).add(p);
+		}
+		
+		int[] vis=new int[N];
+		Stack<Integer> st = new Stack<Integer>();
+		for(int i=0;i<N;i++){
+		    if(vis[i]==0){
+		        toposort(i,adj,vis,st);
+		    }
+		}
+		int[] dist=new int[N];
+		for(int i=0;i<N;i++){
+		    dist[i]=(int)1e9;
+		}
+		dist[0]=0;
+		relaxation(adj,st,dist);
+	     for(int i=0;i<N;i++){
+	         if(dist[i]==(int)1e9){
+	             dist[i]= -1;
+	         }
+	     }
+	     return dist;
+	}
+}
+
+Expected Time Complexity: O(N+E), where N is the number of nodes and E is edges
+
+Expected Space Complexity: O(N)

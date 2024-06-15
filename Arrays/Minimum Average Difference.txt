@@ -1,0 +1,34 @@
+class Solution {
+    public int minimumAverageDifference(int[] nums) {
+        int n=nums.length;
+        
+        if(n==1) return 0;
+        int diff=Integer.MAX_VALUE;
+        
+        int ans=-1;
+        long[] sum=new long[n];
+        sum[0]=nums[0];
+        for(int i=1;i<n;i++){
+            sum[i]=sum[i-1]+nums[i];
+        }
+        
+        for(int i=0;i<n;i++){
+            long LS=sum[i];
+            long RS=(i==n-1)?0:sum[n-1]-LS;
+            
+            int n1=i+1;
+            int n2=n-n1;
+            
+            int left_avg=(int)(LS/n1);
+            int right_avg=(i==n-1)?0:(int)(RS/n2);
+            
+            int avg=Math.abs(left_avg-right_avg);
+            if(diff>avg){
+                diff=avg;
+                ans=i;
+            }
+        }
+        
+        return ans;
+    }
+}

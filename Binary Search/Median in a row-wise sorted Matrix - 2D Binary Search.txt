@@ -1,0 +1,62 @@
+Median : Middle element in the sorted list of all elements. Here both R and C is odd, so total number of elements = R*C will always be even
+
+Brute: Traverse all elements and store in a list. Sort the list and return the middle element (n*m*logm)
+
+Optimized Binary Search :
+class Solution {
+    private int findUpperBound(int[] arr, int median){
+        int low=0;
+        int n=arr.length;
+        int high=n-1;
+        
+        while(low<=high){
+            int mid=(low+high)/2;
+            
+            if(arr[mid]>median){
+                high=mid-1;
+            }else{
+                low=mid+1;
+            }
+        }
+        
+        return low;
+    }
+    private int countSmallerEqualToMid(int matrix[][], int R, int C, int median){
+        int count=0;
+        for(int i=0;i<R;i++){
+            count+=findUpperBound(matrix[i],median);
+        }
+        
+        return count;
+    }
+    int median(int matrix[][], int R, int C) {
+        // code here   
+        int reqCount=(R*C)/2;
+        int low=Integer.MAX_VALUE;
+        int high=Integer.MIN_VALUE;
+        int ans=-1;
+        
+        for(int i=0;i<R;i++){
+            low=Math.min(low,matrix[i][0]);
+            high=Math.max(high,matrix[i][C-1]);
+        }
+        
+        while(low<=high){
+            int mid=(low+high)/2;
+            
+            if(countSmallerEqualToMid(matrix,R,C,mid)>reqCount){
+                ans=mid;
+                high=mid-1;
+            }else{
+                low=mid+1;
+            }
+        }
+        
+        return ans;
+        
+    }
+}
+
+Time Complexity: O(row*log(col)) since the upper bound function takes log(col) time.
+
+Space Complexity: O(1) since no extra space is required.

@@ -1,0 +1,54 @@
+Brute :
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        int n=nums.length;
+        HashSet<Integer> set=new HashSet<>();
+        
+        for(int i=0;i<n;i++){
+            if(nums[i]>0) set.add(nums[i]);
+        }
+        
+        int ans=1;
+        
+        while(true){
+            if(!set.contains(ans)) return ans;
+            ans++;
+        }
+        
+    }
+}
+
+Optimal :
+
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        int n=nums.length;
+        boolean containsOne=false;
+        
+        for(int i=0;i<n;i++){
+            if(nums[i]==1) containsOne=true;
+            
+            if(nums[i]<=0 || nums[i]>n) nums[i]=1;  //Our range is [1,n] and we need only positive numbers. Also if it is negative then later we wont be able to find index when we do num-1.
+        }
+        
+        if(containsOne==false) return 1;
+        
+        // Mark whether integers 1 to n are in nums
+        // Use index as a hash key and negative sign as a presence detector.
+        for(int i=0;i<n;i++){
+            int num=Math.abs(nums[i]);
+            int index=num-1;
+            
+            if(nums[index]<0) continue;
+            
+            nums[index]=nums[index]*(-1);
+        }
+        
+        // First positive in nums is smallest missing positive integer
+        for(int i=0;i<n;i++){
+            if(nums[i]>0) return i+1;
+        }
+        
+        return n+1;
+    }
+}

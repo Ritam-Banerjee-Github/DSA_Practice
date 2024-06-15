@@ -1,0 +1,54 @@
+import java.util.* ;
+import java.io.*; 
+/****************************************************************
+
+    Following is the class structure of the Pair class:
+
+        class Pair
+        {
+        	int weight;
+	        int value;
+	        Pair(int weight, int value)
+	        {
+		        this.weight = weight;
+		        this.value = value;
+	        }
+	        
+        }
+        
+*****************************************************************/
+
+
+public class Solution {
+    public static double maximumValue(Pair[] items, int n, int w) {
+            // Write your code here.
+    	    // ITEMS contains {weight, value} pairs.
+			double ans=0.0;
+			int currWeight=0;
+			Arrays.sort(items,new Comparator<Pair>(){
+				public int compare(Pair a, Pair b){
+					double r1=(double)a.value/(double)a.weight;
+					double r2=(double)b.value/(double)b.weight;
+					if(r1<r2) return 1;  1(+ve) means rhs should be before lhs/Swapped
+					else
+					if(r1>r2) return -1; (-ve) means lhs should be before rhs/No Swap
+					else
+					return 0;  (0 means no swaps)
+				}
+	        });
+			for(int i=0;i<n;i++){
+                    if(currWeight+items[i].weight<=w){
+						currWeight+=items[i].weight;
+						ans+=items[i].value;
+					}
+					else{
+						int remWeight=w-currWeight;
+						ans+=((double)items[i].value/(double)items[i].weight)*(double)remWeight;
+						break;
+					}
+			}
+           return ans;
+    }
+}
+Expected Time Complexity : O(NlogN)
+Expected Auxilliary Space: O(1)

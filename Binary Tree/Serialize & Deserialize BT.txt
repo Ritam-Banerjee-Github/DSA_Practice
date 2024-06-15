@@ -1,0 +1,58 @@
+import java.util.*;
+
+
+public class Solution 
+{
+    public static String serializeTree(TreeNode<Integer> root)
+    {
+        //    Write your code here for serialization of the tree.
+        String str="";  //  StringBuilder res = new StringBuilder();
+        if(root==null) return str;
+        Queue<TreeNode<Integer>> q=new LinkedList<>();
+        q.add(root);
+        while(!q.isEmpty()){
+            TreeNode<Integer> node=q.remove();
+            if(node==null){
+                  str=str+"# "; //res.append("n ");
+                  continue;
+            }
+            str=str+node.data+" "; //res.append(node.val + " ");
+            q.add(node.left);
+            q.add(node.right);
+
+        }
+        return str;
+    }
+    
+    public static TreeNode<Integer> deserializeTree(String str)
+    {
+        //    Write your code here for deserialization of the tree.
+        if(str.length()==0) return null;
+        String[] arr=str.split(" ");  // split() method is used to split a string into an array of substrings based on a specified delimiter.
+
+        TreeNode<Integer> root=new TreeNode<>(Integer.parseInt(arr[0]));
+        int n=arr.length;
+
+        Queue<TreeNode<Integer>> q=new LinkedList<>();
+        q.add(root);
+   
+        for(int i=1;i<n;i++){
+            TreeNode<Integer> node=q.poll();
+
+            if(!arr[i].equals("#")){
+                node.left=new TreeNode(Integer.parseInt(arr[i]));
+                q.add(node.left);
+            }
+            if(!arr[++i].equals("#")){
+                node.right=new TreeNode(Integer.parseInt(arr[i]));
+                q.add(node.right);
+            }
+        }
+
+        return root;
+    }
+}
+
+Time Complexity: O(N)
+
+Space Complexity: O(N)

@@ -1,0 +1,26 @@
+class Solution {
+    static int maxChildren(int N,int M,int greed[], int sz[]) {
+    // code here
+    int count=0;
+    Arrays.sort(sz);
+    Arrays.sort(greed);
+   int i=0;
+   int j=0;
+   while(i<N && j<M){
+       if(sz[j]>=greed[i]){
+           count++;
+           i++;
+           j++;
+       }
+       else{
+           j++;
+       }
+       
+   }
+    return count;
+
+  }
+}
+
+Expected Time Complexity: O(max( NlogN , MlogM ))
+Expected Auxiliary Space: O(1)

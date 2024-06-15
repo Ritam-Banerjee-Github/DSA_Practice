@@ -1,0 +1,24 @@
+class Solution {
+    public int findMaxK(int[] nums) {
+        int n=nums.length;
+        int ans=-1;
+        Arrays.sort(nums);
+        
+        int i=0;
+        int j=n-1;
+        
+        if(nums[i]>0 || nums[j]<0) return ans;  //Edge cases when all positive or all negative
+        
+        while(i<j){
+            if(Math.abs(nums[i])==nums[j]){
+                return nums[j];
+            }else if(Math.abs(nums[i])<nums[j]){
+                j--;
+            }else{
+                i++;
+            }
+        }
+        
+        return ans;
+    }
+}

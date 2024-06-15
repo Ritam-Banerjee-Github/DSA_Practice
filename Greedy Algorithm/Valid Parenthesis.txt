@@ -1,0 +1,35 @@
+import java.util.*;
+public class Solution {
+    public static boolean isBalanced(String S){
+        // Write your code here.
+         int n=S.length();
+        Stack<Character> stack=new Stack<>();
+        int i=0;
+        while(i<n){
+            switch(S.charAt(i)){
+                case '(' : stack.push('(');
+                           i++;
+                           break;
+                case '{' : stack.push('{');
+                           i++;
+                           break;
+                case '[' : stack.push('[');
+                           i++;
+                           break;
+                case ')' : if(stack.isEmpty() || stack.pop()!='(') return false;
+                           i++;
+                           break;
+                case '}' : if(stack.isEmpty() ||stack.pop()!='{') return false;
+                           i++;
+                           break;
+                case ']' : if(stack.isEmpty() ||stack.pop()!='[') return false;
+                           i++;
+                           break;                                                       
+            }
+        }
+      return true;
+    }
+}
+
+TC - O(N)
+SC - O(N) [Extra space for stack]

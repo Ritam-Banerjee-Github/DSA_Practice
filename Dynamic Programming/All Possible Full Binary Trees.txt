@@ -1,0 +1,40 @@
+class Solution {
+    private HashMap<Integer,List<TreeNode>> dp=new HashMap<>();
+    
+    private List<TreeNode> solve(int n){
+        if(n==1){
+            return List.of(new TreeNode(0));
+        }
+        
+        if(n%2==0){
+            List<TreeNode> list=new ArrayList<>();
+            return list;
+        }
+        
+        int key=n;
+        if(dp.get(key)!=null) return dp.get(key);
+        
+        List<TreeNode> list=new ArrayList<>();
+        
+        for(int i=1;i<n;i+=2){
+            List<TreeNode> leftFBT=solve(i);
+            List<TreeNode> rightFBT=solve(n-i-1);
+            
+            for(TreeNode left: leftFBT){
+                for(TreeNode right:rightFBT){
+                    TreeNode root=new TreeNode(0);
+                    root.left=left;
+                    root.right=right;
+                    
+                    list.add(root);
+                }
+            }
+        }
+        
+        dp.put(key,list);
+        return list;
+    }
+    public List<TreeNode> allPossibleFBT(int n) {
+        return solve(n);
+    }
+}

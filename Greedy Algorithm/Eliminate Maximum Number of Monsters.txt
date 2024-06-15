@@ -1,0 +1,22 @@
+class Solution {
+    public int eliminateMaximum(int[] dist, int[] speed) {
+        int n=dist.length;
+        int[] time=new int[n];
+        for(int i=0;i<n;i++){
+            time[i]=(int)Math.ceil((double)dist[i]/speed[i]); //Nearest rounded off number (Ceil) only works with double. So we convert to double first and later convert double ceil value to int
+        }
+
+        Arrays.sort(time);
+        int count=1; //Intitially the gun is charged, so we will always kill 1 monster and start iterating time array from index 1.
+
+        int time_passed=1;
+         
+         for(int i=1;i<n;i++){
+             if(time[i]-time_passed<=0) return count;
+
+             count++;
+             time_passed++;
+         }
+        return count;
+    }
+}

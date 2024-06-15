@@ -1,0 +1,24 @@
+Subtree- A subtree is basically a tree from the given node till all of its leaf nodes.Sum of subtree will be sum of all nodes(till leaf) in left + sum of all nodes(till leaf) in right for the given node + the node.value  
+
+
+class Solution{
+    public void toSumTree(Node root){
+         //add code here.
+        int ans= toSumTreeUtility(root);
+         
+        }
+    public int toSumTreeUtility(Node root){
+        if(root==null) return 0;
+        
+        if(root.left==null && root.right==null){
+            int temp=root.data;
+            root.data=0;
+            return temp;
+        }
+        int lh=toSumTreeUtility(root.left);
+        int rh=toSumTreeUtility(root.right);
+        int temp=root.data;
+        root.data=lh+rh;
+        return temp + root.data;
+    }
+}

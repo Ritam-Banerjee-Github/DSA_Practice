@@ -1,0 +1,48 @@
+class Pair{
+    char character;
+    int freq;
+    
+    public Pair(char ch, int freq){
+        this.character=ch;
+        this.freq=freq;
+    }
+}
+class Solution {
+    public String frequencySort(String s) {
+        HashMap<Character,Integer> map=new HashMap<>();
+        int n=s.length();
+        
+        for(int i=0;i<n;i++){
+            map.put(s.charAt(i),map.getOrDefault(s.charAt(i),0)+1);
+        }
+        
+        List<Pair> list=new ArrayList<>();
+        
+        for(char ch:map.keySet()){
+            list.add(new Pair(ch,map.get(ch)));
+        }
+        
+        Collections.sort(list,new Comparator<Pair>(){
+           public int compare(Pair a, Pair b){
+               if(a.freq>b.freq) return -1;
+               return 1;
+           } 
+        });
+        
+        String ans="";
+        
+        for(int i=0;i<list.size();i++){
+            Pair p=list.get(i);
+            
+            char ch=p.character;
+            int frequency=p.freq;
+            
+            while(frequency>0){
+                ans+=ch;
+                frequency--;
+            }
+        }
+        
+        return ans;
+    }
+}

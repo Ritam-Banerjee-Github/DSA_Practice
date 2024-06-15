@@ -1,0 +1,79 @@
+Memoization-
+
+class Solution {
+    public int utility(int i, int[] arr, int dp[]){
+        if(i==0) return arr[0];
+        if(i<0) return 0;
+        if(dp[i]!=-1) return dp[i];
+        int notpick=utility(i-1,arr,dp);
+        int pick=arr[i]+utility(i-2,arr,dp);
+        return dp[i]=Math.max(pick,notpick);
+
+    }
+    public int rob(int[] nums) {
+       int n=nums.length;
+       if(n==1) return nums[0];
+       int[] dp=new int[n-1];
+       Arrays.fill(dp,-1);
+       int first[]=new int[n-1];
+       int last[]=new int[n-1];
+       for(int i=0;i<n;i++){
+           if(i!=n-1){
+               first[i]=nums[i];
+           }
+           if(i!=0){
+               last[i-1]=nums[i];
+           }
+       }
+       int ans1=utility(first.length-1,first,dp);
+       Arrays.fill(dp,-1); // We need to update dp array and set all elements as -1. Otherwise the same dp array values will be picked up as passed in the previous method.
+       int ans2=utility(last.length-1,last,dp);
+       return Math.max(ans1,ans2);
+
+    }
+}
+
+TC - O(N) + O(N)
+SC - O(N) + O(N)[Recursion Stack Space]
+
+Tabulation -
+class Solution {
+    public int utility(int[] arr, int dp[]){
+        dp[0]=arr[0];
+        
+  
+        for(int i=1;i<arr.length;i++){
+            int pick=arr[i];
+            if(i>1){
+                pick=arr[i]+dp[i-2];
+            }
+            int notpick=dp[i-1];
+            dp[i]=Math.max(pick,notpick);
+          }
+        return dp[arr.length-1];
+    }
+    public int rob(int[] nums) {
+       int n=nums.length;
+       if(n==1) return nums[0];
+       int[] dp=new int[n-1];
+       Arrays.fill(dp,-1);
+       int first[]=new int[n-1];
+       int last[]=new int[n-1];
+       for(int i=0;i<n;i++){
+           if(i!=n-1){
+               first[i]=nums[i];
+           }
+           if(i!=0){
+               last[i-1]=nums[i];
+           }
+       }
+       int ans1=utility(first,dp);
+       Arrays.fill(dp,-1);
+       int ans2=utility(last,dp);
+       return Math.max(ans1,ans2);
+
+    }
+}
+
+TC - O(N) + O(N)
+SC - O(N)

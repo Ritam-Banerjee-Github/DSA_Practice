@@ -1,0 +1,61 @@
+Memoization-
+
+class Solution
+{
+    //Function to find the maximum money the thief can get.
+    public int utility(int arr[],int index, int dp[]){
+        if(index<0) return 0;
+        if(index==0) return arr[0];
+        if(dp[index]!=-1) return dp[index];
+        int notPick=utility(arr,index-1,dp);
+        int pick=arr[index]+utility(arr,index-2,dp);
+        return dp[index]=Math.max(pick,notPick);
+    }
+    public int FindMaxSum(int arr[], int n)
+    {
+        // Your code here
+        int dp[]=new int[n];
+        Arrays.fill(dp,-1);
+        int ans=utility(arr,n-1,dp);
+        return ans;
+        }
+}
+Time Complexity: O(N)
+
+Reason: The overlapping subproblems will return the answer in constant time O(1). Therefore the total number of new subproblems we solve is ‘n’. Hence total time complexity is O(N).
+
+Space Complexity: O(N)
+
+Reason: We are using a recursion stack space(O(N)) and an array (again O(N)). Therefore total space complexity will be O(N) + O(N) ≈ O(N)
+
+
+
+Tabulation -
+class Solution
+{
+    //Function to find the maximum money the thief can get.
+
+    public int FindMaxSum(int arr[], int n)
+    {
+        // Your code here
+        int dp[]=new int[n];
+        Arrays.fill(dp,-1);
+        dp[0]=arr[0];
+        for(int i=1;i<n;i++){
+             int notPick=dp[i-1];
+             int pick=arr[i];
+             if(i>1)
+             pick=arr[i]+dp[i-2];
+             dp[i]=Math.max(pick,notPick);
+        }
+        return dp[n-1];
+    }
+}
+
+Time Complexity: O(N)
+
+Reason: We are running a simple iterative loop
+
+Space Complexity: O(N)
+
+Reason: We are using an external array of size ‘n’.

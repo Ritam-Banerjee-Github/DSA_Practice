@@ -1,0 +1,102 @@
+Brute :
+class Solution {
+    int ans=Integer.MAX_VALUE;
+    List<Integer> result=new ArrayList<>();
+    
+    private void solve(int[] nums, int n, List<Integer> permutation,int score,int[] vis){
+        if(permutation.size()==n){
+            score+=Math.abs(permutation.get(permutation.size()-1)-nums[permutation.get(0)]);
+            if(score<ans){
+                ans=score;
+                // result=permutation;
+                result = new ArrayList<>(permutation); // Create a new list here
+            }
+        }
+        
+        for(int i=0;i<n;i++){
+            if(vis[i]==1) continue;
+            
+            vis[i]=1;
+            permutation.add(i);
+            solve(nums,n,permutation,score+Math.abs(permutation.get(permutation.size()-2)-nums[permutation.get(permutation.size()-1)]),vis);
+            vis[i]=0;
+            permutation.remove(permutation.size()-1);
+        }
+        
+        
+    }
+    public int[] findPermutation(int[] nums) {
+        int n=nums.length;
+        List<Integer> permutation=new ArrayList<>();
+        int[] vis=new int[n];
+        
+        permutation.add(0);  //The lexicographically minimum permutation will always start from 0. Also, we need to add here otherwise formula wont work and throw index out of bound.-> permutation.get(permutation.size()-2)-nums[permutation.get(permutation.size()-1)]
+
+        vis[0]=1;
+        
+        solve(nums,n,permutation,0,vis);
+        
+        int[] ans=new int[n];
+        for(int i=0;i<n;i++){
+            ans[i]=result.get(i);
+        }
+        
+        return ans;
+    }
+}
+
+TC : O(n!)
+
+Optimal : Only one change i.e., to ignore remaining test cases whenever the value of score is greater than ans
+
+class Solution {
+    int ans=Integer.MAX_VALUE;
+    List<Integer> result=new ArrayList<>();
+    
+    private void solve(int[] nums, int n, List<Integer> permutation,int score,int[] vis){
+     
+        if(score>ans) return; //That one change in Brute
+
+        if(permutation.size()==n){
+            score+=Math.abs(permutation.get(permutation.size()-1)-nums[permutation.get(0)]);
+            if(score<ans){
+                ans=score;
+                // result=permutation;
+                result = new ArrayList<>(permutation); // Create a new list here
+            }
+        }
+        
+        for(int i=0;i<n;i++){
+            if(vis[i]==1) continue;
+            
+            vis[i]=1;
+            permutation.add(i);
+            solve(nums,n,permutation,score+Math.abs(permutation.get(permutation.size()-2)-nums[permutation.get(permutation.size()-1)]),vis);
+            vis[i]=0;
+            permutation.remove(permutation.size()-1);
+        }
+        
+        
+    }
+    public int[] findPermutation(int[] nums) {
+        int n=nums.length;
+        List<Integer> permutation=new ArrayList<>();
+        int[] vis=new int[n];
+        
+        permutation.add(0);  //The lexicographically minimum permutation will always start from 0. Also, we need to add here otherwise formula wont work and throw index out of bound.-> permutation.get(permutation.size()-2)-nums[permutation.get(permutation.size()-1)]
+
+        vis[0]=1;
+        
+        solve(nums,n,permutation,0,vis);
+        
+        int[] ans=new int[n];
+        for(int i=0;i<n;i++){
+            ans[i]=result.get(i);
+        }
+        
+        return ans;
+    }
+}
+
+
+

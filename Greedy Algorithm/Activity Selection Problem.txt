@@ -1,0 +1,60 @@
+class Activity{
+    int start;
+    int end;
+    int number;
+    
+    public Activity(int start, int end, int number){
+        this.start=start;
+        this.end=end;
+        this.number=number;
+    }
+}
+
+class ActivityComparator implements Comparator<Activity>{
+    @Override
+    public int compare(Activity x, Activity y){
+        
+       if(x.end>y.end){
+            return 1;   // 1(or any +ve value) means lhs is greater, hence we need to swap rhs before lhs. This is for ascending order.
+        }
+        else
+        if(x.end<y.end){
+            return -1;   // -1(or any -ve value) means rhs is greater, hence lhs has to be before rhs.This is for ascending order.
+        }
+        else 
+        if(x.number>y.number){
+            return 1;
+        }
+        return -1;
+    }
+}
+
+class Solution
+{
+    //Function to find the maximum number of activities that can
+    //be performed by a single person.
+    public static int activitySelection(int start[], int end[], int n)
+    {
+        // add your code here
+        if(start.length==0 || end.length==0) return 0;
+        List<Activity> activities = new ArrayList<Activity>();
+        for(int i=0;i<n;i++){
+            activities.add(new Activity(start[i],end[i],i+1)); // As Activity Number starts with 1
+        }
+        ActivityComparator ac=new ActivityComparator();
+        Collections.sort(activities,ac);
+        int ans=1;
+        int limit=activities.get(0).end;
+        for(int i=1;i<activities.size();i++){
+            if(activities.get(i).start>limit){
+                limit=activities.get(i).end;
+                ans++;
+            }
+        }
+        return ans;
+    }
+}
+
+
+Expected Time Complexity : O(N * Log(N))
+Expected Auxilliary Space : O(N)

@@ -1,0 +1,35 @@
+class Solution {
+    private static boolean isPalindrome(String S, int start, int end){
+        while(start<=end){
+            if(S.charAt(start)!=S.charAt(end)){
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
+    }
+    private static void utility(int index,ArrayList<ArrayList<String>> ans, ArrayList<String> temp, String S){
+        if(index==S.length()){
+            ans.add(new ArrayList<String>(temp));
+            return;
+        }
+        for(int i=index;i<S.length();i++){
+            if(isPalindrome(S,index,i)){
+                temp.add(S.substring(index,i+1));
+                utility(i+1,ans,temp,S);
+                temp.remove(temp.size()-1);
+            }
+        }
+    }
+    static ArrayList<ArrayList<String>> allPalindromicPerms(String S) {
+        // code here
+        ArrayList<ArrayList<String>> ans=new ArrayList<>();
+        ArrayList<String> temp=new ArrayList<>();
+        utility(0,ans,temp,S);
+        return ans;
+    }
+};
+
+Expected Time Complexity: O(N*2N)
+Expected Auxiliary Space: O(N2), where N is the length of the String

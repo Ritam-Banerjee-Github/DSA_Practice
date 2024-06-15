@@ -1,0 +1,29 @@
+class Solution {
+    public int numSubarrayProductLessThanK(int[] nums, int k) {
+        int n=nums.length;
+        int start=0;
+        int end=0;
+        int ans=0;
+        int currProduct=1;
+        
+        while(end<n){
+          currProduct=currProduct*nums[end];
+            
+            while(start<=end && currProduct>=k){
+                currProduct=currProduct/nums[start];
+                start++;
+            }
+            
+          if(currProduct<k){
+              ans=ans+(end-start+1);  // To count individual subarrays as well within the range
+          } 
+            
+          end++;  
+        }
+        
+        return ans;
+    }
+}
+
+TC : O(2N)
+SC : O(1)

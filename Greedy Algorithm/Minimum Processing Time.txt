@@ -1,0 +1,30 @@
+class Solution {
+    public int minProcessingTime(List<Integer> processorTime, List<Integer> tasks) {
+        Collections.sort(processorTime);
+        Collections.sort(tasks);
+        
+        int m=processorTime.size();
+        int n=tasks.size();
+        
+        int ans=0;
+        int j=0;
+        
+        
+        for(int i=n-1;i>=0;i=i-4){
+            int startTime=processorTime.get(j);
+            j++;
+            int first_task=startTime+tasks.get(i);
+            int second_task=startTime+tasks.get(i-1);
+            int third_task=startTime+tasks.get(i-2);
+            int fourth_task=startTime+tasks.get(i-3);
+            
+            int currMax=Math.max(first_task,Math.max(second_task,Math.max(third_task,fourth_task)));
+            
+            ans=Math.max(ans,currMax);
+        }
+        
+        return ans;
+    }
+}
+
+TC=O(nlon)+O(mlogm)+O(n)

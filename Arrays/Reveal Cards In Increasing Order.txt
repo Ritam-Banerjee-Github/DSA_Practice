@@ -1,0 +1,28 @@
+class Solution {
+    public int[] deckRevealedIncreasing(int[] deck) {
+        int n=deck.length;
+        int[] ans=new int[n];
+        boolean skip=false;
+        
+        Arrays.sort(deck);
+        
+        int j=0;
+        int i=0;
+        
+        while(i<n){
+            
+           if(ans[j]==0){
+               if(skip!=true){
+                   ans[j]=deck[i];
+                   i++;
+                }
+                 skip=!skip;
+            } 
+            
+            j=(j+1)%n;
+            
+        }
+        
+        return ans;
+    }
+}

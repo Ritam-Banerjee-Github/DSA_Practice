@@ -1,0 +1,31 @@
+import java.util.*;
+public class Solution {
+
+	public static int kDistinctChars(int k, String str) {
+		// Write your code here
+		int start=0;
+		HashMap<Character,Integer> map=new HashMap<>();
+		int maxi=0;
+		int n=str.length();
+		for(int end=0;end<n;end++){
+			 map.put(str.charAt(end),map.getOrDefault(str.charAt(end),0)+1);
+
+			 while(map.keySet().size()>k){
+				 if(map.get(str.charAt(start))==1){
+					 map.remove(str.charAt(start));
+				 }
+				 else{
+					 map.put(str.charAt(start),map.get(str.charAt(start))-1);
+				 }
+				 
+				 start++;
+			 }
+			 maxi=Math.max(end-start+1,maxi);
+
+		}
+
+		return maxi;
+	}
+
+}
+

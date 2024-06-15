@@ -1,0 +1,23 @@
+// Instead of subtract and multiply, we are doing the opposite way of add and divide the target value to reach startValue
+
+class Solution {
+    private int solve(int startValue, int target){
+        if(startValue==target){
+            return 0;
+        }
+
+        if(startValue>target){
+            return startValue-target;
+        }
+
+        if(target%2==0){
+            return 1+solve(startValue,target/2);
+        }
+
+        return 1+solve(startValue,target+1);
+      
+    }
+    public int brokenCalc(int startValue, int target) {
+        return solve(startValue,target);
+    }
+}

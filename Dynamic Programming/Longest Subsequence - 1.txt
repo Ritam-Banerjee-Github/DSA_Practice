@@ -1,0 +1,25 @@
+class Solution{
+    static int f(int i, int prev, int arr[], int n, int dp[][]){
+        if(i==n) return 0;
+        if(dp[i][prev+1]!=-1) return dp[i][prev+1];
+        int notTake=f(i+1,prev,arr,n,dp);
+        int take=0;
+        if(prev==-1 || Math.abs(arr[i]-arr[prev])==1){
+        take=1+f(i+1,i,arr,n,dp);
+        }
+        return dp[i][prev+1]= Math.max(take,notTake);
+    }
+    static int longestSubsequence(int N, int A[])
+    {
+        // code here
+        int[][] dp=new int[N][N+1];
+        for(int[] row:dp){
+            Arrays.fill(row,-1);
+        }
+        return f(0,-1,A,N,dp);
+        
+    }
+}
+
+Expected Time Complexity: O(N2)
+Expected Auxiliary Space: O(N)

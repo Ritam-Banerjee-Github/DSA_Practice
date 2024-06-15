@@ -1,0 +1,27 @@
+class Solution {
+    int mod=(int)(1e9+7);
+    private int solve(int len,int low,int high,int z, int o,int [] dp){
+        if(len>high) return 0;
+
+        boolean add=false;
+
+        if(len>=low && len<=high){
+            add=true;
+        }
+
+         if(dp[len]!=-1) return dp[len];
+
+        int zero=solve(len+z,low,high,z,o,dp);
+        int one=solve(len+o,low,high,z,o,dp);
+
+        if(add) return dp[len]=(1+zero+one)%mod;
+
+        return dp[len]=(zero+one)%mod;
+    }
+
+    public int countGoodStrings(int low, int high, int zero, int one) {
+    int[] dp=new int[100001]; // OR new int[high+1];
+    Arrays.fill(dp,-1);
+    return solve(0,low,high,zero,one,dp);    // We only need to check the length, no need to actually pass a string and append ones/zeros. Only adding their counts to len is enough as done in recursion function
+    }
+}

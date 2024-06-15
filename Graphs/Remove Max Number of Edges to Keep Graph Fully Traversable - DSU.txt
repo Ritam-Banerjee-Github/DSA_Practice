@@ -1,0 +1,101 @@
+class DSU{
+ List<Integer> ultimateParent=new ArrayList<Integer>();
+ List<Integer> size=new ArrayList<Integer>();
+    int countComponents=0;
+    
+    public DSU(int n){
+        for(int i=0;i<=n;i++){
+            ultimateParent.add(i);
+            size.add(1);
+        }
+        countComponents=n;
+    }
+
+    public int findUltimateParent(int node){
+        if(ultimateParent.get(node)==node){
+            return node;
+        }
+        int par=findUltimateParent(ultimateParent.get(node));
+        return par;
+    }
+    
+    public void UnionBySize(int u, int v){
+        int ultimateParentU=findUltimateParent(u);
+        int ultimateParentV=findUltimateParent(v);
+
+        if(ultimateParentU==ultimateParentV) return;
+
+        if(size.get(ultimateParentU)<size.get(ultimateParentV)){
+            size.set(ultimateParentV, size.get(ultimateParentU)+size.get(ultimateParentV));
+            ultimateParent.set(ultimateParentU,ultimateParentV);
+        }
+        else{
+            size.set(ultimateParentU, size.get(ultimateParentU)+size.get(ultimateParentV));
+            ultimateParent.set(ultimateParentV,ultimateParentU);
+        }
+        
+        countComponents--;
+    }
+    
+    public boolean isSingleComponent(){
+        return countComponents==1;
+    }
+}
+
+class Solution {
+    public int maxNumEdgesToRemove(int n, int[][] edges) {
+        Arrays.sort(edges, new Comparator<int[]> (){
+           public int compare(int[] a, int[] b){
+               if(a[0]>b[0]) return -1;
+               else if(a[0]<b[0])return 1;
+               return 0;
+           } 
+        });
+        
+        DSU Alice=new DSU(n);
+        DSU Bob=new DSU(n);
+        
+        int count=0;
+        
+        for(int i=0;i<edges.length;i++){
+            int type=edges[i][0];
+            int u=edges[i][1];
+            int v=edges[i][2];
+            boolean addEdge=false;
+            
+            if(type==3){
+                if(Alice.findUltimateParent(u)!=Alice.findUltimateParent(v)){
+                    Alice.UnionBySize(u,v);
+                    addEdge=true;
+                }
+                
+                if(Bob.findUltimateParent(u)!=Bob.findUltimateParent(v)){
+                    Bob.UnionBySize(u,v);
+                    addEdge=true;
+                }
+                
+                if(addEdge) count++;
+            }else if(type==2){
+                 if(Bob.findUltimateParent(u)!=Bob.findUltimateParent(v)){
+                    Bob.UnionBySize(u,v);
+                    addEdge=true;
+                }
+                
+                if(addEdge) count++;
+                
+            }else{
+                if(Alice.findUltimateParent(u)!=Alice.findUltimateParent(v)){
+                    Alice.UnionBySize(u,v);
+                    addEdge=true;
+                }
+                if(addEdge) count++;
+            }
+        }
+        
+        if(Alice.isSingleComponent()==true && Bob.isSingleComponent()==true){
+            return edges.length-count;
+        }
+        
+        return -1;
+    }
+}

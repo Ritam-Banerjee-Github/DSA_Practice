@@ -1,0 +1,26 @@
+public class Solution {
+	private static int solve (Node temp){
+		if(temp==null) return 1;
+		int carry=solve(temp.next);
+		if(carry==1){
+            temp.data=temp.data+1;
+			if(temp.data==10){   //Because we are only adding 1, and every number can be 1 to 9, so maximum it can go to is 10
+				temp.data=0;
+				return 1;
+			}
+		}
+
+		return 0;
+	}
+	public static Node addOne(Node head) {
+		Node temp=head;
+		int carry=solve(temp);
+		if(carry==1){
+			Node newHead=new Node(1);
+			newHead.next=head;
+			return newHead;
+		}
+
+		return head;
+	}
+}

@@ -1,0 +1,24 @@
+class GfG{
+    public void insert(Stack<Integer> s, int ele){
+        if(s.isEmpty()||ele>s.peek()){
+            s.push(ele);
+            return;
+        }
+        int k=s.pop();
+        insert(s,ele);
+        s.push(k);
+    }
+    public void helper(Stack<Integer> s){
+        if(s.isEmpty()){
+            return;
+        }
+        int k = s.pop();
+        helper(s);
+        insert(s,k);
+        
+    }
+	public Stack<Integer> sort(Stack<Integer> s)
+	{   helper(s);
+		return s;
+	}
+	

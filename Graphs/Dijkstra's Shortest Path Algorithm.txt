@@ -1,0 +1,47 @@
+class Pair{
+    int node;
+    int distance;
+    public Pair(int node, int weight){
+        this.node=node;
+        this.distance=weight;
+    }
+}
+
+class Solution
+{
+    //Function to find the shortest distance of all the vertices
+    //from the source vertex S.
+    static int[] dijkstra(int V, ArrayList<ArrayList<ArrayList<Integer>>> adj, int S)
+    {
+        // Write your code here
+        int[] dist = new int[V];
+        for(int i=0;i<V;i++){
+            dist[i]=(int)1e9;
+        }
+        dist[S]=0;
+        // PriorityQueue<Pair> pq=new PriorityQueue<Pair>((Pair a,Pair b)->a.distance!=b.distance?a.distance-b.distance:a.node-b.node);
+        PriorityQueue<Pair> pq=new PriorityQueue<Pair>((x,y) -> x.distance-y.distance);
+        pq.add(new Pair(S,0));
+        
+        while(!pq.isEmpty()){
+            int node=pq.peek().node;
+            int distance=pq.peek().distance;
+            pq.remove();
+            for(int i=0;i<adj.get(node).size();i++){
+                int next=adj.get(node).get(i).get(0);
+                int weight=adj.get(node).get(i).get(1);
+                if(dist[node]+weight<dist[next]){  // you can use if(distance+weight<dist[next] as well.
+                    dist[next]=dist[node]+weight;
+                    pq.add(new Pair(next,dist[next]));
+                }
+            }
+            
+        }
+       
+        
+        return dist;
+    }
+}
+
+TC - E logV
+SC - Expected Auxiliary Space: O(V2).

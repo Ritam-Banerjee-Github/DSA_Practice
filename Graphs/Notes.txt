@@ -1,0 +1,29 @@
+Flood Fill Algorithm -> DFS, but no vis[]. Instead we check if the cell in ans[] matrix is updated to newColour or not
+
+Rotten Oranges(Again 2d Matrix) -> Create vis[][], Iterate through given grid[][] and mark vis[i][j]=2(if rotten)/0(else). Keep countFresh++ if grid[i][j]==1. Store rotten cells in Queue<Pair>.Pair contains 3 fields -> row,col,timer. Use BFS and delrow[] and delcol[] and mark 2 for cells in vis[][], increament timer++ and keep count++. After each complete iteration store maxTimer. Math.max(tm,t). Also if (count!=countFresh) return -1
+
+
+DFS for Cycle in Undirected Graph -> Initally parent pointer=-1. Then do normal DFS and if vis[neighbour]!=1 is false, else (parent != neighbour) is true, return true
+
+0/1 Matrix -> vis[][] and dist[][]. Intially traverse the grid and mark all 1s as visited and set thier dist to 0 -> dist.get(i).set(j,0). Store the 1s in Queue<Pair>. Each Pair contains row,col,step. 
+
+Bipartite Graph -> Linear Graph/Graph with even cycle length(length of edges). take two colors and trype tocolour graph such that each adjacent node have with diff color. Here instead of vis[] we take color[] initially marked with -1. And we try to fill them with 0/1 in DFS calls. If any calls return false(if (color[next]==col)), we return false. Else at the end we return true.
+
+Detect Cycle in Directed Graph -> Keep a pathVis[V] and pass it with every DFS calls. Matrk pathVis[node]=1 along with vis[node]=1. If at anytime,vis[neighbour]!=0 && pathVis[neighbour]==1 then retunr false. End of each DFS calls, mark pathVis[node]=0 again.
+
+
+Detect Cycle in Directed Graph(Using Kahn's Algorithm) -> Try to form TopoSort of the graph. A TopoSort only works for DAG. If the TopoSort count<N(no. Of Vertices) then the graph has cycle.
+
+Find Eventual Safe Nodes Using TopoSort -> We need to get nodes which are reaching to terminal nodes(nodes with 0 outgoing edges). We Reverse Graph(Create reverse adjacency list) and instead of calculating outDegree, we can now calculate the inDegrees.We find the topoSort, sort the array and return
+
+
+Cheapest Flight with K Stops -> Here we use Dijkstra's, but in the Priority Queue we prioritize everything on the basis of stops(Not distance). We Store Value(node,stop,dist) in a custom class. Because if we store in the basis of distance in PQ, then we may get th min distance but the stops might exceed K. Hence, we do PQ on the basis of stops. Now since the PQ is not sorted based on distance, so we we break after stops>K i.e., if(stops>k) break; && while adding add if(dist+edW<dist[next.node] && stops<=k)
+
+
+Number of ways to reach end with Minimum Distance -> Here along with distance array, we take ways[], initially filled with 0. For ways[source]=1. And perform bfs of dijkstra's. Here we add one more elseif(dist[node]+weight==dist[next]){ways[next]=ways[next]+ways[node]}. We dont need to insert in PQ anymore, just add in total number of ways
+
+
+Minimum Number of Operations to Make Graph Connected ->
+int count=(Total no of Connected Components -1)
+Number of Extra Edges>=count(return true)
+Else return false

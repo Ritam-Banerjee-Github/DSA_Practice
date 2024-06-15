@@ -1,0 +1,27 @@
+// Traversal -> Right,Left,Root
+
+public class Solution 
+{   
+    static TreeNode<Integer> prev=null; //Define Globally since it is static variable
+
+    private static void flatten(TreeNode<Integer> root){
+	if(root==null) return;
+   
+	flatten(root.right);
+        flatten(root.left);
+        root.right=prev;
+        root.left=null;
+	prev=root;
+   }
+
+    public static TreeNode<Integer> flattenBinaryTree(TreeNode<Integer> root)
+    {
+        // Write your code here.
+      flatten(root);
+      prev=null; //Since it is static variavle, we have to set it to null again for next test case to pass by reseting from null
+      return root;
+
+		
+
+    }
+}

@@ -1,0 +1,26 @@
+Brute Force - Using Hashset 
+TC = 2*O(N)
+SC = O(N)
+
+
+Optimal way - 
+
+class Solution {
+    int remove_duplicate(int arr[],int n){
+        // code here
+        int index=0;
+        int element=arr[0];
+        for(int i=1;i<n;i++){
+            if(arr[i]!=element){
+                arr[index+1]=arr[i];
+                index++;
+                element=arr[i];
+            }
+        }
+        return index+1;
+    }
+}
+
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(1)

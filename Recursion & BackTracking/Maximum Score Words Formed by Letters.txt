@@ -1,0 +1,39 @@
+class Solution {
+    private int solve(int i,int n, String[] words, int[] freq, int[] score){
+        if(i>=n) return 0;
+        
+        int take=0;
+        String currWord=words[i];
+        boolean isPossible=false;
+        int[] tempFreq=Arrays.copyOf(freq, freq.length);  //MasterStrike. Update tempFreq for take case, and send old freq for not take case
+        int currScore=0;
+        int j=0;
+        
+        for(;j<currWord.length();j++){
+            char currChar=currWord.charAt(j);
+            tempFreq[currChar-'a']--;
+            currScore+=score[currChar-'a'];
+            
+            if(tempFreq[currChar-'a']<0) break;
+        }
+        
+        if(j==currWord.length()){
+            take=currScore+solve(i+1,n,words,tempFreq,score);
+        }
+        
+        int notTake=solve(i+1,n,words,freq,score);
+        return Math.max(take,notTake);
+    }
+    public int maxScoreWords(String[] words, char[] letters, int[] score) {
+        int n=words.length;
+        int m=letters.length;
+        int[] freq=new int[26];
+        
+        for(int i=0;i<m;i++){
+            char ch=letters[i];
+            freq[ch-'a']++;
+        }
+        
+        return solve(0,n,words,freq,score);
+    }
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               

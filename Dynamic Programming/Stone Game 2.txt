@@ -1,0 +1,35 @@
+class Solution {
+    
+    Integer[][][] dp;
+    
+    public int stoneGameII(int[] piles) {
+        dp = new Integer[2][piles.length + 1][piles.length + 1];
+        
+        return solve(0, 0, 1,piles); // Alice = 0, Bob = 1
+    }
+    
+    private int solve(int p, int i, int m,int[] piles) {
+        if (i >= piles.length)
+            return 0;
+        
+        if (dp[p][i][m] != null) 
+            return dp[p][i][m];
+        
+        int res = (p == 0) ? -1 : Integer.MAX_VALUE; // Because for Alice we are taking max value and for Bob we are taking Min value. So we initialize with -1 and Max
+        int total = 0;
+        
+        for (int x = 1; x <= 2 * m; x++) {
+            if (i + x > piles.length)
+                break;
+            
+            total += piles[i + x - 1];
+            
+            if (p == 0)
+                res = Math.max(res, total + solve(1, i + x, Math.max(m, x),piles));
+            else
+                res = Math.min(res, solve(0, i + x, Math.max(m, x),piles));
+        }
+        
+        return dp[p][i][m] = res;
+    }
+}

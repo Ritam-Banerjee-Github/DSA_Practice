@@ -1,0 +1,70 @@
+Optimal 1 :
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int n=nums.length;
+        int[] ans=new int[n];
+        
+        boolean isZero=false;
+        int product=1;
+        int countZero=0;
+        
+        for(int i=0;i<n;i++){
+            if(nums[i]==0){
+                isZero=true;
+                countZero++;
+                continue;
+            }else{
+                product=product*nums[i];
+            }
+        }
+        
+        if(countZero>1){
+             Arrays.fill(ans,0);
+            return ans;
+        }
+        
+        if(isZero && countZero==1){
+            for(int i=0;i<n;i++){
+                if(nums[i]!=0){
+                    ans[i]=0;
+                }else{
+                    ans[i]=product;
+                }
+            }
+        }else{
+            for(int i=0;i<n;i++){
+                ans[i]=product/nums[i];
+            }
+        }
+        
+        return ans;
+    }
+}
+
+TC : O(N+N)
+
+Follow Up Optimal : Without using division or any extra space for left[] and right[] product
+
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int n=nums.length;
+        int[] ans=new int[n];
+        ans[0]=1;
+        
+        for(int i=1;i<n;i++){
+            ans[i]=ans[i-1]*nums[i-1];   //Now ans[i] will store the left product of all elements till i-1.
+        }
+        
+        int right_product=1;
+        
+        for(int i=n-1;i>=0;i--){
+            ans[i]=ans[i]*right_product;
+            right_product*=nums[i];
+        }
+        
+        return ans;
+    }
+}
+
+TC : O(N+N)
+

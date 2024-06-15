@@ -1,0 +1,88 @@
+Brute Force :
+
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        ListNode temp=head;
+        Stack<Integer> stack=new Stack<>();
+        
+        while(temp!=null){
+           stack.push(temp.val);
+            temp=temp.next;
+        }
+        
+        temp=head;
+        
+        while(temp!=null){
+            if(temp.val!=stack.peek()) return false;
+            
+            stack.pop();
+            temp=temp.next;class Solution {
+    public boolean isPalindrome(ListNode head) {
+        ListNode temp=head;
+        Stack<Integer> stack=new Stack<>();
+        
+        while(temp!=null){
+           stack.push(temp.val);
+            temp=temp.next;
+        }
+        
+        temp=head;
+        
+        while(temp!=null){
+            if(temp.val!=stack.peek()) return false;
+            
+            stack.pop();
+            temp=temp.next;
+        }
+        
+        return true;
+    }
+}
+ 
+Optimal :
+
+class Solution {
+    private ListNode reverseLinkedList(ListNode head){
+        if(head==null || head.next==null) return head;
+        
+        ListNode curr=head;
+        ListNode prev=null;
+        
+        while(curr!=null){
+            ListNode temp=curr.next;
+            curr.next=prev;
+            prev=curr;
+            curr=temp;
+        }
+        
+        return prev;
+    }
+    public boolean isPalindrome(ListNode head) {
+        ListNode slow=head;
+        ListNode fast=head;
+        
+        while(fast.next!=null && fast.next.next!=null){
+            slow=slow.next;
+            fast=fast.next.next;
+        }
+        
+        ListNode newHead=reverseLinkedList(slow.next);
+        
+        slow=head;
+        ListNode temp=newHead;
+        
+        while(temp!=null){
+            if(slow.val!=temp.val) {
+                reverseLinkedList(newHead);
+                return false;
+            }
+            slow=slow.next;
+            temp=temp.next;
+        }
+        
+        reverseLinkedList(newHead);
+        
+        return true;
+        
+    }
+}

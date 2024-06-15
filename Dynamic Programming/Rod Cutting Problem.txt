@@ -1,0 +1,70 @@
+Recursion + Memoization -
+
+import java.util.*;
+public class Solution {
+	private static int utility(int index, int n, int[] price, int[][] dp){
+		if(index==0){
+			return n*price[0];
+		}
+        if(dp[index][n]!=-1) return dp[index][n];
+		int rodLength=index+1;  // Rod Length is 1 more than index
+		int notTake=utility(index-1,n,price, dp);
+		int take=Integer.MIN_VALUE;
+		if(rodLength<=n){
+			take=price[index]+utility(index,n-rodLength,price, dp);
+		}
+		return dp[index][n]=Math.max(take,notTake);
+	}
+	public static int cutRod(int price[], int n) {
+		// Write your code here.
+		int[][] dp=new int[n][n+1];
+		for(int[] row: dp){
+			Arrays.fill(row,-1);
+		}
+		return utility(n-1,n,price,dp);
+	}
+}
+
+Reason: There are N*(N+1) states therefore at max ‘N*(N+1)’ new problems will be solved.
+
+Space Complexity: O(N*N) + O(N)
+
+Reason: We are using a recursion stack space(O(N)) and a 2D array ( O(N*(N+1)).
+
+
+Tabulation -
+
+public static int cutRod(int price[], int n) {
+		// Write your code here.
+		int[][] dp=new int[n][n+1];
+		for(int[] row: dp){
+			Arrays.fill(row,-1);
+		}
+		
+
+		for(int j=0;j<=n;j++){
+			dp[0][j]=j*price[0];
+		}
+		for(int i=1;i<n;i++){
+			for(int j=0;j<=n;j++){
+              	int rodLength=i+1;
+				int notTake=dp[i-1][j];
+				int take=Integer.MIN_VALUE;
+				if(rodLength<=j){
+					take=price[i]+dp[i][j-rodLength];
+				}
+				dp[i][j]=Math.max(take,notTake);
+			}
+		}
+
+		return dp[n-1][n];
+	}
+}
+
+Time Complexity: O(N*N)
+
+Reason: There are two nested loops
+
+Space Complexity: O(N*N)
+
+Reason: We are using an external array of size ‘N*(N+1)’. Stack Space is eliminated.

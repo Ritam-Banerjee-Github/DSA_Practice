@@ -1,0 +1,23 @@
+class Solution {
+    public int maxDepth(String s) {
+        int n=s.length();
+        if(n==0 || n==1) return 0; //Constraint : It is guaranteed that parentheses expression s is a VPS.
+        
+        int ans=0;
+        int count=0;
+        
+        for(int i=0;i<n;i++){
+            if(s.charAt(i)=='('){
+                count++;
+                ans=Math.max(ans,count);
+            }else if(s.charAt(i)==')'){
+                count--;
+            }
+        }
+        
+        return ans;
+    }
+}
+
+TC : O(N)
+SC : O(1)

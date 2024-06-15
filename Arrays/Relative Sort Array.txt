@@ -1,0 +1,47 @@
+Brute :
+class Solution {
+    public int[] relativeSortArray(int[] arr1, int[] arr2) {
+        int n=arr1.length;
+        int[] ans=new int[n];
+        
+        HashSet<Integer> set=new HashSet<>();
+        Map<Integer,Integer> map=new HashMap<Integer,Integer>();
+        List<Integer> notContain=new ArrayList<>();
+        
+        int m=arr2.length;
+        
+        for(int i=0;i<m;i++){
+            set.add(arr2[i]);
+        }
+        
+        for(int i=0;i<n;i++){
+            if(set.contains(arr1[i])){
+                map.put(arr1[i],map.getOrDefault(arr1[i],0)+1);
+            }else{
+                notContain.add(arr1[i]);
+            }
+        }
+        
+        Collections.sort(notContain);
+        
+        int j=0;
+        
+        for(int i=0;i<m;i++){
+            int element=arr2[i];
+            int count=map.get(element);
+            
+            while(count>0){
+                ans[j]=element;
+                j++;
+                count--;
+            }
+        }
+        
+        for(int element:notContain){
+            ans[j]=element;
+            j++;
+        }
+        
+        return ans;
+    }
+}

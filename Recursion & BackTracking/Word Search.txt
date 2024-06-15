@@ -1,0 +1,45 @@
+class Solution {
+    private boolean traverse(int row, int col, int index, int len, int[][] vis, String word, char[][] board){ 
+        
+        if(index>=len-1) return true;
+        
+        vis[row][col]=1;
+        
+        int n=board.length;
+        int m=board[0].length;
+        
+        int[] delrow={0,0,1,-1};
+        int[] delcol={1,-1,0,-0};
+        
+        for(int i=0;i<4;i++){
+            int nrow=row+delrow[i];
+            int ncol=col+delcol[i];
+            
+            if(nrow<n && nrow>=0 && ncol<m && ncol>=0 && vis[nrow][ncol]!=1 && board[nrow][ncol]==word.charAt(index+1)){
+                if(traverse(nrow,ncol,index+1,len,vis,word,board)==true){
+                    return true;
+                }  
+            }
+        }
+        
+         vis[row][col]=0;
+         return false;
+    }
+    public boolean exist(char[][] board, String word) {
+        
+        int len=word.length();
+        int n=board.length;
+        int m=board[0].length;
+        int[][] vis=new int[n][m];
+        
+       for(int i=0;i<n;i++){
+           for(int j=0;j<m;j++){
+               if(vis[i][j]!=1 && word.charAt(0)==board[i][j]){
+                   if(traverse(i,j,0,len,vis,word,board)==true) return true;
+               }  
+           }
+       } 
+        
+        return false;
+    }
+}

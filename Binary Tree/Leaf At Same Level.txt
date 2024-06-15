@@ -1,0 +1,22 @@
+class Solution
+{
+    boolean check(Node root)
+    {
+	// Your code here
+	Set<Integer> set=new HashSet<Integer>();
+	checkUtility(root,0,set);
+	return set.size()==1;
+    }
+    
+    void checkUtility(Node root,int level,Set<Integer> set){
+        if(root==null){
+            return;
+        }
+        if(root.left==null && root.right==null){
+            set.add(level);
+            return;
+        }
+        checkUtility(root.left,level+1,set);
+        checkUtility(root.right,level+1,set);
+    }
+}

@@ -1,0 +1,49 @@
+class solve {
+    // Function to determine if graph can be coloured with at most M colours such that no two adjacent vertices of graph are coloured with same colour
+
+    private void convertMatrixToList(List<List<Integer>> adj, boolean graph[][]){
+        int n=graph.length;
+        int m=graph[0].length;
+        
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<Integer>());
+        }
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(graph[i][j]==true){
+                    adj.get(i).add(j);
+                }
+            }
+        }
+    }
+    private boolean isPossible(int node,int C,int[] color,List<List<Integer>> adj){
+        for(int next: adj.get(node)){
+            if(color[next]==C) return false;
+        }
+        return true;
+    }
+    private boolean utility(List<List<Integer>> adj, int m, int node, int[] color, int n){
+        if(node==n) return true;
+        for(int i=1;i<=m;i++){
+                if(isPossible(node,i,color,adj)){
+                    color[node]=i;
+                    if(utility(adj,m,node+1,color,n)==true){
+                        return true;
+                    }
+                    color[node]=0;
+                }
+        }
+        return false;
+    }
+    public boolean graphColoring(boolean graph[][], int m, int n) {
+        // Your code here
+        List<List<Integer>> adj=new ArrayList<>();
+        int[] color=new int[n];
+        convertMatrixToList(adj,graph);
+        return utility(adj,m,0,color,n);
+        
+    }
+}
+
+Expected Time Complexity: O(M^N).
+Expected Auxiliary Space: O(N).

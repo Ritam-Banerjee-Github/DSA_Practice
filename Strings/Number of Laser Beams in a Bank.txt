@@ -1,0 +1,33 @@
+class Solution {
+    public int numberOfBeams(String[] bank) {
+        int n=bank.length;
+        TreeMap<Integer,Integer> map=new TreeMap<>();
+        
+        for(int i=0;i<n;i++){
+            int m=bank[i].length();
+            for(int j=0;j<m;j++){
+                if(bank[i].charAt(j)=='1'){
+                    map.put(i,map.getOrDefault(i,0)+1);
+                }
+            }
+        }
+        
+        if(map.size()==0 || map.size()==1) return 0;
+        
+        int prev_row=-1;
+        int ans=0;
+        
+        for(Integer row:map.keySet()){
+         if(prev_row==-1){
+             prev_row=row;
+             continue;
+            }
+            if(prev_row<row){
+                ans+=map.get(prev_row)*map.get(row);
+                prev_row=row;
+            }
+        }
+        
+        return ans;
+    }
+}

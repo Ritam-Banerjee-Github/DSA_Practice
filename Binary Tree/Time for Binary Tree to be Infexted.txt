@@ -1,0 +1,116 @@
+Intuitive Approach :
+class Solution {
+    TreeNode startNode;
+    HashMap<TreeNode,TreeNode> parentMap;
+    int ans=0;
+    
+    private void buildParentMap(TreeNode node,int start){
+        Queue<TreeNode> q=new LinkedList<>();
+        q.add(node);
+        
+        while(!q.isEmpty()){
+            TreeNode parent=q.remove();
+            if(parent.val==start) startNode=parent;
+            
+            if(parent.left!=null){
+                q.add(parent.left);
+                parentMap.put(parent.left,parent);
+            }
+            
+             if(parent.right!=null){
+                q.add(parent.right);
+                parentMap.put(parent.right,parent);
+            }
+            
+        }
+    }
+    public int amountOfTime(TreeNode root, int start) {
+        parentMap=new HashMap<>();
+        buildParentMap(root,start);
+        
+        Queue<TreeNode> q=new LinkedList<>();
+        q.add(startNode);
+        HashSet<TreeNode> visited=new HashSet<>();
+        visited.add(startNode);
+        
+        while(!q.isEmpty()){
+            boolean isInfected=false;
+            int size=q.size();
+            
+            for(int i=0;i<size;i++){
+                TreeNode node=q.remove();
+                
+                if(node.left!=null && !visited.contains(node.left)){
+                    q.add(node.left);
+                    visited.add(node.left);
+                    isInfected=true;
+                }
+                
+                 if(node.right!=null && !visited.contains(node.right)){
+                    q.add(node.right);
+                    visited.add(node.right);
+                    isInfected=true;
+                }
+                
+                 if(parentMap.get(node)!=null && !visited.contains(parentMap.get(node))){
+                    q.add(parentMap.get(node));
+                    visited.add(parentMap.get(node));
+                    isInfected=true;
+                }
+            }
+            
+            if(isInfected==true) ans++;
+        }
+        return ans;    
+    }
+}
+
+Approach 2:
+class Solution {
+    private void build(HashMap<Integer,List<Integer>> adj, TreeNode root, int parent){
+        if(root==null) return;
+        
+        if(parent!=-1){
+             adj.computeIfAbsent(root.val, k -> new ArrayList<>()).add(parent); //Create empty arraylist for corresponding key if the value for key is null. If not null then it will return the value
+        }
+        if(root.left!=null){
+             adj.computeIfAbsent(root.val, k -> new ArrayList<>()).add(root.left.val);
+        }
+        if(root.right!=null){
+             adj.computeIfAbsent(root.val, k -> new ArrayList<>()).add(root.right.val);
+        }
+        
+        build(adj,root.left,root.val);
+        build(adj,root.right,root.val);
+        
+    }
+    public int amountOfTime(TreeNode root, int start) {
+        int ans=0;
+        HashMap<Integer,List<Integer>> adj=new HashMap<>();
+        build(adj,root,-1);
+        
+        Queue<Integer> queue=new LinkedList<>();
+        
+        queue.add(start);
+        HashSet<Integer> visited=new HashSet<>();
+        visited.add(start);
+        
+        while(!queue.isEmpty()){
+            int n=queue.size();
+            
+            for(int i=0;i<n;i++){
+                int curr=queue.poll();
+                
+                for(int next:adj.getOrDefault(curr,Collections.emptyList())){ //To take care of single value input. It will return empty list.
+                    if(!visited.contains(next)){
+                        queue.add(next);
+                        visited.add(next);
+                    }
+                }
+            }
+            ans++;
+        }
+        
+        return ans-1; // There will be extra 1 in the end
+    }
+}

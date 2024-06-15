@@ -1,0 +1,60 @@
+Knowledge++=All integers can be represented in the form of (3k or 3k+1 or 3k+2).
+
+class Solution {
+    public int minimumRounds(int[] tasks) {
+        HashMap<Integer,Integer> map=new HashMap<>();
+        int n=tasks.length;
+        for(int i=0;i<n;i++){
+            map.put(tasks[i],map.getOrDefault(tasks[i],0)+1); //Map of task_difficulty and count
+        }
+         int result=0;
+
+        for(int task_id:map.keySet()){
+
+            /* using keySet() for iteration over keys 
+        for (String name : gfg.keySet())  
+            System.out.println("key: " + name); 
+          
+         using values() for iteration over values 
+        for (String url : gfg.values())  
+            System.out.println("value: " + url); 
+
+            using for-each loop for iteration over Map.entrySet() 
+        for (Map.Entry<String,String> entry : gfg.entrySet())  
+            System.out.println("Key = " + entry.getKey() + 
+                             ", Value = " + entry.getValue()); 
+
+            */                 
+            if(map.get(task_id)==1) return -1;
+
+            if(map.get(task_id)%3==0){
+                result+=map.get(task_id)/3;
+            }else{ // remainder is either 1 or 2. so we need to add 1 to the opertion(breaking in the terms of 2)
+                result+=map.get(task_id)/3 +1;
+            }
+        }
+
+        return result;
+
+    }
+}
+
+Approach 2 -
+class Solution {
+    public int minimumRounds(int[] tasks) {
+        int ans=0;
+        HashMap<Integer,Integer> map=new HashMap<>();
+        int n=tasks.length;
+        for(int i=0;i<n;i++){
+            map.put(tasks[i],map.getOrDefault(tasks[i],0)+1);
+        }
+        
+        for(int count:map.values()){
+            if(count==1) return -1;
+            
+            ans+=(int)Math.ceil((double)count/3);
+        }
+        
+        return ans;
+    }
+}

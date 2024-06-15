@@ -1,0 +1,96 @@
+Left Rotation by K indexes mean moving the first k elements to the end and shifting the remaining elements to the left. For ex, left rotation by 2 means moving first 2 elements to end  and shifting all remaining to left by 2 places.
+
+Brute -
+public class Main {
+  public static void Rotatetoleft(int[] arr, int n, int k) {
+    if (n == 0)
+      return;
+    k = k % n;
+    if (k > n)
+      return;
+    int[] temp = new int[k];
+    for (int i = 0; i < k; i++) {
+      temp[i] = arr[i];
+    }
+    for (int i = 0; i < n - k; i++) {
+      arr[i] = arr[i + k];
+    }
+    for (int i = n - k; i < n; i++) {
+      arr[i] = temp[i - n + k];
+    }
+  }
+  public static void main(String args[]) {
+    int n = 7;
+    int[] arr = {1,2,3,4,5,6,7};
+    int k = 2;
+    Rotatetoleft(arr, n, k);
+    System.out.println("After Rotating the elements to left ");
+    for (int i = 0; i < n; i++) {
+      System.out.print(arr[i] + " ");
+    }
+  }
+}
+ Store the 1st k elements in a temp array/arrayList and shift remaining elements to left and at the end insert the elements from temp at the end starting from n-d index where n is size of array.
+But this usses extra space of O(N)
+
+
+Optimal Solution -
+
+class Solution
+{
+     private void ReverseUtility(long arr[], int start, int end){
+        while(start<=end){
+            long temp=arr[start];
+            arr[start]=arr[end];
+            arr[end]=temp;
+            start++;
+            end--;
+        }
+    }
+    void leftRotate(long arr[], int k,int n)
+    {
+        k=k%n;
+        ReverseUtility(arr,0,k-1);
+        ReverseUtility(arr,k,n-1);
+        ReverseUtility(arr,0,n-1);
+        
+    }
+}
+
+Time Complexity – O(N) where N is the number of elements in an array
+
+Space Complexity – O(1) since no extra space is required
+
+Brute for Rotating elements to right-
+
+import java.util.*;
+public class Main {
+  public static void Rotatetoright(int[] arr, int n, int k) {
+    if (n == 0)
+      return;
+    k = k % n;
+    if (k > n)
+      return;
+    int[] temp = new int[k];
+    for (int i = n - k; i < n; i++) {
+      temp[i - n + k] = arr[i];
+    }
+    for (int i = n - k - 1; i >= 0; i--) {
+      arr[i + k] = arr[i];
+    }
+    for (int i = 0; i < k; i++) {
+      arr[i] = temp[i];
+    }
+  }
+  public static void main(String args[]) {
+    int n = 7;
+    int[] arr = {1,2,3,4,5,6,7};
+    int k = 2;
+    Rotatetoright(arr, n, k);
+    System.out.println("After Rotating the elements to right ");
+    for (int i = 0; i < n; i++) {
+      System.out.print(arr[i] + " ");
+    }
+  }
+}
+

@@ -1,0 +1,76 @@
+Similar Question : Word Ladder ( Microsoft, Amazon ) : https://github.com/MAZHARMIK/Interview_DS_Algo/blob/master/Graph/Word_Ladder.cpp
+                       Print all Jumping Numbers smaller than or equal to a given value (https://www.geeksforgeeks.org/print-all-jumping-numbers-smaller-than-or-equal-to-a-given-value/)
+
+Pattern : 
+Ask about number or word
+Each digit or character can be changed
+You have to reach a target word/number in minimum steps
+Given a list of words/numbers which are allowed/denied
+
+class Solution {
+    public int openLock(String[] deadends, String target) {
+        int level=0;
+        
+        int n=deadends.length;
+        Set<String> set=new HashSet<>();
+        
+        for(int i=0;i<n;i++){
+            set.add(deadends[i]);
+        }
+        
+        String start="0000";
+        if(set.contains(start)) return -1;
+        
+        Queue<String> queue=new LinkedList<>();
+        queue.add(start);
+        
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            
+            for(int i=0;i<size;i++){
+                String str=queue.remove();
+                
+                if(str.equals(target)) return level;
+                
+                checkString(str,set,queue);
+            }
+            
+            level++;
+        }
+        
+        return -1;
+    }
+    
+    private void checkString(String str, Set<String> set,Queue<String> q){
+        StringBuilder sb=new StringBuilder(str);
+        
+        for(int i=0;i<4;i++){
+            char ch=sb.charAt(i);
+            
+            char inc=sb.charAt(i)=='9'?'0':(char)(sb.charAt(i)+1);
+            char dec=sb.charAt(i)=='0'?'9':(char)(sb.charAt(i)-1);
+            
+            sb.setCharAt(i,inc);
+            String increaseStr=sb.toString();
+            if(!set.contains(increaseStr)){
+                q.add(increaseStr);
+                set.add(increaseStr);
+            }
+            
+            sb.setCharAt(i,dec);
+            String decreaseStr=sb.toString();
+            if(!set.contains(decreaseStr)){
+                q.add(decreaseStr);
+                set.add(decreaseStr);
+            }
+            
+            sb.setCharAt(i,ch);
+        }
+    }
+}
+
+    
+//Using BFS
+//T.C : We have n = 10 slots in each wheel and we have w = 4 wheels. In worst case we will explore all possible combinations.
+//      Total Combinations = O(n^w)
+//S.C : In worst case we will store all possible combinations in queue O(n^w)

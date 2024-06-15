@@ -1,0 +1,32 @@
+class Solution{
+    static int f(int i,int j, int arr[][], int n, int dp[][]){
+         if(j<0 || j>=n) return -(int)1e8;
+        if(i==n-1) return arr[i][j];
+       
+       if(dp[i][j]!=-1) return dp[i][j]; 
+        int below=arr[i][j] + f(i+1,j,arr,n,dp);
+        int ld=arr[i][j]+f(i+1,j-1,arr,n,dp);
+        int rd=arr[i][j]+f(i+1,j+1,arr,n,dp);
+        
+        return dp[i][j]=Math.max(below,Math.max(ld,rd));
+    }
+    static int maximumPath(int N, int Matrix[][])
+    {
+        // code here
+        int[][] dp=new int[N][N];
+        for(int i=0;i<N;i++){
+            for(int j=0;j<N;j++){
+                dp[i][j]=-1;
+            }
+        }
+        int maxi=-(int)1e8;
+        for(int j=0;j<N;j++){
+            maxi=Math.max(maxi,f(0,j,Matrix,N,dp));
+        }
+        return maxi;
+    }
+}
+
+
+Expected Time Complexity: O(N*N)
+Expected Auxiliary Space: O(N*N)

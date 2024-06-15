@@ -1,0 +1,86 @@
+Solution 1 - Recursion + memoization (Using HashMap dp) : 32 / 59 test cases passed
+
+class Solution {
+    int mod=(int)(1e9+7);
+    
+    HashMap<String,Integer> dp=new HashMap<>();
+    
+    private int solve(int i, int n, int absentCount, int consecutiveLateCount){
+        if(i>n) return 1;
+        
+        String key=""+i+" "+absentCount+" "+consecutiveLateCount;
+        if(dp.containsKey(key)) return dp.get(key);
+        
+        int present=0;
+        int absent=0;
+        int late=0;
+        
+        present=solve(i+1,n,absentCount,0);
+        
+        if(absentCount<1){
+            absent=solve(i+1,n,absentCount+1,0);
+        }
+        
+        if(consecutiveLateCount<2){
+            late=solve(i+1,n,absentCount,consecutiveLateCount+1);
+        }
+        
+        int ans=((present+absent)%mod+late)%mod;
+        
+        dp.put(key,ans);
+        return ans;
+    }
+    
+    public int checkRecord(int n) {
+        return solve(1,n,0,0);
+    }
+    
+}
+
+Solution 2 - Recursion + memoization (Using 3D dp) : All test cases passed
+class Solution {
+    int mod=(int)(1e9+7);
+    
+    HashMap<String,Integer> dp=new HashMap<>();
+    
+    private int solve(int i, int n, int absentCount, int consecutiveLateCount, int[][][] dp){
+        if(i>n) return 1;
+        
+        if(dp[i][absentCount][consecutiveLateCount]!=-1) return dp[i][absentCount][consecutiveLateCount];
+        
+        int present=0;
+        int absent=0;
+        int late=0;
+        
+        present=solve(i+1,n,absentCount,0,dp);
+        
+        if(absentCount<1){
+            absent=solve(i+1,n,absentCount+1,0,dp);
+        }
+        
+        if(consecutiveLateCount<2){
+            late=solve(i+1,n,absentCount,consecutiveLateCount+1,dp);
+        }
+        
+        int ans=((present+absent)%mod+late)%mod;
+        
+        
+        dp[i][absentCount][consecutiveLateCount]=ans;
+        return ans;
+    }
+    
+    public int checkRecord(int n) {
+        int[][][] dp=new int[n+2][2][3];
+
+        for(int[][] matrix : dp){
+            for(int[] row:matrix){
+                Arrays.fill(row,-1);
+            }
+        }
+            
+        return solve(1,n,0,0,dp);
+    }
+    
+}
+
+

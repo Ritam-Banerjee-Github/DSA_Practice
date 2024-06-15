@@ -1,0 +1,15 @@
+class Solution {
+    public int rangeBitwiseAnd(int left, int right) {
+        int shiftCount=0;
+        
+        while(left!=right){   //Also used to fine the longest common number/prefix b/w two numbers
+            left=left>>1;
+            right=right>>1;
+            shiftCount++;
+        } 
+        
+        return left<<shiftCount;
+    }
+}
+
+TC - O(logn) To represent any number in 32 bits

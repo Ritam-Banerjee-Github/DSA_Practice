@@ -1,0 +1,43 @@
+Throwing Exceptions
+The program resumes execution when the exception is caught somewhere by a "catch" block.
+
+
+Well first of all ,
+
+There are 2 types of Exceptions. Checked & Unchecked.
+
+Unchecked exceptions(Thrown in Runtime) are the ones that your program cannot recover from. Like NullPointers, telling you that something is really wrong with your logic.
+
+Checked exceptions(Thrown During Compilation) are runtime exceptions, and from these ones you can recover from.
+
+Therefore you should avoid using catch statemens looking for the "Exception" base class. Which are represent both times. You should probably consider looking for specific exceptions(normally sub-classes of Run-Time exceptions).
+
+
+for(DataSource source : dataSources) {
+    try {
+        //do something with 'source'
+    } catch (Exception e) { // catch any exception
+      continue; // will just skip this iteration and jump to the next
+    }
+   //other stuff ? 
+}
+
+
+If you are not breaking the loop somehow inside the catch block, then the other iterations will just continue, regardless of whether an exception was thrown in a previous iteration.
+
+Try this simple example and see what happens:
+
+List<String> list = new ArrayList<String>();
+list.add("1");
+list.add("2");
+list.add("3");
+
+for(String str: list) {
+   try {
+       System.out.println(str);
+       throw new Exception("Exception for string " + str);
+   } catch(Exception ex) {
+       System.out.println("Caught exception");
+   }
+}
+You will see that all iteration execute, even though each one throws an exception.

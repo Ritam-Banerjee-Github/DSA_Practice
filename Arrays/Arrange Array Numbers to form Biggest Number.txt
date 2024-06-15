@@ -1,0 +1,24 @@
+class Solution {
+    String printLargest(String[] arr) {
+        // code here
+        String ans="";
+        ArrayList<String> list=new ArrayList<>();
+        for(String str:arr){
+            list.add(str);  // In case int[] arr was given, we first need to convert integer to string ->  list.add(String.valueOf(nums[i]));
+        }
+        Collections.sort(list, new Comparator<>(){
+            public int compare(String x, String y){
+                String a=x+y;
+                String b=y+x;
+                return a.compareTo(b)>0?-1:1;
+            }
+        });
+        for(String str:list){
+            ans+=str;
+        }
+        return ans;
+    }
+}
+
+Expected Time Complexity: O(NlogN)
+Expected Auxiliary Space: O(N)

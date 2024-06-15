@@ -1,0 +1,44 @@
+class Solution {
+    public String makeGood(String s) {
+        int n=s.length();
+        if(n==1) return s;
+        
+        StringBuilder sb=new StringBuilder();
+        Stack<Character> stack =new Stack<>();
+        
+        for(int i=0;i<n;i++){
+            int currChar=(int)s.charAt(i);
+            if(stack.isEmpty()){
+                stack.push(s.charAt(i));
+                continue;
+            }
+            
+            int lastCharInStack=(int)stack.peek();
+            
+            if(currChar+32==lastCharInStack || currChar-32==lastCharInStack){
+                stack.pop();
+            }else{
+                stack.push(s.charAt(i));
+            }
+        }
+        
+        while(!stack.isEmpty()){
+            sb.append(stack.peek());
+            stack.pop();
+        }
+        
+        
+        return sb.reverse().toString();
+    }
+}
+
+TC : O(N) + O(N) + O(N/2) + O(N)
+SC : O(N) + O(N)
+
+The time complexity of StringBuilder.reverse().toString() in Java can be broken down as follows:
+
+StringBuilder.reverse(): This method reverses the characters in the StringBuilder object in-place. It iterates over half of the characters in the StringBuilder and swaps each character with its corresponding character from the other end of the sequence. The time complexity of this operation is O(n/2), where n is the number of characters in the StringBuilder.
+
+toString(): This method creates a new String object from the characters in the StringBuilder. It iterates over each character in the StringBuilder to copy them into the new String object. The time complexity of this operation is O(n), where n is the number of characters in the StringBuilder.
+
+Therefore, when combined, the time complexity of StringBuilder.reverse().toString() is O(n/2) + O(n), which simplifies to O(n), where n is the number of characters in the StringBuilder.

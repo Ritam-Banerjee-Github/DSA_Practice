@@ -1,0 +1,21 @@
+//Here both players pla optimally is misleading. Any move by either Alice or Bob does not have any impact on the other player, bcoz alice cant remove 'B' and Bob can't remove 'A'.So the number of moves which can be made by each player is already set in the begining of the game only.
+
+class Solution {
+    public boolean winnerOfGame(String colors) {
+        int n=colors.length();
+        int alice=0;
+        int bob=0;
+
+        for(int i=1;i<n-1;i++){
+            if(colors.charAt(i-1)==colors.charAt(i) && colors.charAt(i)==colors.charAt(i+1)){
+                if(colors.charAt(i)=='A'){
+                     alice++;
+                }else{
+                    bob++;
+                }
+            }
+        }
+
+        return alice>bob?true:false;
+    }
+}

@@ -1,0 +1,32 @@
+class Solution {
+    public int bagOfTokensScore(int[] tokens, int power) {
+        int score =0;
+        Arrays.sort(tokens); Greedily looking to increase score
+
+        int n=tokens.length;
+        int i=0;
+        int j=n-1;
+
+        int maxScore=0;
+
+        while(i<=j){      //Each token(any token index[i/j]) may be played at most once and in any order. You do not have to play all the tokens.
+            if(power>=tokens[i]){
+                power-=tokens[i];
+                i++; //Played i, so moving to next token forward
+                score++;
+
+                maxScore=Math.max(maxScore,score);
+            }else if(score>=1){
+                power+=tokens[j];
+                score--;
+                j--;   //Played j, so moving to next token backward
+                
+                maxScore=Math.max(maxScore,score);
+            }else{
+                return maxScore;
+            }
+        }
+
+        return maxScore;
+    }
+}

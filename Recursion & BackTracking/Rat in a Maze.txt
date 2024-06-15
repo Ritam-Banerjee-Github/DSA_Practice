@@ -1,0 +1,36 @@
+class Solution {
+    private static void utility(int row, int col, int[][] m, int[][] vis, String temp,
+    ArrayList<String> ans, int n, int[] drow, int[] dcol){
+        if(row==n-1 && col==n-1){
+            ans.add(temp);
+            return;
+        }
+        String lex="DLRU";
+        for(int i=0;i<4;i++){
+            int nrow=row+drow[i];
+            int ncol=col+dcol[i];
+            if(nrow>=0 && nrow<n && ncol>=0 && ncol<n && m[nrow][ncol]==1 && vis[nrow][ncol]!=1){
+                vis[nrow][ncol]=1;
+                utility(nrow,ncol,m,vis,temp+lex.charAt(i),ans,n,drow,dcol);
+                vis[nrow][ncol]=0;
+            }
+        }
+    }
+    public static ArrayList<String> findPath(int[][] m, int n) {
+        // Your code here
+        ArrayList<String> ans = new ArrayList<String>();
+        int[] drow={1,0,0,-1};
+        int[] dcol={0,-1,1,0};
+        String temp="";
+        int[][] vis=new int[n][n];
+        vis[0][0]=1;
+        if(m[0][0]==1){
+        utility(0,0,m,vis,temp,ans,n,drow,dcol);
+        }
+        return ans;
+    }
+}
+
+Time Complexity: O(4^(m*n)), because on every cell we need to try 4 different directions.
+
+Space Complexity:  O(m*n), Maximum Depth of the recursion tree(auxiliary space).

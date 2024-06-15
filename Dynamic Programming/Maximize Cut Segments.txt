@@ -1,0 +1,37 @@
+class Solution
+{
+    //Function to find the maximum number of cuts.
+    public int f(int i, int x, int y, int z,int dp[]){
+        if(i==0){
+            return 0;
+        }
+
+        if(dp[i]!=-1) return dp[i];
+
+        int cutx=-(int)1e8,cuty=-(int)1e8,cutz=-(int)1e8;
+
+        if(x<=i){
+            cutx=1+f(i-x,x,y,z,dp);
+        }
+        if(y<=i){
+            cuty=1+f(i-y,x,y,z,dp);
+        }
+        if(z<=i){
+            cutz=1+f(i-z,x,y,z,dp);
+        }
+
+        return dp[i]=Math.max(cutx,Math.max(cuty,cutz));
+    }
+    public int maximizeCuts(int n, int x, int y, int z)
+    {
+       //Your code here
+       int[] dp = new int[n+1];
+       Arrays.fill(dp,-1);
+       int ans=f(n,x,y,z,dp);
+       return (ans<0)?0:ans;
+    }
+}
+
+
+Expected Time Complexity : O(N)
+Expected Auxiliary Space: O(N)

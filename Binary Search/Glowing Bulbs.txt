@@ -1,0 +1,50 @@
+#include <vector>
+
+// Function to calculate the sum of multiples
+long long calculateSumOfMultiples(const std::vector<int> &primes, long long x) {
+    int size = primes.size();
+    long long sum = 0;
+
+    // Step 1: Iterate over all the subsets of primes
+    for (int i = 1; i < (1 << size); i++) {
+        long long product = 1;
+        int sign = -1;
+
+        // Step 2: Multiply the selected primes and keep track of the sign
+        for (int j = 0; j < size; j++) {
+            if ((i >> j) & 1) {
+                product *= primes[j];
+                sign *= -1;
+            }
+        }
+
+        // Step 3: Add the sign * (x / product) to the sum
+        sum += sign * (x / product);
+    }
+
+    return sum;
+}
+
+// Function to find the Kth glowing bulb
+long long findKthGlowingBulb(const std::vector<int> &labels, long long k) {
+    long long answer = 1;
+    long long low = 1;
+    long long high = 1e12;
+
+    // Step 4: Perform binary search to find the answer
+    while (low <= high) {
+        long long mid = (low + high) >> 1;
+
+        // Step 5: Calculate the sum of multiples using the mid value
+        if (calculateSumOfMultiples(labels, mid) >= k) {
+            // If the sum is greater than or equal to k, update the answer and search in the lower half
+            answer = mid;
+            high = mid - 1;
+        } else {
+            // If the sum is less than k, search in the upper half
+            low = mid + 1;
+        }
+    }
+
+    return answer; // Return the final answer
+}
