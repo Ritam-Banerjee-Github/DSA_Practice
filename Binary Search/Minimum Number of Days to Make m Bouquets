@@ -1,0 +1,55 @@
+class Solution {
+    private boolean mBouquets(int mid, int m, int k, int[] bloomDay, int n){
+        int totalCount=0;
+        int adjacentCount=0;
+        
+        for(int i=0;i<n;i++){
+            if(bloomDay[i]<=mid){
+                adjacentCount++;
+                
+                if(adjacentCount==k){
+                    adjacentCount=0;
+                    totalCount++;
+                }
+            }else{
+                adjacentCount=0;
+            }
+        }
+        
+        if(totalCount<m) return false;
+        
+        return true;
+    }
+    public int minDays(int[] bloomDay, int m, int k) {
+        int n=bloomDay.length;
+        int requiredFlowers=m*k;
+        
+        if(n<requiredFlowers) return -1;
+        
+        int maxBloomDay=0;
+        
+        for(int i=0;i<n;i++){
+            maxBloomDay=Math.max(bloomDay[i],maxBloomDay);
+        }
+        
+        int low=1;
+        int high=maxBloomDay;
+        int ans=-1;
+        
+        while(low<=high){
+            int mid=low + (high-low)/2;
+            
+            if(mBouquets(mid,m,k,bloomDay,n)==true){
+                ans=mid;
+                high=mid-1;
+            }else{
+                low=mid+1;
+            }
+        }
+        
+        return ans;
+        
+    }
+}
+
+TC - O(nlog(maxBloomDay))
