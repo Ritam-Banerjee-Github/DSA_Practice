@@ -1,0 +1,53 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    HashMap<Integer,Integer> map=new HashMap<>();
+    List<Integer> inOrder=new ArrayList<>();
+    
+    private void inOrderTraversal(TreeNode root){
+        if(root==null) return;
+        
+        inOrderTraversal(root.left);
+        inOrder.add(root.val);
+        inOrderTraversal(root.right);
+    }
+    
+    private void makeBstToGst(TreeNode root){
+        if(root==null) return;
+        
+        makeBstToGst(root.left);
+        makeBstToGst(root.right);
+        root.val=map.get(root.val);
+    }
+    public TreeNode bstToGst(TreeNode root) {
+        inOrderTraversal(root);
+        int n=inOrder.size();
+        int[] prefixSum=new int[n];
+        prefixSum[n-1]=inOrder.get(n-1);
+        
+        for(int i=n-2;i>=0;i--){
+            prefixSum[i]=prefixSum[i+1]+inOrder.get(i);    
+        }
+        
+        for(int i=0;i<n;i++){
+            map.put(inOrder.get(i),prefixSum[i]);
+        }
+        
+        makeBstToGst(root);
+        return root;
+        
+    }
+}
