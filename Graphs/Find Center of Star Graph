@@ -1,0 +1,25 @@
+class Solution {
+    public int findCenter(int[][] edges) {
+        int n=edges.length;
+        HashMap<Integer,Integer> map=new HashMap<>();
+        
+        int ans=-1;
+        
+        int u1=edges[0][0];
+        int v1=edges[0][1];
+        
+        int u2=edges[1][0];
+        int v2=edges[1][1];
+        
+        if(u1==u2 || u1==v2){
+            ans=u1;
+        }else{
+            ans=v1;
+        }
+        
+        return ans;
+    }
+}
+
+TC - O(1)
+SC - O(1)
