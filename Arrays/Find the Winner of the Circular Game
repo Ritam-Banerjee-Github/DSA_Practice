@@ -1,0 +1,45 @@
+//Approach 1: Brute Force (Simple Simulation)
+//T.C : O(n^2)
+//S.C : O(n)
+class Solution {
+    public int findTheWinner(int n, int k) {
+        List<Integer> list=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            list.add(i+1);
+        }
+        
+        int size=list.size();
+        int ind=0;
+        
+        while(size>1){
+           int currIndex=(ind+k-1)%size;
+           list.remove(currIndex);  
+           ind=currIndex; 
+           size--; 
+        }
+        
+        return list.get(0);
+    }
+}
+
+
+//Approach 2: Using Queue for Simulation
+//T.C : O(n*k)
+//S.C : O(n)
+class Solution {
+    public int findTheWinner(int n, int k) {
+        Queue<Integer> que = new LinkedList<>();
+        for (int i = 1; i <= n; i++) {
+            que.add(i);
+        }
+
+        while (que.size() > 1) {
+            for (int count = 1; count <= k - 1; count++) {
+                que.add(que.poll());
+            }
+            que.poll();
+        }
+
+        return que.peek();
+    }
+}
