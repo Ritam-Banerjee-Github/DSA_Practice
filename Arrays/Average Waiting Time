@@ -1,0 +1,33 @@
+class Solution {
+    public double averageWaitingTime(int[][] customers) {
+        double ans=0;
+        int currTime=0;
+        
+        int n=customers.length;
+        int[] waitTime=new int[n];
+        
+        for(int i=0;i<n;i++){
+            int arrival=customers[i][0];
+            int time=customers[i][1];
+            
+            if(arrival>=currTime){
+                currTime=arrival;
+                int timeTaken=currTime+time;
+                waitTime[i]=timeTaken-currTime;
+                currTime=timeTaken;
+            }else{
+                int timeTaken=currTime+time;
+                waitTime[i]=timeTaken-arrival;
+                currTime=timeTaken;
+            }
+        }
+        
+        double sum=0;
+        for(int i=0;i<n;i++){
+            sum+=waitTime[i];
+        }
+        
+        ans=((double)sum/n);
+        return ans;
+    }
+}
