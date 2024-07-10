@@ -1,0 +1,21 @@
+class Solution {
+    public int minOperations(String[] logs) {
+        int folderCount=0;
+        int n=logs.length;
+        
+        for(int i=0;i<n;i++){
+            String curr=logs[i];
+            if(curr.equals("../")){
+                if(folderCount==0) continue;
+                
+                folderCount--;
+            }else if(curr.equals("./")){
+                continue;
+            }else{
+                folderCount++;
+            }
+        }
+        
+        return folderCount;
+    }
+}
