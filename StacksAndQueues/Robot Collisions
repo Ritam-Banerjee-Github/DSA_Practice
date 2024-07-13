@@ -1,6 +1,98 @@
 //Using Stack
 //T.C : O(nlogn)
 //T.C : O(n)
+
+MY CODE :
+//Using Stack
+//T.C : O(nlogn)
+//T.C : O(n)
+class Data{
+    int position;
+    int health;
+    char ch;
+    int originalIndex;
+    
+    public Data(int position,int health,char ch, int index){
+        this.position=position;
+        this.health=health;
+        this.ch=ch;
+        this.originalIndex=index;
+    }
+}
+class Solution {
+    public List<Integer> survivedRobotsHealths(int[] positions, int[] healths, String directions) {
+        int n = positions.length;
+        Stack<Data> stack=new Stack<>();
+        List<Data> list=new ArrayList<>();
+        
+        for(int i=0;i<n;i++){
+            list.add(new Data(positions[i],healths[i],directions.charAt(i),i));
+        }
+        
+        Collections.sort(list,new Comparator<Data>(){
+           public int compare(Data a, Data b){
+               if(a.position<b.position) return -1;
+               if(a.position>b.position) return 1;
+               return 0;
+           } 
+        });
+        
+        for(Data d:list){
+            if(d.ch=='L'){
+                if(stack.isEmpty() || stack.peek().ch=='L'){
+                    stack.push(d);
+                }else if(stack.isEmpty() || stack.peek().ch=='R'){
+                    
+                    while(!stack.isEmpty() && stack.peek().ch=='R'){
+                        Data popped=stack.pop();
+                        
+                        if(popped.health==d.health){
+                            break;
+                        }else if(popped.health>d.health){
+                            popped.health-=1;
+                            stack.push(popped);
+                            break;
+                        }else if(popped.health<d.health){
+                            d.health-=1;
+                            if(stack.isEmpty() || (stack.peek().ch=='L' && d.health>0)){
+                                stack.push(d);
+                                break;
+                            }
+                        }
+                    }
+                    
+                    
+                }
+            }else if(d.ch=='R'){
+                    stack.push(d);
+            }
+        }
+        
+        List<Data> afterList=new ArrayList<>(stack.size());
+        
+        while(!stack.isEmpty()){
+            afterList.add(stack.pop());
+        }
+        
+         Collections.sort(afterList,new Comparator<Data>(){
+           public int compare(Data a, Data b){
+               if(a.originalIndex<b.originalIndex) return -1;
+               if(a.originalIndex>b.originalIndex) return 1;
+               return 0;
+           } 
+        });
+        
+        
+        List<Integer> ans=new ArrayList<>(afterList.size());
+        for(Data d:afterList){
+            ans.add(d.health);
+        }
+        
+        return ans;
+    }
+}
+
+Optimized Solution:
 class Solution {
     public List<Integer> survivedRobotsHealths(int[] positions, int[] healths, String directions) {
         int n = positions.length;
