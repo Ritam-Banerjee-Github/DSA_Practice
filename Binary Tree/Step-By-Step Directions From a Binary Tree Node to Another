@@ -1,0 +1,133 @@
+Approach 1: 287 / 332 test cases passed. Status: Memory Limit Exceeded
+
+class Solution {
+    StringBuilder ans;
+    int minLength=Integer.MAX_VALUE;
+    
+    private TreeNode makeParent(Map<TreeNode, TreeNode> parentMap,TreeNode root, int startValue){
+        Queue<TreeNode> q=new LinkedList<>();
+        q.add(root);
+        TreeNode startNode=new TreeNode(0);
+        
+        while(!q.isEmpty()){
+            TreeNode node=q.remove();
+            if(node.val==startValue) startNode=node;
+            
+            if(node.left!=null){
+                parentMap.put(node.left,node);
+                q.add(node.left);
+            }
+            
+            if(node.right!=null){
+                parentMap.put(node.right,node);
+                q.add(node.right);
+            }
+        }
+        
+        return startNode;
+    }
+    
+    private void solve(TreeNode node,Map<TreeNode, TreeNode> parentMap,Map<TreeNode,Integer> visited, int destValue, String currStr, int length){
+        if(node.val==destValue){
+            if(length<minLength){
+                ans=new StringBuilder(currStr);
+            }
+            return;
+        }
+        
+        if(node.left!=null && visited.get(node.left)==null){
+            visited.put(node.left,1);
+            solve(node.left,parentMap,visited,destValue,currStr+"L",length+1);
+        }
+        
+        if(node.right!=null && visited.get(node.right)==null){
+            visited.put(node.right,1);
+            solve(node.right,parentMap,visited,destValue,currStr+"R",length+1);
+        }
+        
+        if(parentMap.get(node)!=null && visited.get(parentMap.get(node))==null){
+            visited.put(parentMap.get(node),1);
+            solve(parentMap.get(node),parentMap,visited,destValue,currStr+"U",length+1);
+        }
+        
+    }
+    public String getDirections(TreeNode root, int startValue, int destValue) {
+        Map<TreeNode, TreeNode> parentMap=new HashMap<>();
+        TreeNode startNode=makeParent(parentMap,root,startValue);
+        
+        Map<TreeNode,Integer> visited=new HashMap<>();
+        visited.put(startNode,1);
+        solve(startNode,parentMap,visited, destValue,"",0);
+        
+        return ans.toString();
+    }
+}
+
+Approach 2: (Using LCA)
+T.C : O(n)
+S.C : O(n)
+class Solution {
+
+    private TreeNode lowestCommonAncestor(TreeNode root, int src, int dest) {
+        if (root == null) {
+            return null;
+        }
+        
+        if (root.val == src || root.val == dest) {
+            return root;
+        }
+        
+        TreeNode left = lowestCommonAncestor(root.left, src, dest);
+        TreeNode right = lowestCommonAncestor(root.right, src, dest);
+        
+        if (left != null && right != null) {
+            return root;
+        }
+        
+        return left != null ? left : right;
+    }
+
+    private boolean findPath(TreeNode node, int target, StringBuilder path) {
+        if (node == null) {
+            return false;
+        }
+
+        if (node.val == target) {
+            return true;
+        }
+
+        path.append('L');
+        if (findPath(node.left, target, path)) {
+            return true;
+        }
+        path.deleteCharAt(path.length() - 1);
+
+        path.append('R');
+        if (findPath(node.right, target, path)) {
+            return true;
+        }
+        path.deleteCharAt(path.length() - 1);
+
+        return false;
+    }
+
+    public String getDirections(TreeNode root, int startValue, int destValue) {
+        TreeNode LCA = lowestCommonAncestor(root, startValue, destValue);
+
+        StringBuilder lcaToStart = new StringBuilder();
+        StringBuilder lcaToDest = new StringBuilder();
+
+        findPath(LCA, startValue, lcaToStart);
+        findPath(LCA, destValue, lcaToDest);
+
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < lcaToStart.length(); i++) {
+            result.append('U');
+        }
+
+        result.append(lcaToDest);
+
+        return result.toString();
+    }
+}
