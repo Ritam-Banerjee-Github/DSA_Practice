@@ -1,0 +1,93 @@
+class Pair{
+    TreeNode node;
+    int dist;
+    
+    public Pair(TreeNode node,int dist){
+        this.node=node;
+        this.dist=dist;
+    }
+}
+
+class Solution {
+    Set<TreeNode> leafs=new HashSet<>();
+    Map<TreeNode,TreeNode> parent=new HashMap<>();
+    int ans=0;
+    
+    private void makeParent(TreeNode root){
+        Queue<TreeNode> q=new LinkedList<>();
+        q.add(root);
+        
+        
+        while(!q.isEmpty()){
+            TreeNode node=q.remove();
+            
+            if(node.left!=null){
+                parent.put(node.left,node);
+                q.add(node.left);
+            }
+            
+            if(node.right!=null){
+                parent.put(node.right,node);
+                q.add(node.right);
+            }
+            
+            if(node.left==null && node.right==null){
+                leafs.add(node);
+            }
+        }
+    }
+    
+    private void computeLeafs(TreeNode node,int distance){
+        int length=0;
+        Queue<Pair> q=new LinkedList<>();
+        q.add(new Pair(node,0));
+        HashMap<TreeNode,Integer> vis=new HashMap<>();
+        vis.put(node,1);
+        
+        while(!q.isEmpty()){
+            
+            Pair p=q.remove();
+            TreeNode currNode=p.node;
+            int currDist=p.dist;
+            
+            if(currDist>=distance) continue;
+            
+            if(currNode.left!=null && vis.get(currNode.left)==null){
+                vis.put(currNode.left,1);
+                if(currNode.left.left==null && currNode.left.right==null){
+                    ans++;
+                }
+                q.add(new Pair(currNode.left,currDist+1));
+              
+            }
+            
+            if(currNode.right!=null && vis.get(currNode.right)==null){
+                vis.put(currNode.right,1);
+                if(currNode.right.left==null && currNode.right.right==null){
+                    ans++;
+                }
+                q.add(new Pair(currNode.right,currDist+1));
+           
+            }
+            
+            if(parent.get(currNode)!=null && vis.get(parent.get(currNode))==null){
+                vis.put(parent.get(currNode),1);
+                if(parent.get(currNode).left==null && parent.get(currNode).right==null){
+                    ans++;
+                }
+                q.add(new Pair(parent.get(currNode),currDist+1));
+            }
+            
+        }
+    }
+    
+    public int countPairs(TreeNode root, int distance) {
+        makeParent(root);
+        
+        for(TreeNode node : leafs){
+            computeLeafs(node,distance);
+        }
+        
+        return ans/2;
+    }
+}
