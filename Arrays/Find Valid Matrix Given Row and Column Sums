@@ -1,0 +1,28 @@
+Greedy - Put the minimum value in cell for that row and column
+class Solution {
+    public int[][] restoreMatrix(int[] rowSum, int[] colSum) {
+        int n=rowSum.length;
+        int m=colSum.length;
+        
+        int[][] ans=new int[n][m];
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                
+                if(rowSum[i]==0 || colSum[j]==0){
+                    ans[i][j]=0;
+                }else if(rowSum[i]<colSum[j]){
+                    ans[i][j]=rowSum[i];
+                    colSum[j]=colSum[j]-rowSum[i];
+                    rowSum[i]=0;
+                }else{
+                    ans[i][j]=colSum[j];
+                    rowSum[i]=rowSum[i]-colSum[j];
+                    colSum[j]=0;
+                }
+            }
+        }
+        
+        return ans;
+    }
+}
