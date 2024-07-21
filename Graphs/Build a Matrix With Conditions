@@ -1,0 +1,58 @@
+class Solution {
+    private List<Integer> topoSort(int k, int[][] conditions){
+        int m=conditions.length;
+        List<Integer> topoSort=new ArrayList<>();
+        List<List<Integer>> adj=new ArrayList<>();
+        for(int i=0;i<=k;i++){                      //1 based indexing
+            adj.add(new ArrayList<>());
+        }
+        
+        int[] inDegree=new int[k+1];
+        
+        for(int i=0;i<m;i++){
+            int u=conditions[i][0];
+            int v=conditions[i][1];
+            
+            adj.get(u).add(v);
+            inDegree[v]++;
+        }
+        
+        Queue<Integer> q=new LinkedList<>();
+        for(int i=1;i<=k;i++){                   //1 based indexing
+            if(inDegree[i]==0) q.add(i);
+        }
+        
+        while(!q.isEmpty()){
+            int node=q.remove();
+            topoSort.add(node);
+            
+            for(int next:adj.get(node)){
+                inDegree[next]--;
+                if(inDegree[next]==0) q.add(next);
+            }
+        }
+        
+        return topoSort;
+    }
+    
+    public int[][] buildMatrix(int k, int[][] rowConditions, int[][] colConditions) {
+        int[][] ans=new int[k][k];
+        List<Integer> topoSortRow=topoSort(k,rowConditions);
+        List<Integer> topoSortCol=topoSort(k,colConditions);
+        
+        if(topoSortRow.size()!=k || topoSortCol.size()!=k) return new int[][]{};
+        
+        for(int i=0;i<k;i++){
+            int value_row_i=topoSortRow.get(i);
+            
+            for(int j=0;j<k;j++){
+                if(topoSortCol.get(j)==value_row_i){
+                    ans[i][j]=value_row_i;
+                    break;
+                }
+            }
+        }
+        
+        return ans;
+    }
+}
