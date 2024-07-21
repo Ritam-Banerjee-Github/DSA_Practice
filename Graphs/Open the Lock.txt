@@ -54,14 +54,14 @@ class Solution {
             String increaseStr=sb.toString();
             if(!set.contains(increaseStr)){
                 q.add(increaseStr);
-                set.add(increaseStr);
+                set.add(increaseStr);           //To remove duplicates for next time
             }
             
             sb.setCharAt(i,dec);
             String decreaseStr=sb.toString();
             if(!set.contains(decreaseStr)){
                 q.add(decreaseStr);
-                set.add(decreaseStr);
+                set.add(decreaseStr);           //To remove duplicates for next time
             }
             
             sb.setCharAt(i,ch);
