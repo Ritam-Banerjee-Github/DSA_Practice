@@ -1,0 +1,85 @@
+Approach 1 : Brute Force
+12 / 28 test cases passed.  Status: Time Limit Exceeded
+class Solution {
+    long ans=Long.MIN_VALUE;
+    
+    private void solve(int i, int[] nums1, int[] nums2, int n, int sum, int count, PriorityQueue<Integer> pq,
+                      int k){
+        if(i==n){
+            if(count==k){
+                ans=Math.max(ans,sum*pq.peek());
+            }
+            
+            return;
+        }
+        
+        if(count==k){
+            ans=Math.max(ans,sum*pq.peek());
+            return;
+        }
+        
+        pq.add(nums2[i]);
+        solve(i+1,nums1,nums2,n,sum+nums1[i],count+1,pq,k);
+        pq.remove(nums2[i]);
+        
+        solve(i+1,nums1,nums2,n,sum,count,pq,k);
+    }
+    public long maxScore(int[] nums1, int[] nums2, int k) {
+        int n=nums1.length;
+        PriorityQueue<Integer> pq=new PriorityQueue<>();
+        solve(0,nums1,nums2,n,0,0,pq,k);
+        return ans;
+    }
+}
+
+Approach 2: PQ(Best usecase) + Sorting (Greedy)
+class Pair{
+    int value1;
+    int value2;
+    
+    public Pair(int value1, int value2){
+        this.value1=value1;
+        this.value2=value2;
+    }
+}
+class Solution {
+    long ans=Long.MIN_VALUE;
+    
+   
+    public long maxScore(int[] nums1, int[] nums2, int k) {
+        int n=nums1.length;
+        PriorityQueue<Integer> pq=new PriorityQueue<>();
+        List<Pair> list=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            list.add(new Pair(nums1[i],nums2[i]));       //To maintain index order
+        }
+        
+        Collections.sort(list,new Comparator<Pair>(){    //Sort in descending order in nums2
+           public int compare(Pair a, Pair b){
+               if(a.value2>b.value2) return -1;
+               if(a.value2<b.value2) return 1;
+               return 0;
+           } 
+        });
+        
+        long sum=0;
+
+        //To maximize the minimum value in nums2. Also, we can only store k elements at a time
+        for(int i=0;i<k;i++){                 
+            sum+=list.get(i).value1;
+            pq.add(list.get(i).value1);
+        }
+        
+        ans=Math.max(ans,sum*list.get(k-1).value2);
+        
+        for(int i=k;i<n;i++){
+            sum-=pq.remove();
+            pq.add(list.get(i).value1);
+            sum+=list.get(i).value1;
+            ans=Math.max(ans,sum*list.get(i).value2);
+            
+        }
+        
+        return ans;
+    }
+}
