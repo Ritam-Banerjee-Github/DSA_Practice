@@ -1,0 +1,54 @@
+class Pair{
+    int value;
+    int freq;
+    
+    public Pair(int value,int freq){
+        this.value=value;
+        this.freq=freq;
+    }
+}
+class Solution {
+    public int[] frequencySort(int[] nums) {
+        int n=nums.length;
+        HashMap<Integer,Integer> map=new HashMap<>();
+        
+        for(int i=0;i<n;i++){
+            map.put(nums[i],map.getOrDefault(nums[i],0)+1);
+        }
+        
+        List<Pair> list=new ArrayList<>();
+        int[] ans=new int[n];
+        
+        for(int key:map.keySet()){
+            list.add(new Pair(key,map.get(key)));
+        }
+        
+        Collections.sort(list,new Comparator<Pair>(){
+          public int compare(Pair a, Pair b){
+              if(a.freq>b.freq) return 1;
+              if(a.freq<b.freq) return -1;
+              if(a.freq==b.freq){
+                  if(a.value>b.value) return -1;
+                  if(a.value<b.value) return 1;
+              }
+              
+              return 0;
+          }  
+        });
+        
+        int index=0;
+        for(Pair p : list){
+            int value=p.value;
+            int freq=p.freq;
+            
+            while(freq>0){
+                ans[index++]=value;
+                freq--;
+            }
+            
+        }
+        
+        return ans;
+        
+    }
+}
