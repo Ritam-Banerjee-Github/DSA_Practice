@@ -1,0 +1,105 @@
+class Pair {
+    int value;
+    int index;
+
+    public Pair(int value, int index) {
+        this.value = value;
+        this.index = index;
+    }
+}
+
+class Solution {
+    public long totalCost(int[] costs, int k, int candidates) {
+        long ans = 0;
+         PriorityQueue<Pair> frontPQ=new PriorityQueue<>(new Comparator<Pair>(){
+            public int compare(Pair a, Pair b){
+                if(a.value<b.value) return -1;
+                if(a.value>b.value) return 1;
+                if(a.value==b.value){
+                    if(a.index<b.index) return -1;
+                    if(a.index>b.index) return 1;
+                    return 0;
+                }
+                
+                return 0;
+            }
+        });
+        
+        PriorityQueue<Pair> backPQ=new PriorityQueue<>(new Comparator<Pair>(){
+            public int compare(Pair a, Pair b){
+                if(a.value<b.value) return -1;
+                if(a.value>b.value) return 1;
+                if(a.value==b.value){
+                    if(a.index<b.index) return -1;
+                    if(a.index>b.index) return 1;
+                    return 0;
+                }
+                
+                return 0;
+            }
+        });
+
+        int n = costs.length;
+        boolean[] vis = new boolean[n];
+
+        int i = 0;
+        int j = n - 1;
+
+        // Add the first candidates elements to the frontPQ
+        while (i < candidates && i < n) {
+            frontPQ.add(new Pair(costs[i], i));
+            vis[i] = true;
+            i++;
+        }
+
+        // Add the last candidates elements to the backPQ
+        while (j >= n - candidates && j >= i) {  // Ensure no overlap
+            backPQ.add(new Pair(costs[j], j));
+            vis[j] = true;
+            j--;
+        }
+
+        for (int num = 1; num <= k; num++) {
+            if (!frontPQ.isEmpty() && !backPQ.isEmpty()) {
+                if (frontPQ.peek().value < backPQ.peek().value || 
+                   (frontPQ.peek().value == backPQ.peek().value && frontPQ.peek().index < backPQ.peek().index)) {
+                    Pair hired = frontPQ.poll();
+                    ans += hired.value;
+
+                    if (i < n) {
+                        while (i < n && vis[i]) {
+                            i++;
+                        }
+                        if (i < n) {
+                            frontPQ.add(new Pair(costs[i], i));
+                            vis[i] = true;
+                            i++;
+                        }
+                    }
+                } else {
+                    Pair hired = backPQ.poll();
+                    ans += hired.value;
+
+                    if (j >= 0) {
+                        while (j >= 0 && vis[j]) {
+                            j--;
+                        }
+                        if (j >= 0) {
+                            backPQ.add(new Pair(costs[j], j));
+                            vis[j] = true;
+                            j--;
+                        }
+                    }
+                }
+            } else if (!frontPQ.isEmpty()) {
+                Pair hired = frontPQ.poll();
+                ans += hired.value;
+            } else if (!backPQ.isEmpty()) {
+                Pair hired = backPQ.poll();
+                ans += hired.value;
+            }
+        }
+
+        return ans;
+    }
+}
