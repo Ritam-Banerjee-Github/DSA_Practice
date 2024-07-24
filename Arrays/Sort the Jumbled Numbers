@@ -1,0 +1,64 @@
+class Pair{
+    int value;
+    int mappedValue;
+    int index;
+    
+    public Pair(int value, int mappedValue, int index){
+        this.value=value;
+        this.mappedValue=mappedValue;
+        this.index=index;
+    }
+}
+class Solution {
+    public int[] sortJumbled(int[] mapping, int[] nums) {
+        int n=nums.length;
+        List<Pair> list=new ArrayList<>();
+        
+        for(int i=0;i<n;i++){
+            int num=nums[i];
+            int value=num;
+            
+            StringBuilder sb=new StringBuilder("");
+            while(num>0){
+                int rem=num%10;
+                sb.append(mapping[rem]);
+                num=num/10;
+            }
+            
+            String reversedStr=sb.reverse().toString();
+            
+            if(reversedStr.isEmpty()){            //To take care of 0 value
+                list.add(new Pair(value,mapping[0],i));
+                continue;
+            }
+            
+            int mappedValue=Integer.parseInt(reversedStr);
+            list.add(new Pair(value,mappedValue,i));
+            
+
+        }
+        
+        int[] ans=new int[n];
+        int index=0;
+        
+        Collections.sort(list,new Comparator<Pair>(){
+           public int compare(Pair a, Pair b){
+               if(a.mappedValue>b.mappedValue) return 1;
+               if(a.mappedValue<b.mappedValue) return -1;
+               if(a.mappedValue==b.mappedValue){
+                   if(a.index>b.index) return 1;
+                   if(a.index<b.index) return -1;
+               }
+               
+               return 0;
+           } 
+        });
+        
+        while(index<n){
+            ans[index]=list.get(index).value;
+            index++;
+        }
+        
+        return ans;
+    }
+}
