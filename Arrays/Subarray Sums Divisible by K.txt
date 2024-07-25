@@ -1,3 +1,5 @@
+Math Division Basic -> Sum of subarrays from 0 to i, when divided by k gives a remainder which we store in map. If we continue adding next elements to sum and divide at each step and find remainder to be same as k, then till that index(lets say, j) the sum of subarrays is exactly divisible by k b/w elements from index i to j
+
 class Solution {
     public int subarraysDivByK(int[] nums, int k) {
         int n=nums.length;
