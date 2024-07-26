@@ -1,0 +1,60 @@
+Floyd Warshal : TC - O(N^3)
+"Try to find distance between any two vertices via all vertices one by one. Then you will ultimately have an updated matrix with minimum distances"
+
+class Solution {
+    private void floydWarshal(int n, int[][] matrix){
+        for(int via=0;via<n;via++){
+            for(int i=0;i<n;i++){
+                for(int j=0;j<n;j++){
+                    matrix[i][j]=Math.min(matrix[i][j],matrix[i][via]+matrix[via][j]);
+                }
+            }
+        }
+    }
+    public int findTheCity(int n, int[][] edges, int distanceThreshold) {
+        int m=edges.length;
+        int[][] matrix=new int[n][n];
+        
+        for(int[] row:matrix){
+            Arrays.fill(row,100000);
+        }
+        
+        //Must to make matrix[i][i]=0 as distance b/w same vertices will always be 0
+        for(int i=0;i<n;i++){
+            matrix[i][i]=0;
+        }
+        
+        for(int i=0;i<m;i++){
+            int u=edges[i][0];
+            int v=edges[i][1];
+            int weight=edges[i][2];
+            
+            matrix[u][v]=weight;
+            
+            matrix[v][u]=weight;
+        }
+        
+        floydWarshal(n,matrix);
+        
+        TreeMap<Integer,Integer> map=new TreeMap<>();
+        
+        for(int i=0;i<n;i++){
+            int count=0;
+            for(int j=0;j<n;j++){
+                if(matrix[i][j]<=distanceThreshold)count++;
+            }
+            
+             map.put(i,count);
+        }
+        
+        int ans=0;
+        int mini=Integer.MAX_VALUE;
+        for(int key:map.keySet()){
+            if(map.get(key)<=mini){
+                mini=map.get(key);
+                ans=key;
+            }
+        }
+        return ans;
+    }
+}
