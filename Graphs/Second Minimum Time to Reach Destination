@@ -1,0 +1,74 @@
+class Pair {
+    int node;
+    int dist;
+
+    public Pair(int node, int dist) {
+        this.node = node;
+        this.dist = dist;
+    }
+}
+
+class Solution {
+    public int secondMinimum(int n, int[][] edges, int time, int change) {
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i <= n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        int[] dist1 = new int[n + 1];
+        int[] dist2 = new int[n + 1];
+        Arrays.fill(dist1, Integer.MAX_VALUE);
+        Arrays.fill(dist2, Integer.MAX_VALUE);
+        dist1[1] = 0;
+
+       PriorityQueue<Pair> pq=new PriorityQueue<>(new Comparator<Pair>(){
+           public int compare(Pair a, Pair b){
+               if(a.dist>b.dist) return 1;
+               if(a.dist<b.dist) return -1;
+               return 0;
+           } 
+        });
+        
+        pq.add(new Pair(1, 0));
+
+        while (!pq.isEmpty()) {
+            Pair p = pq.remove();
+            int node = p.node;
+            int dist = p.dist;
+
+            // If node n is reached with second smallest distance
+            if (node == n && dist2[node] != Integer.MAX_VALUE) {
+                return dist2[node];
+            }
+
+            int newDist=0;
+            int quotient=dist/change;  
+            if(quotient%2!=0){                      //For odd multimples of quotient, it will be in Red
+                newDist=((quotient+1)*change)+time;
+            }else{
+                newDist=dist+time;
+            }
+
+            for (int next : adj.get(node)) {
+                if (newDist < dist1[next]) {
+                    dist2[next] = dist1[next];
+                    dist1[next] = newDist;
+                    pq.add(new Pair(next, dist1[next]));
+                } else if (newDist > dist1[next] && newDist < dist2[next]) {
+                    dist2[next] = newDist;
+                    pq.add(new Pair(next, dist2[next]));
+                }
+            }
+        }
+
+        return -1;
+    }
+    
+}
