@@ -13,10 +13,10 @@ class Solution {
                 ans+=nums[i];
             }
             
-            minNuksaan=Math.min(minNuksaan,Math.abs(nums[i]-(nums[i]^k)));
+            minNuksaan=Math.min(minNuksaan,Math.abs(nums[i]-(nums[i]^k)));   //Since we have to do it for a pair of nodes i.e., edge. SO if total count of changes is odd, we need to subtract the one which took minimum in change
         }
         
-        if(count%2!=0){
+        if(count%2!=0){                            // here ^^^ (for odd number of changes)
             ans-=minNuksaan;
         }
         return ans;
