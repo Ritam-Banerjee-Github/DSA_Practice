@@ -10,7 +10,7 @@ class Solution {
                 time+=timeForChild+2;
             }
         }
-        return time;
+        return time;  Returning the total time taken for all child of this node
     }
     public int minTime(int n, int[][] edges, List<Boolean> hasApple) {
         List<List<Integer>> adj=new ArrayList<>();
