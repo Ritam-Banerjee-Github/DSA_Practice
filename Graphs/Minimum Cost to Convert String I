@@ -3,7 +3,8 @@ class Solution {
         for(int via=0;via<26;via++){
             for(int i=0;i<26;i++){
                 for(int j=0;j<26;j++){
-                    if(matrix[i][via]!= Integer.MAX_VALUE&& matrix[via][j]!=Integer.MAX_VALUE) matrix[i][j]=Math.min(matrix[i][j],matrix[i][via]+matrix[via][j]); //To avoid overbound of size of int. Othersie will get wrong result
+                    if(matrix[i][via]!= Integer.MAX_VALUE&& matrix[via][j]!=Integer.MAX_VALUE) matrix[i][j]=Math.min(matrix[i][j],matrix[i][via]+matrix[via][j]);
+//To avoid overbound of size of int during addition. Othersie will get wrong result
                 }
             }
         }
