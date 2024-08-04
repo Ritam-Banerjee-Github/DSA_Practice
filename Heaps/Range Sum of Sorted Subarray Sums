@@ -1,0 +1,46 @@
+Approach-2 : We can find sum of all subarrays of an array using Heap. That too in sorted order, minHeap - ascending; maxHeap-descending
+T.C : O(n^2 *n logn) - The size of PQ will always nbe n, never exceed
+S.C : O(n) - The size of PQ will always nbe n, never exceed
+
+class Pair{
+    int sum;
+    int index;
+    
+    public Pair(int sum, int index){
+        this.sum=sum;
+        this.index=index;
+    }
+}
+class Solution {
+    public int rangeSum(int[] nums, int n, int left, int right) {
+        int mod=(int)(1e9+7);
+        PriorityQueue<Pair> pq=new PriorityQueue<>(new Comparator<Pair>(){
+            public int compare(Pair a, Pair b){
+                if(a.sum<b.sum) return -1;
+                if(a.sum>b.sum) return 1;
+                return 0;
+            }
+        });
+        
+        for(int i=0;i<n;i++){
+            pq.add(new Pair(nums[i],i));
+        }
+        
+        int ans=0;
+        for(int count=1;count<=right;count++){
+            Pair p=pq.remove();
+            int sum=p.sum;
+            int index=p.index;   //Subarray sum till this index, index
+
+            //Subarray Sum till index, index+1
+            if(index+1<n){
+                pq.add(new Pair(sum+nums[index+1],index+1));
+            }
+            
+            if(count>=left){
+                ans=(ans+sum)%mod;
+            }
+        }
+        return ans;
+    }
+}
