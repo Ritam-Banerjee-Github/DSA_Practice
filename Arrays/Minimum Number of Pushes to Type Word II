@@ -1,0 +1,31 @@
+class Solution {
+    public int minimumPushes(String word) {
+        int n=word.length();
+        int[] freq=new int[26];
+        for(int i=0;i<n;i++){
+            freq[word.charAt(i)-'a']++;
+        }
+        
+        Arrays.sort(freq); //Sorts in ascending Order. But we need to minimize and traverse in descending order, so we have to traverse from back like below
+        int ans=0;
+        
+        for(int i=25;i>17;i--){
+            ans+=freq[i];
+        }
+        
+        for(int i=17;i>9;i--){
+            ans+=freq[i]*2;
+        }
+        
+        for(int i=9;i>1;i--){
+            ans+=freq[i]*3;
+        }
+        
+        for(int i=1;i>=0;i--){
+            ans+=freq[i]*4;
+        }
+        
+        return ans;
+        
+    }
+}
