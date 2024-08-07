@@ -1,0 +1,69 @@
+//Approach - Simple Recursion Story
+//T.C : O(log10(num)) - Count total number of digits in num; 
+//S.C : O(log10(num))
+
+class Solution { 
+    HashMap<Integer,String> ones=new HashMap<>();
+    HashMap<Integer,String> lessThanTwenty=new HashMap<>();
+    HashMap<Integer,String> tens=new HashMap<>();
+    
+    public Solution(){   //Created constructor to initialize the map values
+    
+    ones.put(1,"One");
+    ones.put(2,"Two");
+    ones.put(3,"Three");
+    ones.put(4,"Four");
+    ones.put(5,"Five");
+    ones.put(6,"Six");
+    ones.put(7,"Seven");
+    ones.put(8,"Eight");
+    ones.put(9,"Nine");
+        
+        
+    lessThanTwenty.put(10,"Ten");
+    lessThanTwenty.put(11,"Eleven");
+    lessThanTwenty.put(12,"Twelve");
+    lessThanTwenty.put(13,"Thirteen");
+    lessThanTwenty.put(14,"Fourteen");
+    lessThanTwenty.put(15,"Fifteen");
+    lessThanTwenty.put(16,"Sixteen");
+    lessThanTwenty.put(17,"Seventeen");
+    lessThanTwenty.put(18,"Eighteen");
+    lessThanTwenty.put(19,"Nineteen");
+        
+        
+  
+    tens.put(1,"Ten");
+    tens.put(2,"Twenty");
+    tens.put(3,"Thirty");
+    tens.put(4,"Forty");
+    tens.put(5,"Fifty");
+    tens.put(6,"Sixty");
+    tens.put(7,"Seventy");
+    tens.put(8,"Eighty");
+    tens.put(9,"Ninety");
+        
+    }     
+    private String solve(int num){
+        if(num<10) return ones.get(num);
+        if(num<20) return lessThanTwenty.get(num);
+        if(num<100) return tens.get(num/10) + ((num%10!=0)?" "+ones.get(num%10):"");
+        if(num<1000) return ones.get(num/100)+" Hundred"+((num%100!=0)?" "+solve(num%100):"");
+        if (num < 1000000) {
+            return solve(num / 1000) + " Thousand" + (num % 1000 != 0 ? " " + solve(num % 1000) : "");
+        }
+
+        if (num < 1000000000) {
+            return solve(num / 1000000) + " Million" + (num % 1000000 != 0 ? " " + solve(num % 1000000) : "");
+        }
+
+        return solve(num / 1000000000) + " Billion" + (num % 1000000000 != 0 ? " " + solve(num % 1000000000) : "");
+        
+    }    
+    
+    public String numberToWords(int num) {
+        if(num==0) return "Zero";
+       return solve(num);
+    }
+    
+}
