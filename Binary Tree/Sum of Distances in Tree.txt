@@ -2,7 +2,7 @@ class Solution {
     int[] ans;
     int N;
     int root_distance=0;
-    int[] count;
+    int[] countOfSelfAndChildNodes;
     
     private int dfs_root_count(int node, int parent, int currDepth, List<List<Integer>> adj){
         int curr_count=1;  //self node count
@@ -15,12 +15,12 @@ class Solution {
             }
         }
         
-        count[node]=curr_count;
+        countOfSelfAndChildNodes[node]=curr_count;
         return curr_count;
     }
     
     private void dfs_populate_ans(int node, int parent, List<List<Integer>> adj){ 
-        if(parent!=-1) ans[node]=ans[parent]-count[node]+(N-count[node]);
+        if(parent!=-1) ans[node]=ans[parent]-countOfSelfAndChildNodes[node]+(N-countOfSelfAndChildNodes[node]);  //Last one denotes count of remaining nodes
         
         for(int next:adj.get(node)){
             if(next!=parent) {   
@@ -32,7 +32,7 @@ class Solution {
     public int[] sumOfDistancesInTree(int n, int[][] edges) {
         ans=new int[n];
         this.N=n;
-        count=new int[n];
+        countOfSelfAndChildNodes=new int[n];
         
         List<List<Integer>> adj=new ArrayList<>();
         for(int i=0;i<n;i++){
