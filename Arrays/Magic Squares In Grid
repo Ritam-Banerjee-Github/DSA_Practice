@@ -1,0 +1,63 @@
+class Solution {
+    
+    private boolean isMagic(int i, int j, int[][] grid){
+         Set<Integer> set=new HashSet<>();
+            set.add(1);
+            set.add(2);
+            set.add(3);
+            set.add(4);
+            set.add(5);
+            set.add(6);
+            set.add(7);
+            set.add(8);
+            set.add(9);
+                
+        for(int row=i-1;row<=i+1;row++){
+            for(int col=j-1;col<=j+1;col++){
+                if(!set.contains(grid[row][col])) return false;
+                
+                set.remove(grid[row][col]);
+            }
+        }
+        
+        
+        int diagonalSum=grid[i-1][j-1]+grid[i][j]+grid[i+1][j+1];
+        int antiDiagonalSum=grid[i-1][j+1]+grid[i][j]+grid[i+1][j-1];
+        
+        if(diagonalSum!=antiDiagonalSum) return false;
+        
+        for(int row=i-1;row<=i+1;row++){
+             int rowSum=0;
+            for(int col=j-1;col<=j+1;col++){
+                rowSum+=grid[row][col];
+            }
+            if(rowSum!=diagonalSum) return false;
+        }
+        
+        for(int col=j-1;col<=j+1;col++){
+            int colSum=0;
+            for(int row=i-1;row<=i+1;row++){
+                colSum+=grid[row][col];
+            }
+            
+            if(colSum!=diagonalSum) return false;
+        }
+        
+       return true; 
+    }
+    public int numMagicSquaresInside(int[][] grid) {
+        int rows=grid.length;
+        int cols=grid[0].length;
+        
+        int ans=0;
+        for(int i=1;i<rows-1;i++){
+            for(int j=1;j<cols-1;j++){ 
+                if(isMagic(i,j,grid)) ans++;
+               
+            }
+        }
+        
+        
+        return ans;
+    }
+}
