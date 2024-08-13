@@ -1,0 +1,100 @@
+Approach 1: Recusrion+BackTracking+Set
+124 / 176 test cases passed.
+class Solution {
+    List<List<Integer>> ans=new ArrayList<>();
+    Set<String> set=new HashSet<>();
+    
+    private void solve(int i, int n, int sum, int target, int[] candidates, List<Integer> temp, String str){
+        if(i>=n){
+            if(sum==target && !set.contains(str)){
+                set.add(str);
+                ans.add(new ArrayList<>(temp));
+            }
+            return;
+        }
+        
+        temp.add(candidates[i]);
+        solve(i+1,n,sum+candidates[i],target,candidates,temp,str+candidates[i]);
+        temp.remove(temp.size()-1);
+            
+        
+        solve(i+1,n,sum,target,candidates,temp,str);
+    }
+    
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        List<Integer> temp=new ArrayList<>();
+        int n=candidates.length;
+        solve(0,n,0,target,candidates,temp,"");
+        
+        
+        return ans;
+    }
+}
+
+Approach 2: Recusrion+BackTracking+Set + Adding 1 shuttle change of return when sum>target
+class Solution {
+    List<List<Integer>> ans=new ArrayList<>();
+    Set<String> set=new HashSet<>();
+    
+    private void solve(int i, int n, int sum, int target, int[] candidates, List<Integer> temp, String str){
+        if(i>=n){
+            if(sum==target && !set.contains(str)){
+                set.add(str);
+                ans.add(new ArrayList<>(temp));
+            }
+            return;
+        }
+        
+        if(sum>target) return;
+        
+        temp.add(candidates[i]);
+        solve(i+1,n,sum+candidates[i],target,candidates,temp,str+candidates[i]);
+        temp.remove(temp.size()-1);
+            
+        
+        solve(i+1,n,sum,target,candidates,temp,str);
+    }
+    
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        List<Integer> temp=new ArrayList<>();
+        int n=candidates.length;
+        solve(0,n,0,target,candidates,temp,"");
+        
+        
+        return ans;
+    }
+}
+
+Approach 3: Recursion + BackTracking + For Loop  : ACCEPTED SOLUTION
+class Solution {
+    List<List<Integer>> ans=new ArrayList<>();
+    
+    private void solve(int i, int n, int sum, int target, int[] candidates, List<Integer> temp){
+        if(sum>target) return;
+      
+        if(sum==target){
+                ans.add(new ArrayList<>(temp));
+                return;
+            }
+        
+        for(int idx=i;idx<n;idx++){
+            if(idx>i && candidates[idx]==candidates[idx-1]) continue;
+            
+            temp.add(candidates[idx]);
+            solve(idx+1,n,sum+candidates[idx],target,candidates,temp);
+            temp.remove(temp.size()-1);
+        }
+            
+    }
+    
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        List<Integer> temp=new ArrayList<>();
+        int n=candidates.length;
+        solve(0,n,0,target,candidates,temp);
+        
+        return ans;
+    }
+}
