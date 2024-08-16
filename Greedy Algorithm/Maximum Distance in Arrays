@@ -1,0 +1,51 @@
+Note : It is told to pick up two integers from two different arrays (each array picks one) and then calculate the distance.
+class Solution {
+    public int maxDistance(List<List<Integer>> arrays) {
+        int n=arrays.size();
+        
+        int min=Integer.MAX_VALUE;
+        int minIndex=-1;
+        int secondMin=Integer.MAX_VALUE;
+        int secondMinIndex=-1;
+        
+        int max=Integer.MIN_VALUE;
+        int maxIndex=-1;
+        int secondMax=Integer.MIN_VALUE;
+        int secondMaxIndex=-1;
+        
+         for(int i=0;i<n;i++){
+            int low=arrays.get(i).get(0);
+            int last_index=arrays.get(i).size()-1;
+            int high=arrays.get(i).get(last_index);
+             
+            if(low<min){
+                secondMin=min;
+                secondMinIndex=minIndex;
+                
+                min=low;
+                minIndex=i;
+            }else if(low<secondMin){
+                secondMin=low;
+                secondMinIndex=i;
+            }
+             
+            if(high>max){
+                secondMax=max;
+                secondMaxIndex=maxIndex;
+                
+                max=high;
+                maxIndex=i;
+            }else if(high>secondMax){
+                secondMax=high;
+                secondMaxIndex=i;
+            } 
+            
+           
+        }
+        
+        if(maxIndex==minIndex){
+            return Math.max(Math.abs(min-secondMax),Math.abs(max-secondMin));
+        }
+        return Math.abs(min-max);    
+    }
+}
