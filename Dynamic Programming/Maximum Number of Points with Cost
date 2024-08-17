@@ -1,0 +1,149 @@
+Approach 1 : Brute Force (Recursion) 
+128 / 157 test cases passed   Status: Time Limit Exceeded
+class Solution {
+    private long solve(int row, int prev_col, int n, int m, long points, int[][] grid){
+        if(row==n-1){
+            long maxi=Long.MIN_VALUE;
+            for(int j=0;j<m;j++){
+                maxi=Math.max(maxi,points+grid[row][j]-Math.abs(prev_col-j));
+            }
+            
+            return maxi;
+        }
+        
+        long maxi=Long.MIN_VALUE;
+        for(int j=0;j<m;j++){
+            maxi=Math.max(maxi,solve(row+1,j,n,m,points+grid[row][j]-Math.abs(j-prev_col),grid));
+        }
+        
+        return maxi;
+    }
+    public long maxPoints(int[][] grid) {
+        int n=grid.length;
+        int m=grid[0].length;
+        
+        long ans=Long.MIN_VALUE;
+        
+        if(n==1){
+          for(int col=0;col<m;col++){
+            ans=Math.max(ans,grid[0][col]);
+            }
+            
+            return ans;
+        }
+        
+        for(int col=0;col<m;col++){
+            ans=Math.max(ans,solve(1,col,n,m,grid[0][col],grid));
+        }
+        
+        return ans;
+    }
+}
+
+Approach 2 : Recursion+Memoization for 3 states
+140 / 157 test cases passed      Status: Time Limit Exceeded
+class Solution {
+    Map<String,Long> dp=new HashMap<>();
+    
+    private long solve(int row, int prev_col, int n, int m, long points, int[][] grid){
+        if(row==n-1){
+            long maxi=Long.MIN_VALUE;
+            for(int j=0;j<m;j++){
+                maxi=Math.max(maxi,points+grid[row][j]-Math.abs(prev_col-j));
+            }
+            
+            return maxi;
+        }
+        
+        
+        String key=""+row+"#"+prev_col+"#"+points;
+        if(dp.containsKey(key)) return dp.get(key);
+        
+        long maxi=Long.MIN_VALUE;
+        for(int j=0;j<m;j++){
+            maxi=Math.max(maxi,solve(row+1,j,n,m,points+grid[row][j]-Math.abs(j-prev_col),grid));
+        }
+        
+        
+        dp.put(key,maxi);
+        return maxi;
+    }
+    public long maxPoints(int[][] grid) {
+        int n=grid.length;
+        int m=grid[0].length;
+        
+        long ans=Long.MIN_VALUE;
+        
+        //Edge Case
+        if(n==1){          
+          for(int col=0;col<m;col++){
+            ans=Math.max(ans,grid[0][col]);
+            }
+            
+            return ans;
+        }
+        
+        
+        for(int col=0;col<m;col++){
+            ans=Math.max(ans,solve(1,col,n,m,grid[0][col],grid));
+        }
+        
+        return ans;
+    }
+}
+
+Approach 3 : We are finding the best prev column smartly by computing left and right for each row with the help of prev computed values
+
+T.C : O(n*(3m))
+S.C : O(n) - Only prev,left,ight, curr arrays
+class Solution {
+    public long maxPoints(int[][] grid) {
+        int n=grid.length;
+        int m=grid[0].length;
+        
+        long ans=Long.MIN_VALUE;
+        
+        //Edge Case
+        if(n==1){          
+          for(int col=0;col<m;col++){
+            ans=Math.max(ans,grid[0][col]);
+            }
+            
+            return ans;
+        }
+        
+        long[] prev=new long[m];
+        for(int j=0;j<m;j++){
+            prev[j]=grid[0][j];
+        }
+        
+        for(int i=1;i<n;i++){
+            long[] left=new long[m];
+            long[] right=new long[m];
+            long[] curr=new long[m];
+            
+            left[0]=prev[0];
+            for(int j=1;j<m;j++){
+                left[j]=Math.max(prev[j],left[j-1]-1);
+            }
+            
+            right[m-1]=prev[m-1];
+            for(int j=m-2;j>=0;j--){
+                right[j]=Math.max(prev[j],right[j+1]-1);
+            }
+            
+            for(int j=0;j<m;j++){
+                curr[j]=grid[i][j]+Math.max(left[j],right[j]);
+            }
+            
+            prev=curr;
+        }
+
+         // Return the maximum value from the last row that will be stored in prev array
+        for(int col=0;col<m;col++){
+            ans=Math.max(ans,prev[col]);
+        }
+        
+        return ans;
+    }
+}
