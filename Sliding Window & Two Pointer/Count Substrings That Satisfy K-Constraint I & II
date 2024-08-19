@@ -1,0 +1,33 @@
+Approach 1 : Brute Force
+class Solution {
+    private int countZero(int i, int j, String s){
+        int count=0;
+        for(int ind=i;ind<=j;ind++){
+            if(s.charAt(ind)=='0')count++;
+        }
+        return count;    
+    }
+    private int countOne(int i, int j, String s){
+        int count=0;
+        for(int ind=i;ind<=j;ind++){
+            if(s.charAt(ind)=='1')count++;
+        }
+        return count;    
+    }
+    public int countKConstraintSubstrings(String s, int k) {
+        int n=s.length();
+        int ans=0;
+        for(int i=0;i<n;i++){
+            for(int j=i;j<n;j++){
+                if(countZero(i,j,s)<=k){
+                    ans++;
+                }else if(countOne(i,j,s)<=k){
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+}
+
+Approach 2 (for part II) : Sliding Window (Usually this is a problem of Segment Tree i.e., whenever queries are given)
