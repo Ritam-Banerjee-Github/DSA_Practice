@@ -1,0 +1,28 @@
+class Solution {
+    private Map<String, Long> dp=new HashMap<>();
+    
+    private long solve(int i, int isA, int n, int[] A, int[] B){
+        if(i>=n) return 0;
+        
+        String key=""+i+"#"+isA;
+        if(dp.containsKey(key)) return dp.get(key);
+        
+        long same=Long.MIN_VALUE;
+        long change=Long.MIN_VALUE;
+        
+        if(isA==1){
+            same=A[i]+solve(i+1,1,n,A,B);
+            change=solve(i+1,0,n,A,B);
+        }else if(isA==0){
+            same=B[i]+solve(i+1,0,n,A,B);
+            change=solve(i+1,1,n,A,B);
+        }
+        
+        dp.put(key,Math.max(same,change));
+        return Math.max(same,change);
+    }
+    public long maxEnergyBoost(int[] energyDrinkA, int[] energyDrinkB) {
+        int n=energyDrinkA.length;
+        return Math.max(solve(0,1,n,energyDrinkA,energyDrinkB),solve(0,0,n,energyDrinkA,energyDrinkB));
+    }
+}
