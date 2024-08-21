@@ -19,7 +19,8 @@ class Solution {
         
         for(int j=index;j<=r;j++){
             if(s.charAt(j)==s.charAt(l)){
-                lalachWalaApproach=Math.min(lalachWalaApproach,solve(index,j-1,s,dp)+solve(j,r,s,dp));
+                lalachWalaApproach=Math.min(lalachWalaApproach,solve(index,j-1,s,dp)+solve(j,r,s,dp));  
+//There should be addition of 1 for last function. We are not doing this as it will get added with the 1 when we call the basicApproach for its recursion
             }
         }
         
