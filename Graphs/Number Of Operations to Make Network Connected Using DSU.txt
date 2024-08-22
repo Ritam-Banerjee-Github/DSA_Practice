@@ -58,7 +58,7 @@ class Solution {
             }
         }
         
-
+        //Minimum number of edges required to make graph completely connected = Number of components -1
         int ans=ds.components -1;
         if(cntExtras>=ans) return ans;
         return -1;
