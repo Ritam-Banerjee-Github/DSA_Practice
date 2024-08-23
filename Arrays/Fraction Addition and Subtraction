@@ -1,0 +1,107 @@
+My Solution : All test cases passed
+class Solution {
+    public String fractionAddition(String s) {
+        int n=s.length();
+        if(n<=4) return s; //Edge case: -7/3 
+        
+        int i=0;
+        int num=0;
+        int den=0;
+        int sign=1;
+        
+        
+        if(s.charAt(i)=='-'){
+            sign=-1;
+            i++;
+        }
+        
+        String numStr="";
+        String denStr="";
+        
+        //If th numerator or denominator is 10, then it will be of 2 digits, hence we use these loops
+        while(s.charAt(i)!='/'){   
+            numStr+=s.charAt(i)+"";
+            i++;
+        }
+        
+        i++;
+        while(s.charAt(i)!='+' && s.charAt(i)!='-'){
+            denStr+=s.charAt(i)+"";
+            i++;
+        }
+        
+        num=Integer.parseInt(numStr);
+        den=Integer.parseInt(denStr);
+        
+        
+        while(i<n){
+            int currSign=(s.charAt(i++)=='-')?-1:1;
+            
+            String currNumStr="";
+            String currDenStr="";
+        
+            while(i<n && s.charAt(i)!='/'){
+                currNumStr+=s.charAt(i)+"";
+                i++;
+            }
+            
+            i++;
+            while(i<n && s.charAt(i)!='+' && s.charAt(i)!='-'){
+                currDenStr+=s.charAt(i)+"";
+                i++;
+            }
+         
+        
+            int currNum=Integer.parseInt(currNumStr);
+            int currDen=Integer.parseInt(currDenStr);
+            
+            if(currSign==sign){
+                num=num*currDen + currNum*den;
+                den=den*currDen;
+            }else{
+                double prevVal=(double)num/den;
+                double currVal=(double)currNum/currDen;
+                
+                int tempSign=0;
+                if(prevVal>currVal){
+                    tempSign=sign;
+                }else{
+                    tempSign=currSign;
+                }
+                
+                num=(sign*num*currDen) + (currSign*currNum*den);
+                num=Math.abs(num);
+                den=den*currDen;
+                sign=tempSign;
+            }
+
+//Another optimazation is to find gcd(num,den) and divide both by that
+            while(num%2==0 && den%2==0){
+                num=num/2;
+                den=den/2;
+            }
+            
+            while(num%3==0 && den%3==0){
+                num=num/3;
+                den=den/3;
+            }
+            
+            while(num%5==0 && den%5==0){
+                num=num/5;
+                den=den/5;
+            }
+            
+            while(num%7==0 && den%7==0){
+                num=num/7;
+                den=den/7;
+            }
+        }
+       
+        String ans="";
+        if(sign==-1)ans+="-";
+        ans+=num+"/"+den;
+        
+        return ans;
+  
+    }
+}
