@@ -1,0 +1,49 @@
+Brute Force : 163 / 217 test cases passed.  Status: Time Limit Exceeded
+class Solution {
+    private boolean isPalindrome(String s){
+        int i=0;
+        int j=s.length()-1;
+        
+        while(i<=j){
+            if(s.charAt(i)!=s.charAt(j)) return false;
+            i++;
+            j--;
+        }
+        
+        return true;
+    }
+    public String nearestPalindromic(String n) {
+        long num=Long.parseLong(n);
+        
+        long temp=num;
+        long prev=0;
+        
+        while(temp>=0){
+            temp--;
+            
+            if(isPalindrome(String.valueOf(temp))){
+                prev=temp;
+                break;
+            }
+        }
+        
+        temp=num;
+        long next=0;
+        while(true){
+            temp++;
+            if(isPalindrome(String.valueOf(temp))){
+                next=temp;
+                break;
+            }
+        }
+        
+        long prevDiff=Math.abs(num-prev);
+        long nextDiff=Math.abs(num-next);
+        
+        if(prevDiff<=nextDiff) return String.valueOf(prev);
+        
+        return String.valueOf(next);
+    }
+}
+
+Optimal Approach :
