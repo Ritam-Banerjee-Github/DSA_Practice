@@ -1,0 +1,40 @@
+class Solution {
+    private boolean flag=true;
+    
+    private void dfs(int row, int col, int n, int m, int[][] grid1, int[][] grid2, int[][] vis){
+        vis[row][col]=1;
+        if(grid1[row][col]==0) flag=false;
+        
+        int[] delrow={-1,0,1,0};
+        int[] delcol={0,1,0,-1};
+        
+        for(int i=0;i<4;i++){
+            int nrow=row+delrow[i];
+            int ncol=col+delcol[i];
+            
+            if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && vis[nrow][ncol]==0 && grid2[nrow][ncol]==1){
+                dfs(nrow,ncol,n,m,grid1,grid2,vis);
+            }
+        }
+    }
+    public int countSubIslands(int[][] grid1, int[][] grid2) {
+        int n=grid1.length;
+        int m=grid1[0].length;
+        int ans=0;
+        
+        int[][] vis=new int[n][m];
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(vis[i][j]!=1 && grid2[i][j]==1){
+                    flag=true;
+                    dfs(i,j,n,m,grid1,grid2,vis);
+//Flag will only remain true if all 1's in grid2 are also 1's in grid1 for every traversal. So it can be added.
+                    if(flag==true)ans++;
+                }
+            }
+        }
+        
+        return ans;
+    }
+}
