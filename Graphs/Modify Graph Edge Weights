@@ -22,7 +22,7 @@ class Solution {
         // Priority queue for Dijkstra's algorithm
         PriorityQueue<long[]> pq = new PriorityQueue<>(Comparator.comparingLong(a -> a[0]));
         long[] result = new long[n];  // shortest path distance from src to each node
-        boolean[] visited = new boolean[n];
+        // boolean[] visited = new boolean[n];
         Arrays.fill(result, Long.MAX_VALUE); // Initialize distances as infinity
         result[src] = 0;  // Distance from src to src is 0
         pq.offer(new long[]{0, src}); // (distance, node)
@@ -32,8 +32,8 @@ class Solution {
             long currDist = curr[0];
             int currNode = (int) curr[1];
 
-            if (visited[currNode]) continue;
-            visited[currNode] = true;
+            
+            if(currNode==dest) break;
 
             if (!adj.containsKey((long) currNode)) continue;
 
