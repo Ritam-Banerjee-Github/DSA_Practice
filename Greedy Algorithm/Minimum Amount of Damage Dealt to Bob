@@ -1,0 +1,53 @@
+class Pair{
+    int damage;
+    int health;
+    
+    public Pair(int damage, int health){
+        this.damage=damage;
+        this.health=health;
+    }
+}
+class Solution {
+    public long minDamage(int power, int[] damage, int[] health) {
+        long ans=0;
+        int second=0;
+        
+        int n=damage.length;
+        List<Pair> list=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            list.add(new Pair(damage[i],health[i]));
+        }
+        
+        Collections.sort(list,new Comparator<Pair>(){
+           public int compare(Pair a, Pair b){
+               int hitsNeededA=(int)Math.ceil((double)a.health/power);
+               int hitsNeededB=(int)Math.ceil((double)b.health/power);
+               
+               double effectiveDamageA=(double)a.damage/hitsNeededA;
+               double effectiveDamageB=(double)b.damage/hitsNeededB;
+               
+               if(effectiveDamageA>effectiveDamageB) return -1;
+               if(effectiveDamageA<effectiveDamageB) return 1;
+               return 0;
+               
+           } 
+        });
+        
+        for(int i=0;i<n;i++){
+            int currDamage=list.get(i).damage;
+            int currHealth=list.get(i).health;
+            
+            while(currHealth>0){
+                second++;
+                currHealth-=power;
+            }
+            
+            ans+=second*currDamage;
+        }
+        
+        
+        return ans;
+    }
+}
+
+
