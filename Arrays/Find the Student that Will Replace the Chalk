@@ -1,3 +1,4 @@
+Approach 1:
 class Solution {
     public int chalkReplacer(int[] chalk, int k) {
         int n=chalk.length;
@@ -12,6 +13,28 @@ class Solution {
             }
         }
         
+        
+    }
+}
+
+Approach 2: (Optimal)
+class Solution {
+    public int chalkReplacer(int[] chalk, int k) {
+        int n=chalk.length;
+        
+        long totalSum=0;    //Use long as : 1 <= chalk[i] <= 105
+        for(int i=0;i<n;i++){
+           totalSum+=chalk[i]; 
+        }
+        
+        long remainder=k%totalSum;
+        
+        for(int i=0;i<n;i++){
+          if(remainder<=0 || remainder-chalk[i]<0) return i;
+          remainder-=chalk[i];
+        }
+        
+        return -1;
         
     }
 }
