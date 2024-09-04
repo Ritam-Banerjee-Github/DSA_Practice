@@ -1,0 +1,88 @@
+class Solution {
+    public int robotSim(int[] commands, int[][] obstacles) {
+        int positionX=0;
+        int positionY=0;
+        String direction="North";
+        int ans=0;
+        
+        Set<String> set=new HashSet<>();
+        for(int[] obstacle:obstacles){
+            int x=obstacle[0];
+            int y=obstacle[1];
+            String pos=x+"#"+y;
+            set.add(pos);
+        }
+        
+        int n=commands.length;
+        
+        for(int i=0;i<n;i++){
+            if(commands[i]==-2){
+                if(direction.equals("North")){
+                    direction="West";
+                }else if(direction.equals("South")){
+                    direction="East";
+                }else if(direction.equals("East")){
+                    direction="North";
+                }else if(direction.equals("West")){
+                    direction="South";
+                }
+            }else if(commands[i]==-1){
+                if(direction.equals("North")){
+                    direction="East";
+                }else if(direction.equals("South")){
+                    direction="West";
+                }else if(direction.equals("East")){
+                    direction="South";
+                }else if(direction.equals("West")){
+                    direction="North";
+                }
+            }else{
+                int k=commands[i];
+                
+                if(direction.equals("North")){
+                    while(k>0){
+                        int temp=positionY+1;
+                        String newPosition=positionX+"#"+temp;
+                        if(set.contains(newPosition)) break;
+                        
+                        positionY=temp;
+                        ans=Math.max(ans,positionX*positionX + positionY*positionY);
+                        k--;
+                    }
+                }else if(direction.equals("South")){
+                    while(k>0){
+                        int temp=positionY-1;
+                        String newPosition=positionX+"#"+temp;
+                        if(set.contains(newPosition)) break;
+                        
+                        positionY=temp;
+                        ans=Math.max(ans,positionX*positionX + positionY*positionY);
+                        k--;
+                    }
+                }else if(direction.equals("East")){
+                    while(k>0){
+                        int temp=positionX+1;
+                        String newPosition=temp+"#"+positionY;
+                        if(set.contains(newPosition)) break;
+                        
+                        positionX=temp;
+                        ans=Math.max(ans,positionX*positionX + positionY*positionY);
+                        k--;
+                    }
+                }else if(direction.equals("West")){
+                    while(k>0){
+                        int temp=positionX-1;
+                        String newPosition=temp+"#"+positionY;
+                        if(set.contains(newPosition)) break;
+                        
+                        positionX=temp;
+                        ans=Math.max(ans,positionX*positionX + positionY*positionY);
+                        k--;
+                    }
+                }
+            }
+        }
+        
+        return ans;
+    }
+}
