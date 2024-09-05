@@ -1,0 +1,77 @@
+Approach 1 - Backtracking 
+14 / 64 Test cases passed    Status: Time Limit Exceeded
+class Solution {
+    List<Integer> ans=new ArrayList<>();
+    
+    private boolean solve(int i, int n, List<Integer> temp, int sum, int target){
+        if(i==n){
+            if(sum==target){
+                ans=new ArrayList<>(temp);
+                return true;
+            }
+            
+            return false;
+        }
+        
+        for(int j=1;j<=6;j++){
+            temp.add(j);
+            if(solve(i+1,n,temp,sum+j,target)==true) return true;
+            temp.remove(temp.size()-1);
+                
+        }
+        
+        return false;
+    }
+    public int[] missingRolls(int[] rolls, int mean, int n) {
+        int m=rolls.length;
+        int sum=0;
+        for(int i=0;i<m;i++){
+            sum+=rolls[i];
+        }
+        
+        int target=((m+n)*mean)-sum;
+        
+        List<Integer> temp=new ArrayList<>();
+        if(solve(0,n,temp,0,target)==true){
+            return ans.stream().mapToInt(Integer::intValue).toArray();
+        }
+        
+        return new int[]{};
+    }
+}
+
+Approach 2 - Optimal (Self made- What a Solve!)
+class Solution {
+    public int[] missingRolls(int[] rolls, int mean, int n) {
+        int m=rolls.length;
+        int sum=0;
+        for(int i=0;i<m;i++){
+            sum+=rolls[i];
+        }
+        
+        int target=((m+n)*mean)-sum;
+        
+        int[] ans=new int[n];
+        
+        double doubleEachNumber=Math.ceil((double) target/n);
+        if(target<=0 || doubleEachNumber>6.0) return new int[]{};  //Edge test case
+        
+        int eachNumber=target/n;
+        
+        if(eachNumber==0) return new int[]{};  //Edge test case
+        
+        int diff=target-(eachNumber*n);
+        Arrays.fill(ans,eachNumber);
+        
+        for(int i=0;i<n;i++){
+            if(diff==0) break;
+            
+            int maxPossibleValue=Math.min(6-ans[i],diff);  //Edge test case
+            ans[i]=ans[i]+maxPossibleValue;
+            diff-=maxPossibleValue;
+        }
+        return ans;
+    }
+}
+
+
