@@ -1,3 +1,22 @@
+New Solution -
+class Solution {
+    public boolean canJump(int[] nums) {
+        int n=nums.length;
+        
+        int max=0;
+        int currMax=0;
+        
+        for(int i=0;i<n;i++){
+            if(i>max) return false;
+            max=Math.max(max,i+nums[i]);
+            if(max>=n-1) return true;
+        }
+        
+        return false;
+    }
+}
+
+Old Solution -
 class Solution {
     static int canReach(int[] A, int N) {
         // code here
