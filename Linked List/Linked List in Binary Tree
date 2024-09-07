@@ -1,0 +1,81 @@
+Wrong Approach- We need to traverse form every TreeNode downwards to match the Linked List
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    private boolean solve(TreeNode root, int index, int n, List<Integer> list){
+        if(root==null) return false;
+        
+        if(index==n-1){
+            if(root.val==list.get(index)) return true;
+        }
+        
+        if(root.val!=list.get(index)){
+            index =0;
+        }
+        
+        if(root.val==list.get(index)) index++;
+        
+        boolean left=solve(root.left,index,n,list);
+        if(left==true) return true;
+        
+        boolean right=solve(root.right,index,n,list);
+        if(right==true) return true;
+        
+        return false;
+    }
+    
+    public boolean isSubPath(ListNode head, TreeNode root) {
+        List<Integer> list=new ArrayList<>();
+        ListNode temp=head;
+        while(temp!=null){
+            list.add(temp.val);
+            temp=temp.next;
+        }
+        
+        int n=list.size();
+        
+        return solve(root,0,n,list);
+      }
+}
+
+Correct Approach - Power of Recursion. Simply trust Recursion
+class Solution {
+    private boolean solve(ListNode head,TreeNode root){
+        if(head==null) return true;
+        if(root==null) return false;
+        
+        if(head.val==root.val){
+            return solve(head.next,root.left) || solve(head.next,root.right);
+        }
+        
+        return false;
+    }
+    
+    public boolean isSubPath(ListNode head, TreeNode root) {
+        if(root==null) return false;
+        return solve(head,root) || isSubPath(head,root.left) || isSubPath(head,root.right);
+      }
+}
