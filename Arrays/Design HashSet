@@ -1,0 +1,46 @@
+class MyHashSet {
+    List<List<Integer>> list;
+    int capacity=100000;  //At most 10^4 calls will be made in total
+    
+    public MyHashSet() {
+        list=new ArrayList<>(capacity);
+        for(int i=0;i<capacity;i++){
+            list.add(new ArrayList<>());
+        }
+    }
+    
+    public void add(int key) {
+        int index=key%capacity;
+        
+        List<Integer> currList=list.get(index);
+        if(currList.contains(key)) return;
+        
+        currList.add(key);
+    }
+    
+    public void remove(int key) {
+        int index=key%capacity;
+        
+        List<Integer> currList=list.get(index);
+        if(currList.contains(key)) currList.remove(Integer.valueOf(key));
+    }
+    
+    public boolean contains(int key) {
+        int index=key%capacity;
+        
+        List<Integer> currList=list.get(index);
+        if(currList.contains(key)) return true;
+        
+        return false;
+    }
+}
+
+
+
+/**
+ * Your MyHashSet object will be instantiated and called as such:
+ * MyHashSet obj = new MyHashSet();
+ * obj.add(key);
+ * obj.remove(key);
+ * boolean param_3 = obj.contains(key);
+ */
