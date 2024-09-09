@@ -1,0 +1,74 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public int[][] spiralMatrix(int m, int n, ListNode head) {
+        int[][] ans=new int[m][n];
+        for(int[] row:ans){
+            Arrays.fill(row,-1);
+        }
+        
+        ListNode temp=head;
+        
+        int dir=0;
+        
+        int top=0;
+        int down=m-1;
+        
+        int left=0;
+        int right=n-1;
+        
+        while(top<=down && left<=right && temp!=null){
+            if(dir==0){
+                for(int i=left;i<=right;i++){
+                    if(temp==null) break;
+                    ans[top][i]=temp.val;
+                    temp=temp.next;
+                }
+                
+                top++;
+            }
+            
+            if(dir==1){
+                for(int i=top;i<=down;i++){
+                    if(temp==null) break;
+                    ans[i][right]=temp.val;
+                    temp=temp.next;
+                }
+                
+                right--;
+            }
+            
+            if(dir==2){
+                for(int i=right;i>=left;i--){
+                    if(temp==null) break;
+                    ans[down][i]=temp.val;
+                    temp=temp.next;
+                }
+                
+                down--;
+            }
+            
+            if(dir==3){
+                for(int i=down;i>=top;i--){
+                    if(temp==null) break;
+                    ans[i][left]=temp.val;
+                    temp=temp.next;
+                }
+                
+                left++;
+            }
+            
+            dir=(dir+1)%4;
+        }
+        
+        return ans;
+    }
+}
