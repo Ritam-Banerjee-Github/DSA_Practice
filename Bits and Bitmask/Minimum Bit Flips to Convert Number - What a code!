@@ -1,0 +1,49 @@
+class Solution {
+    private String parseBits(int num){
+        String str="";
+        
+        while(num>1){
+            str=num%2+str;
+            num=num/2;
+        }
+        
+        if(num==1) str=1+str;
+        
+        return str;
+    }
+    public int minBitFlips(int start, int goal) {
+        if(start==0) return Integer.bitCount(goal);
+        if(goal==0) return Integer.bitCount(start);
+        
+        
+        String startBits=parseBits(start);
+        String goalBits=parseBits(goal);
+        
+        int startLength=startBits.length();
+        int goalLength=goalBits.length();
+        int diff=Math.abs(startLength-goalLength);
+        
+        int startIndex=0;
+        int goalIndex=0;
+        int ans=0;
+        
+        if(startLength>goalLength){
+            for(;startIndex<diff;startIndex++){
+                if(startBits.charAt(startIndex)=='1') ans++;
+            }
+            
+        }else{
+            for(;goalIndex<diff;goalIndex++){
+                if(goalBits.charAt(goalIndex)=='1') ans++;
+            }
+        }
+        
+        while(startIndex<startLength && goalIndex<goalLength){
+            if(startBits.charAt(startIndex)!=goalBits.charAt(goalIndex)) ans++;
+            startIndex++;
+            goalIndex++;
+        }
+        
+        return ans;
+    }
+}
