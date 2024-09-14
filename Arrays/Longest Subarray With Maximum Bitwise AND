@@ -1,0 +1,27 @@
+Note : The result of AND operation b/w any 2 numbers (x and y) will always be <= x or y. Basically more AND operations -> decreasing value
+class Solution {
+    public int longestSubarray(int[] nums) {
+        int maxValue=Integer.MIN_VALUE;
+        int n=nums.length;
+        int ans=0;
+        
+        for(int i=0;i<n;i++){
+            maxValue=Math.max(maxValue,nums[i]);
+        }
+        
+        for(int i=0;i<n;i++){
+            if(nums[i]==maxValue){
+                int count =1;
+                
+                while(i+1<n && nums[i]==nums[i+1]){
+                    i++;
+                    count++;
+                }
+                
+                ans=Math.max(ans,count);
+            }
+        }
+        
+        return ans;
+    }
+}
