@@ -1,3 +1,39 @@
+My Solution : Brute Force
+class Solution {
+    public int findTheLongestSubstring(String s) {
+        int ans=0;
+        int n=s.length();
+        int countA=0;
+        int countE=0;
+        int countI=0;
+        int countO=0;
+        int countU=0;
+        
+        for(int i=0;i<n;i++){
+            for(int j=i;j<n;j++){
+                if(s.charAt(j)=='a') countA++;
+                if(s.charAt(j)=='e') countE++;
+                if(s.charAt(j)=='i') countI++;
+                if(s.charAt(j)=='o') countO++;
+                if(s.charAt(j)=='u') countU++;
+
+                if(countA%2==0 && countE%2==0 && countI%2==0 && countO%2==0 && countU%2==0){
+                    ans=Math.max(ans,j-i+1);
+                }
+            }
+            
+                countA=0;
+                countE=0;
+                countI=0;
+                countO=0;
+                countU=0;
+        }
+        
+        return ans;
+    }
+}
+
+Solution 2 : Optimal Approach
 Note : Similar to Longest length of subarray with sum=target.
 
 class Solution {
