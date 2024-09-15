@@ -1,0 +1,29 @@
+My Solution:
+class Solution {
+    private long solve(int i, int count, int n, int[] a, int[] b,long[][] dp){
+       if(count==4){
+           return 0;
+       }
+        
+       if(i>=n) return -(long)(1e18);
+        
+       if(dp[count][i]!=Long.MIN_VALUE) return dp[count][i];
+        
+        long notTake=solve(i+1,count,n,a,b,dp);
+        
+        long take=a[count]*(long)b[i] + solve(i+1,count+1,n,a,b,dp); //Need to cast b[i] to long to avoid overflow at last test cases
+         
+        dp[count][i]=Math.max(notTake,take);
+        return Math.max(notTake,take);
+    }
+    
+    public long maxScore(int[] a, int[] b) {
+        int n=b.length;
+        long[][] dp=new long[4][n+1];
+        for(long[] row:dp){
+            Arrays.fill(row,Long.MIN_VALUE);
+        }
+        return solve(0,0,n,a,b,dp);
+        
+    }
+}
