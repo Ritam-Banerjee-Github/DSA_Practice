@@ -34,7 +34,7 @@ class Solution {
             ans=Math.min(ans,totalB-totalA);
         }
 
-//Need to handle first and last difference seraparetly as well
+//Need to handle first and last diff separately
         String first=timePoints.get(0);
         Integer hoursFirst=Integer.parseInt(first.substring(0,2));
         Integer minsFirst=Integer.parseInt(first.substring(3,5));
@@ -44,7 +44,9 @@ class Solution {
         Integer hoursLast=Integer.parseInt(last.substring(0,2));
         Integer minsLast=Integer.parseInt(last.substring(3,5));
         Integer totalLast=hoursLast*60 + minsLast;
-        ans=Math.min(ans,1440-totalLast+totalFirst);
+        
+        Integer linearDiff=totalLast-totalFirst;
+        ans=Math.min(ans,1440-linearDiff); // 24hrs Wrap around time
         
         return ans;
     }
