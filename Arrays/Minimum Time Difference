@@ -1,0 +1,51 @@
+class Solution {
+    public int findMinDifference(List<String> timePoints) {
+        int n=timePoints.size();
+        Collections.sort(timePoints, new Comparator<String>(){
+            public int compare(String a, String b){
+               for(int i=0;i<5;i++){
+                   if(i==2) continue;
+                   
+                   int first=a.charAt(i)-'0';
+                   int second=b.charAt(i)-'0';
+                   
+                   if(first>second) return 1;
+                   if(first<second) return -1;
+               }
+                
+                return 0;
+            }
+        });
+        
+        int ans=Integer.MAX_VALUE;
+        
+        for(int i=1;i<n;i++){
+            String a=timePoints.get(i-1);
+            String b=timePoints.get(i);
+            
+            Integer hoursA=Integer.parseInt(a.substring(0,2));
+            Integer minsA=Integer.parseInt(a.substring(3,5));
+            Integer totalA=hoursA*60 + minsA;
+                
+            Integer hoursB=Integer.parseInt(b.substring(0,2));
+            Integer minsB=Integer.parseInt(b.substring(3,5));
+            Integer totalB=hoursB*60 + minsB;
+            
+            ans=Math.min(ans,totalB-totalA);
+        }
+
+//Need to handle first and last difference seraparetly as well
+        String first=timePoints.get(0);
+        Integer hoursFirst=Integer.parseInt(first.substring(0,2));
+        Integer minsFirst=Integer.parseInt(first.substring(3,5));
+        Integer totalFirst=hoursFirst*60 + minsFirst;
+        
+        String last=timePoints.get(n-1);
+        Integer hoursLast=Integer.parseInt(last.substring(0,2));
+        Integer minsLast=Integer.parseInt(last.substring(3,5));
+        Integer totalLast=hoursLast*60 + minsLast;
+        ans=Math.min(ans,1440-totalLast+totalFirst);
+        
+        return ans;
+    }
+}
