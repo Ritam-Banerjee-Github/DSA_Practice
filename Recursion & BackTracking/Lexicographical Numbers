@@ -1,0 +1,24 @@
+Note : Feels a bit more like Recursion + DFS if you thnk about it
+TC - O(N) : Only visiting all numbers
+class Solution {
+    List<Integer> ans=new ArrayList<>();
+    
+    private void solve(int num, int n){
+        if(num>n) return;
+        ans.add(num);
+        
+        for(int append=0;append<=9;append++){
+            int newnum=num*10+append;
+            if(newnum>n) break;
+            
+            solve(newnum,n);
+        }
+    }
+    public List<Integer> lexicalOrder(int n) {
+      for(int startNum=1;startNum<=9;startNum++){
+          solve(startNum,n);
+      }  
+        
+       return ans; 
+    }
+}
