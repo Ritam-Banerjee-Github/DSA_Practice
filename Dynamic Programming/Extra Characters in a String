@@ -1,0 +1,33 @@
+class Solution {
+    
+    private int solve(int index, int n, String s, Set<String> set,int[] dp){
+        if(index>=n) return 0;
+        
+        if(dp[index]!=-1) return dp[index];
+        
+        int extra=1+solve(index+1,n,s,set,dp);
+        
+        
+        for(int j=index;j<n;j++){
+            String temp=s.substring(index,j+1);
+            
+            if(set.contains(temp)){
+                extra=Math.min(extra,solve(j+1,n,s,set,dp));
+            }
+        }
+        
+        return dp[index]=extra;
+    }
+    public int minExtraChar(String s, String[] dictionary) {
+        Set<String> set=new HashSet<>();
+        for(String str:dictionary){
+            set.add(str);
+        }
+        
+        int[] dp=new int[s.length()+1];
+        Arrays.fill(dp,-1);
+        
+        return solve(0,s.length(),s,set,dp);
+        
+    }
+}
