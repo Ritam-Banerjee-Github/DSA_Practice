@@ -1,3 +1,4 @@
+Note : Actually a Trie proble, but can be solved like this as well
 class Solution {
     public int longestCommonPrefix(int[] arr1, int[] arr2) {
         Set<Integer> set=new HashSet<>();
@@ -15,7 +16,7 @@ class Solution {
                 num=num/10;
             }
             
-            ans=Math.max(ans,(int)Math.log10(num)+1);
+            ans=Math.max(ans,(int)Math.log10(num)+1); //To calculate number of digits- Math.log10(num)
         }
         return ans;
     }
