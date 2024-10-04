@@ -1,0 +1,28 @@
+Self - Good!
+class Solution {
+    public long dividePlayers(int[] skill) {
+        long ans=0;
+        int n=skill.length;
+        int i=0;
+        int j=n-1;
+        int sum=0;
+        
+        for(int k=0;k<n;k++){
+            sum+=skill[k];
+        }
+        int divisor=n/2;
+        int sumOfEachTeam=sum/divisor;
+        
+        Arrays.sort(skill);
+        while(i<j){
+            if(skill[i]+skill[j]!=sumOfEachTeam) return -1; //Has to be, because after sorting every array element must be part of one 
+pair to divide whole array
+            
+            ans+=skill[i]*skill[j];
+            i++;
+            j--;
+        }
+        
+        return ans;
+    }
+}
