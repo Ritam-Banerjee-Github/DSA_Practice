@@ -1,0 +1,39 @@
+Self - Good!
+class Solution {
+    public boolean checkInclusion(String s1, String s2) {
+        int n=s1.length();
+        int m=s2.length();
+        
+        if(m<n) return false;
+        
+        int[] original=new int[26];
+        int[] check=new int[26];
+        
+        for(int i=0;i<n;i++){
+            original[s1.charAt(i)-'a']++;
+        }
+        
+        int start=0;
+        int end=0;
+        
+        while(end<m){
+            check[s2.charAt(end)-'a']++;
+            
+            if((end-start+1)==n){
+                int index=0;
+                for(;index<26;index++){
+                    if(original[index]!=check[index]) break;
+                }
+                
+                if(index==26) return true;
+                
+                check[s2.charAt(start)-'a']--;
+                start++;
+            }
+            
+            end++;
+        }
+        
+        return false;
+    }
+}
