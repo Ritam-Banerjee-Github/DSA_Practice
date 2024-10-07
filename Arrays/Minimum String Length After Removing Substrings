@@ -1,0 +1,23 @@
+class Solution {
+    public int minLength(String s) {
+        int n=s.length();
+        int ans=n;
+        
+        Stack<Character> stack=new Stack<>();
+        int i=0;
+        while(i<n){
+            if( (!stack.isEmpty() && (s.charAt(i)=='B' && stack.peek()=='A')) || (!stack.isEmpty() &&
+                                                                                (s.charAt(i)=='D' && stack.peek()=='C')) ){
+                stack.pop();
+                ans=ans-2;
+                
+            }else{
+                stack.push(s.charAt(i));
+            }
+            
+            i++;
+        }
+        
+        return ans;
+    }
+}
