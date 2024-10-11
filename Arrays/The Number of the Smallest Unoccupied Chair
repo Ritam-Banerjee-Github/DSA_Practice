@@ -1,0 +1,87 @@
+Self Solve. Good!
+
+class Pair {
+    int arrival;
+    int departure;
+    int num;
+    
+    public Pair(int arrival, int departure, int num) {
+        this.arrival = arrival;
+        this.departure = departure;
+        this.num = num;
+    }
+}
+
+class Occupant {
+    int end;
+    int chairNum;
+    
+    public Occupant(int end, int chairNum) {
+        this.end = end;
+        this.chairNum = chairNum;
+    }
+}
+
+class Solution {
+    public int smallestChair(int[][] times, int targetFriend) {
+        PriorityQueue<Integer> unoccupied = new PriorityQueue<>();  // Queue for available chairs
+        int n = times.length;
+        
+        // Initially all chairs are available from 0 to n-1
+        for (int i = 0; i < n; i++) {
+            unoccupied.add(i);
+        }
+        
+        List<Pair> list = new ArrayList<>();
+        
+        // Create a list of Pair objects with arrival, departure, and friend number
+        for (int i = 0; i < n; i++) {
+            int arrival = times[i][0];
+            int departure = times[i][1];
+            int num = i;
+            list.add(new Pair(arrival, departure, num));
+        }
+        
+        Collections.sort(list,new Comparator<Pair>(){
+           public int compare(Pair a, Pair b){
+               if(a.arrival<b.arrival) return -1;
+               if(a.arrival>b.arrival) return 1;
+               return 0;
+           } 
+        });
+        
+        
+        PriorityQueue<Occupant> occupied=new PriorityQueue<>(new Comparator<Occupant>(){
+           public int compare(Occupant a, Occupant b){
+               if(a.end<b.end) return -1;
+               if(a.end>b.end) return 1;
+               return 0;
+           } 
+        });
+        
+        // Go through each friend's arrival and departure
+        for (int i = 0; i < n; i++) {
+            Pair p = list.get(i);
+            int currStart = p.arrival;
+            int currEnd = p.departure;
+            int currNum = p.num;
+            
+            // Free up any chairs whose occupants have already left
+            while (!occupied.isEmpty() && occupied.peek().end <= currStart) {
+                Occupant o = occupied.poll();
+                unoccupied.add(o.chairNum);  // Add the chair back to unoccupied
+            }
+            
+            // If it's the target friend, assign them the smallest available chair and return it
+            if (currNum == targetFriend) {
+                return unoccupied.poll();
+            } else {
+                // Otherwise, assign the smallest available chair to the current friend
+                int unoccupiedSeat = unoccupied.poll();
+                occupied.add(new Occupant(currEnd, unoccupiedSeat));  // Mark the chair as occupied
+            }
+        }
+        
+        return -1;  // Shouldn't reach here
+    }
+}
