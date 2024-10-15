@@ -1,0 +1,59 @@
+Approach 1 : Brute Force O(n^2). Always think of stack when adjacent elements need to be replaced 
+563 / 581 test cases passed Status: Time Limit Exceeded
+class Solution {
+    public long minimumSteps(String s) {
+        long ans=0;
+        int n=s.length();
+        Stack<Integer> stack=new Stack<>();
+        
+        for(int i=0;i<n;i++){
+            if(s.charAt(i)=='0'){
+                int count=0;
+                
+                while(!stack.isEmpty() && stack.peek()==1){
+                    stack.pop();
+                    ans++;
+                    count++;
+                }
+                
+                stack.push(0);
+                while(count>0){
+                    stack.push(1);
+                    count--;
+                }
+                
+            }else{
+                stack.push(1);
+            }
+        }
+        
+        return ans;
+    }
+}
+
+Approach 2 : Optimal. Store 1st occurence of 1's index and shift that by 1 for every occurence of 0 in future. 
+            Only shifting the index by 1 will do, no need to actually insert 1 in the next index.
+class Solution {
+    public long minimumSteps(String s) {
+        long ans=0;
+        int n=s.length();
+        Stack<Integer> stack=new Stack<>();
+        int firstOne=-1;
+        
+        for(int i=0;i<n;i++){
+            if(s.charAt(i)=='1'){
+                firstOne=i;
+                break;
+            }
+        }
+        
+        for(int i=firstOne+1;i<n;i++){
+            if(s.charAt(i)=='0' && firstOne!=-1){
+                ans+=i-firstOne;
+                firstOne++;
+            }
+        }
+        
+        return ans;
+    }
+}
