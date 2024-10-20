@@ -1,0 +1,66 @@
+class Solution {
+    public boolean parseBoolExpr(String expression) {
+        int n=expression.length();
+        Stack<Character> stack=new Stack();
+        
+        for(int i=0;i<n;i++){
+            if(expression.charAt(i)==',') continue;
+            
+            if(expression.charAt(i)==')'){
+                List<Character> list=new ArrayList<>();
+                
+                while(stack.peek()!='('){
+                    list.add(stack.pop());
+                }
+                
+                stack.pop();
+                char operator=stack.pop();
+                
+                if(operator=='&'){
+                    if(list.size()==1){
+                        stack.push(list.get(0));
+                    }else{
+                        char ans=list.get(0);
+                        
+                        for(int j=1;j<list.size();j++){
+                            if(ans=='t' && list.get(j)=='t'){
+                                ans='t';
+                            }else{
+                                ans='f';
+                            }
+                        }
+                        
+                        stack.push(ans);
+                    }
+                }else if(operator=='|'){
+                    if(list.size()==1){
+                        stack.push(list.get(0));
+                    }else{
+                        char ans=list.get(0);
+                        
+                        for(int j=1;j<list.size();j++){
+                            if(ans=='f' && list.get(j)=='f'){
+                                ans='f';
+                            }else{
+                                ans='t';
+                            }
+                        }
+                        
+                        stack.push(ans);
+                    }
+                }else if(operator=='!'){
+                    char currExpression=list.get(0);
+                    if(currExpression=='t'){
+                        stack.push('f');
+                    }else{
+                        stack.push('t');
+                    }
+                }
+            }else{
+                stack.push(expression.charAt(i));
+            }
+        }
+        
+        return stack.pop()=='f'?false:true;
+    }
+}
