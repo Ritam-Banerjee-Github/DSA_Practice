@@ -1,0 +1,32 @@
+class Solution {
+    int ans=Integer.MIN_VALUE;
+    List<String> list=new ArrayList<>();
+    Set<String> set=new HashSet<>();
+    
+    private void solve(int i, int n, String s){
+      if(i>=n){
+          ans=Math.max(ans,list.size());
+      } 
+        
+        String currStr="";
+        
+      for(int index=i;index<n;index++){
+          currStr=currStr+s.charAt(index);
+          
+          if(!set.contains(currStr)){
+              list.add(currStr);
+              set.add(currStr);
+              solve(index+1,n,s);
+              list.remove(list.size()-1);
+              set.remove(currStr);
+          }
+      } 
+        
+    }
+    
+    public int maxUniqueSplit(String s) {
+        int n=s.length();
+        solve(0,n,s);
+        return ans;
+    }
+}
