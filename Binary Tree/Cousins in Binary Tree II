@@ -1,0 +1,84 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode replaceValueInTree(TreeNode root) {
+        Queue<TreeNode> q=new LinkedList<>();
+        q.add(root);
+        
+        int level=0;
+        Map<Integer,Integer> levelSumMap=new HashMap<>();
+        
+        while(!q.isEmpty()){
+           int n=q.size();
+           int sum=0;
+           for(int i=0;i<n;i++){
+               TreeNode node=q.remove();
+               sum+=node.val;
+               if(node.left!=null){
+                   q.add(node.left);
+               }
+               
+               if(node.right!=null){
+                   q.add(node.right);
+               }
+           }
+            
+            levelSumMap.put(level,sum);
+            level++;
+        }
+        
+        int level2=1;
+        
+        q.add(root);
+        
+        while(!q.isEmpty()){
+           int n=q.size();
+           
+           if(levelSumMap.get(level2)==null) break;
+            
+           for(int i=0;i<n;i++){
+               TreeNode node=q.remove();
+               int currSum=levelSumMap.get(level2);
+               
+               if(node.left!=null){
+                   currSum-=node.left.val;
+               }
+               
+               if(node.right!=null){
+                   currSum-=node.right.val;
+               }
+               
+               if(node.left!=null){
+                   q.add(node.left);
+                   node.left.val=currSum;
+               }
+               
+               if(node.right!=null){
+                   q.add(node.right);
+                   node.right.val=currSum;
+               }
+               
+               
+           }
+            
+           level2++;
+        }
+        
+        if(root!=null) root.val=0;
+        
+        return root;
+    }
+}
