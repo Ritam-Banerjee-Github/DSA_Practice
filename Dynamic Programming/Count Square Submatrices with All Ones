@@ -1,0 +1,114 @@
+Brute Force - Self
+class Solution {
+    public int countSquares(int[][] matrix) {
+        int n=matrix.length;
+        int m=matrix[0].length;
+        
+        int maxSquare=Math.min(m,n);
+        int ans=0;
+        
+        //Let's do this for all 1x1
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(matrix[i][j]==1) ans++;
+            }
+        }
+        
+        //Lets do for remaining sizes
+        for(int size=2;size<=maxSquare;size++){
+            for(int row=0;row<=n-size;row++){
+                for(int col=0;col<=m-size;col++){
+                    boolean notOne=false;
+                    
+                    for(int i=0;i<size;i++){
+                        for(int j=0;j<size;j++){
+                            if(matrix[row+i][col+j]!=1){
+                                notOne=true;
+                                break;
+                            }
+                        }
+                        
+                        if(notOne==true) break;
+                    }
+                    
+                    if(notOne!=true) ans++;
+                }
+            }
+        }
+        
+        
+        return ans;
+    }
+}
+DP- Recursion + Memoization
+//T.C : O(m*n)
+//S.C : O(m*n)
+class Solution {
+    int m, n;
+
+    private int solve(int i, int j, int[][] grid, int[][] t) {
+        if (i >= grid.length || j >= grid[0].length) 
+            return 0;
+
+        if (grid[i][j] == 0)
+            return 0;
+
+        if (t[i][j] != -1)
+            return t[i][j];
+
+        // Right
+        int right = solve(i, j + 1, grid, t);
+        // Diagonal
+        int diagonal = solve(i + 1, j + 1, grid, t);
+        // Below
+        int below = solve(i + 1, j, grid, t);
+
+        return t[i][j] = 1 + Math.min(Math.min(right, diagonal), below);
+    }
+
+    public int countSquares(int[][] grid) {
+        int result = 0;
+        m = grid.length;
+        n = grid[0].length;
+        int[][] t = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                t[i][j] = -1; // Initialize the memoization table with -1
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                result += solve(i, j, grid, t);
+            }
+        }
+        return result;
+    }
+}
+
+DP - Bottom Up
+class Solution {
+    public int countSquares(int[][] matrix) {
+        int n=matrix.length;
+        int m=matrix[0].length;
+        
+       int[][] dp=new int[n][m];
+       int ans=0;
+       
+       for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(i==0 || j==0){
+                dp[i][j]=matrix[i][j];
+            }else{
+                if(matrix[i][j]==1){
+                    dp[i][j]=1+Math.min(dp[i-1][j-1],Math.min(dp[i-1][j],dp[i][j-1]));  //Count of sq matrixes with 1's upto i,j (Opposite of recursion)
+                }
+            }
+
+            ans+=dp[i][j];
+        }
+       }
+
+       return ans;
+    }
+}
