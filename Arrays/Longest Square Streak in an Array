@@ -1,0 +1,112 @@
+Approach 1 - Recursion + Memoization 
+Memory Limit Exceeded : 66 / 92 testcases passed
+class Solution {
+    private int solve(int i, int n, int prev, int[] nums, int[][] dp){
+        if(i>=n) return 0;
+
+        if(prev!=-1 && dp[i][prev]!=-1) return dp[i][prev];
+
+        int notTake=solve(i+1,n,prev,nums,dp);
+        int take=0;
+
+        if(prev==-1){
+            take=1+solve(i+1,n,i,nums,dp);
+        }else if(nums[prev]*nums[prev]==nums[i] ){
+            take=1+solve(i+1,n,i,nums,dp);
+        }
+        
+        if(prev!=-1) dp[i][prev]=Math.max(take,notTake);
+        return Math.max(take,notTake);
+    }
+    public int longestSquareStreak(int[] nums) {
+        Arrays.sort(nums);
+        int n=nums.length;
+
+        int[][] dp=new int[n+1][n+1];
+        for(int[] row:dp){
+            Arrays.fill(row,-1);
+        }
+
+        int ans=solve(0,n,-1,nums,dp);
+
+        return ans==1?-1:ans;
+
+    }
+}
+
+Approach 2 : Sort + BinarySearch O(nlogn)
+Accepted
+class Solution {
+    private int binary(int low, int n, int target, int[] nums){
+        int high=n-1;
+        int ans=n;
+
+        while(low<=high){
+            int mid=(low+high)/2;
+
+            if(nums[mid]==target){
+                ans=mid;
+                break;
+            }else if(nums[mid]<target){
+                low=mid+1;
+            }else{
+                high=mid-1;
+            }
+        }
+
+        return ans;
+    }
+    public int longestSquareStreak(int[] nums) {
+        Arrays.sort(nums);
+        int n=nums.length;
+
+        int ans=-1;
+        for(int i=0;i<n;i++){
+            int curr=nums[i];
+            Set<Integer> set=new HashSet<>();
+            set.add(curr);
+            int j=i+1;
+
+            int target=curr*curr;
+
+            while(true){
+                int next=binary(j,n,target,nums);
+                if(next==n) break;
+
+                set.add(nums[next]);
+                target=nums[next]*nums[next];
+                j=next+1;
+            }
+
+            ans=Math.max(ans,set.size());
+        }
+
+        return ans==1?-1:ans;
+    }
+}
+
+Apprach 3 - Sort + Map O(nlogn)
+Accepted
+class Solution {
+    public int longestSquareStreak(int[] nums) {
+        Arrays.sort(nums);
+        int n=nums.length;
+
+        int ans=-1;
+        Map<Integer,Integer>map=new HashMap<>();
+        for(int i=0;i<n;i++){
+            int sqroot=(int)Math.sqrt(nums[i]);
+//Since the number has to be a square, and this is the way to check for (sqRoot*sqRoot==num)
+// As Math.sqrt() returns double which we cast to int, which needs to be verified
+            if(sqroot*sqroot==nums[i] && map.containsKey(sqroot)){
+                map.put(nums[i],map.get(sqroot)+1);
+            }else{
+                map.put(nums[i],1);
+            }
+
+            ans=Math.max(ans,map.get(nums[i]));
+        }
+
+        return ans==1?-1:ans;
+    }
+}
