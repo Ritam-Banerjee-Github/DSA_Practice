@@ -1,0 +1,43 @@
+class Solution {
+    public int minimumMountainRemovals(int[] nums) {
+        int ans=Integer.MAX_VALUE;
+        int n=nums.length;
+
+        int[] lis=new int[n];
+        int[] lds=new int[n];
+
+        Arrays.fill(lis,1);
+        Arrays.fill(lds,1);
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<i;j++){
+                if(nums[i]>nums[j] && lis[j]+1>lis[i]){
+                    lis[i]=lis[j]+1;
+                }
+            }
+        }
+
+        for(int i=n-1;i>=0;i--){
+            for(int j=n-1;j>i;j--){
+                if(nums[i]>nums[j] && lds[j]+1>lds[i]){
+                    lds[i]=lds[j]+1;
+                }
+            }
+        }
+//Question asks for minimum removal, which means maximum size of mountain array, so combined max LIS on left of i and max size LDS 
+in right of i 
+        for(int i=0;i<n;i++){
+             int leftTotalElements=i+1;
+             int leftLIS=lis[i];
+             int leftRemoval=leftTotalElements-leftLIS;
+
+             int rightTotalElements=n-i;
+             int rightLDS=lds[i];
+             int rightRemoval=rightTotalElements-rightLDS;
+
+             if(leftLIS>1 && rightLDS>1) ans=Math.min(ans,leftRemoval+rightRemoval);  //As min length of mountain array must be >=3
+        }
+
+        return ans;
+    }
+}
