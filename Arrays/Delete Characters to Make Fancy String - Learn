@@ -1,0 +1,41 @@
+TLE : 303/306 test cases passed 
+Inserting at end of new String
+class Solution {
+    public String makeFancyString(String s) {
+        int n=s.length();
+        if(n<=2) return s;
+        
+        String ans="";
+        
+        for(int i=0;i<n;i++){
+            if(i>0 && i<n-1 && s.charAt(i-1)==s.charAt(i) && s.charAt(i)==s.charAt(i+1)){
+                continue;
+            }
+
+            ans+=s.charAt(i);
+        }
+
+        return ans;
+    }
+}
+
+Accepted : Using StringBuilder instead of inserting at last of String
+class Solution {
+    public String makeFancyString(String s) {
+        int n=s.length();
+        if(n<=2) return s;
+
+        StringBuilder ans=new StringBuilder();
+        
+        for(int i=0;i<n;i++){
+            if(i>0 && i<n-1 && s.charAt(i-1)==s.charAt(i) && s.charAt(i)==s.charAt(i+1)){
+                continue;
+            }
+
+            ans.append(s.charAt(i));
+        }
+
+       
+        return ans.toString();
+    }
+}
