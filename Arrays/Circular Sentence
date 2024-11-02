@@ -1,0 +1,34 @@
+class Solution {
+    public boolean isCircularSentence(String sentence) {
+        String[] sentenceArray=sentence.split(" ");
+        int length=sentenceArray.length;
+         
+        boolean isCircular=true; 
+        if(length==1){
+            return sentenceArray[0].charAt(0)==sentenceArray[0].charAt(sentenceArray[0].length()-1);
+        }
+
+        for(int i=0;i<length;i++){
+            
+            if(i==length-1){
+                char last=sentenceArray[i].charAt(sentenceArray[i].length()-1);
+                char first=sentenceArray[0].charAt(0);
+
+                if(last!=first){
+                    isCircular=false;
+                    break;
+                }
+            }else{
+                char curr=sentenceArray[i].charAt(sentenceArray[i].length()-1);
+                char next=sentenceArray[i+1].charAt(0);
+
+                if(next!=curr){
+                    isCircular=false;
+                    break;
+                }
+            }
+        }
+
+        return isCircular;
+    }
+}
