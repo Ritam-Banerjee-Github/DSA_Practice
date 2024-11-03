@@ -1,0 +1,48 @@
+class Solution {
+    public boolean rotateString(String s, String goal) {
+        int n=s.length();
+        int m=goal.length();
+
+        if(n!=m) return false;
+//Append the String again at the end, like we do in circular array. This trick helps in matching all rotaions.
+        StringBuilder sb=new StringBuilder(s);
+        for(int i=0;i<n;i++){
+            sb.append(s.charAt(i));
+        }
+
+        int start=0;
+        int end=m-1;
+        int len=sb.length();
+
+        while(end<len){
+            int currPos=start;
+            boolean allMatch=false;
+            int goalPos=0;
+
+            while(currPos<=end){
+                if(currPos==end && sb.charAt(currPos)==goal.charAt(goalPos)){
+                    allMatch=true;
+                    break;
+                }
+                
+                if(sb.charAt(currPos)==goal.charAt(goalPos)){
+                     currPos++;
+                     goalPos++;
+                }else{
+                    allMatch=false;
+                    break;
+                }
+
+            }
+
+            if(allMatch==true){
+                return true;
+            }else{
+                start++;
+                end++;
+            }
+        }
+
+        return false;
+    }
+}
