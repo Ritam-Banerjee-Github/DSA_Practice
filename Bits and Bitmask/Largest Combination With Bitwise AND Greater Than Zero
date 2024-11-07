@@ -1,0 +1,51 @@
+DP Approach :
+TLE - 29/80 test cases passed.
+class Solution {
+    Map<String,Integer> dp=new HashMap<>();
+
+    private int solve(int i,int n, int currAnd, int[] candidates){
+       if(i>=n) return 0;
+         
+       String key=""+i+"#"+currAnd;
+       if(dp.containsKey(key)) return dp.get(key);
+
+       int notTake=solve(i+1,n,currAnd,candidates);
+       int take=0;
+       int result=candidates[i]&currAnd;
+
+       if(result>0){
+        take=1+solve(i+1,n,candidates[i]&currAnd,candidates);
+       }
+    
+        dp.put(key,Math.max(take,notTake));
+       return Math.max(take,notTake); 
+    }
+
+    public int largestCombination(int[] candidates) {
+        int n=candidates.length;
+        int currAnd=-1;
+
+        return solve(0,n,currAnd,candidates);
+
+    }
+}
+
+Bits Manipulation :
+class Solution {
+    public int largestCombination(int[] candidates) {
+        int[] count = new int[24];
+        int result = 0;
+
+        // Count how many numbers have the i-th bit set
+        for (int i = 0; i < 24; i++) { // O(24)
+            for (int num : candidates) { // O(n)
+                if ((num & (1 << i)) != 0) {
+                    count[i]++;
+                }
+            }
+            result = Math.max(result, count[i]);
+        }
+
+        return result;
+    }
+}
