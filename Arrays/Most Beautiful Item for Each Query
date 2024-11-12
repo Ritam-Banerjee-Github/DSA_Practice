@@ -1,0 +1,52 @@
+class Solution {
+    private int binarySearch(int low, int high, int[][] prefixSum, int target){
+        int ans=0;
+        if(prefixSum[0][0]>target) return ans;
+
+        while(low<=high){
+            int mid=(low+high)/2;
+
+            if(prefixSum[mid][0]<=target){
+                ans=prefixSum[mid][1];
+                low=mid+1;
+            }else{
+                high=mid-1;
+            }
+        }
+
+        return ans;
+    }
+    public int[] maximumBeauty(int[][] items, int[] queries) {
+        int n=queries.length;
+        int m=items.length;
+
+        int[] ans=new int[n];
+
+        Arrays.sort(items, new Comparator<int[]>(){
+           public int compare(int[] a, int[] b){
+            if(a[0]<b[0]) return -1;
+            if(a[0]>b[0]) return 1;
+            return 0;
+           }
+        });
+
+        int[][] prefixItems=new int[m][2];
+        int currMax=0;
+        int index=0;
+        for(int[] item:items){
+           prefixItems[index][0]=item[0];
+           currMax=Math.max(currMax,item[1]);
+           prefixItems[index][1]=currMax;
+           index++;
+        }
+
+        for(int i=0;i<n;i++){
+            int price=queries[i];
+            ans[i]=binarySearch(0,m-1,prefixItems,price);
+        }
+
+        return ans;
+    }
+
+  
+}
