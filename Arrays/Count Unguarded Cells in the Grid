@@ -1,0 +1,63 @@
+class Solution {
+    public int countUnguarded(int m, int n, int[][] guards, int[][] walls) {
+        int ans=0;
+        int[][] grid=new int[m][n];
+
+        for(int[] wall:walls){
+            grid[wall[0]][wall[1]]=3;
+        }
+ 
+        for(int[] guard:guards){
+            grid[guard[0]][guard[1]]=2;
+        }       
+
+
+        for(int[] guard:guards){
+            int guardRow=guard[0];
+            int guardCol=guard[1];
+            
+            //top
+            int tempRow=guardRow-1;
+            int tempCol=guardCol;
+
+            while(tempRow>=0 && grid[tempRow][tempCol]!=2 && grid[tempRow][tempCol]!=3){
+                grid[tempRow][tempCol]=1;
+                tempRow--;
+            }
+
+            //bottom
+             tempRow=guardRow+1;
+             tempCol=guardCol;
+
+            while(tempRow<m && grid[tempRow][tempCol]!=2 && grid[tempRow][tempCol]!=3){
+                grid[tempRow][tempCol]=1;
+                tempRow++;
+            }
+
+            //left
+            tempRow=guardRow;
+            tempCol=guardCol-1;
+
+            while(tempCol>=0 && grid[tempRow][tempCol]!=2 && grid[tempRow][tempCol]!=3){
+                grid[tempRow][tempCol]=1;
+                tempCol--;
+            }
+
+            //right
+             tempRow=guardRow;
+             tempCol=guardCol+1;
+
+            while(tempCol<n && grid[tempRow][tempCol]!=2 && grid[tempRow][tempCol]!=3){
+                grid[tempRow][tempCol]=1;
+                tempCol++;
+            }
+        }
+
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==0) ans++;
+            }
+        }
+        return ans;
+    }
+}
