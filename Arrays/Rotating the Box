@@ -45,3 +45,51 @@ class Solution {
         return ans;
     }
 }
+
+Solution 2 -
+TC - O(n*2m)
+class Solution {
+    public char[][] rotateTheBox(char[][] box) {
+        int n=box.length;
+        int m=box[0].length;
+
+        char[][] ans=new char[m][n];
+
+        for(int i=0;i<n;i++){
+            int count=0;
+            for(int j=0;j<=m;j++){
+                
+                if(j==m){
+                    int row=j-1;
+                    while(count>0){
+                        ans[row][n-i-1]='#';
+                        row--;
+                        count--;
+                    }
+
+                    break;
+
+                }
+                
+            ans[j][n-i-1]='.'; //Marking empty cells with '.' as default and later replacing with '*' or '#', if required
+                
+             if(box[i][j]=='*'){
+                    ans[j][n-i-1]='*';
+                    int row=j-1;
+                    while(count>0){
+                        ans[row][n-i-1]='#';
+                        row--;
+                        count--;
+                    }
+
+                }else if(box[i][j]=='#'){
+                    count++;
+                }
+
+            }
+        }
+
+
+        return ans;
+    }
+}
