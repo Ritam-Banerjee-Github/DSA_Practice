@@ -8,7 +8,7 @@ class Solution {
             int index=spaces[i];
             index=index+count;
 
-            ans.insert(index,' ');
+            ans.insert(index,' '); //Adds space and moves remaining elements to right
             count++;
         }
 
