@@ -1,0 +1,57 @@
+Self Solve !
+class Solution {
+    public boolean canChange(String start, String target) {
+        int n=start.length();
+        String startCharsOrder="";
+        for(int i=0;i<n;i++){
+            if(start.charAt(i)!='_') startCharsOrder=startCharsOrder+start.charAt(i);
+        }
+
+        String targetCharsOrder="";
+        for(int i=0;i<n;i++){
+            if(target.charAt(i)!='_') targetCharsOrder=targetCharsOrder+target.charAt(i);
+        }
+
+        //Check characters order and size/frequency equality as well
+        if(!targetCharsOrder.equals(startCharsOrder)) return false;
+
+
+        List<Integer> startRindices=new ArrayList<>();
+        List<Integer> startLindices=new ArrayList<>();
+
+        List<Integer> targetRindices=new ArrayList<>();
+        List<Integer> targetLindices=new ArrayList<>();
+
+        for(int i=0;i<n;i++){
+            if(start.charAt(i)=='L'){
+              startLindices.add(i);
+            }
+            if(start.charAt(i)=='R'){
+              startRindices.add(i);
+            } 
+
+            if(target.charAt(i)=='L'){
+             targetLindices.add(i);
+            }
+
+            if(target.charAt(i)=='R'){
+              targetRindices.add(i);
+            }
+        }
+
+        int m=startRindices.size();
+        int p=startLindices.size();
+
+//If at any point 'R' char index in target is less than 'R' char index in start, return false as 'R' means only move towards right in start.
+//Similarly, written logic for 'L' character as well. 
+        for(int i=0;i<m;i++){
+            if(targetRindices.get(i)-startRindices.get(i)<0) return false;
+        }
+
+        for(int i=0;i<p;i++){
+           if(targetLindices.get(i)-startLindices.get(i)>0) return false;
+        }
+
+        return true;
+    }
+}
