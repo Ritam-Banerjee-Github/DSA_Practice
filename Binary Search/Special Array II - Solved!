@@ -1,0 +1,54 @@
+class Pair{
+    int start;
+    int end;
+    
+    public Pair(int start, int end){
+        this.start=start;
+        this.end=end;
+    }
+}
+
+class Solution {
+    private boolean binarySearch(int low, int high, List<Pair> list, int rangeStart, int rangeEnd ){
+        
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            
+            if(list.get(mid).start>=rangeStart && list.get(mid).end<=rangeEnd){
+                return false;
+            }else if(list.get(mid).end<=rangeStart){
+                low=mid+1;
+            }else{
+                high=mid-1;
+            }
+            
+        }
+        
+        return true;
+    }
+    
+    public boolean[] isArraySpecial(int[] nums, int[][] queries) {
+        int n=nums.length;
+        int m=queries.length;
+        boolean[] ans=new boolean[m];
+        
+        List<Pair> list=new ArrayList<>();
+        
+        for(int i=0;i<n-1;i++){
+            if((nums[i]%2==0 && nums[i+1]%2==0) || (nums[i]%2!=0 && nums[i+1]%2!=0)){
+                list.add(new Pair(i,i+1));
+            }
+        }
+        
+        int high=list.size()-1;
+        int low=0;
+        
+        for(int i=0;i<m;i++){
+            int rangeStart=queries[i][0];
+            int rangeEnd=queries[i][1];
+            
+            ans[i]=binarySearch(low,high,list,rangeStart,rangeEnd);
+        }
+        return ans;
+    }
+}
