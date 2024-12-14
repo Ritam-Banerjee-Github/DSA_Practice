@@ -1,0 +1,31 @@
+//Approach-1 (Using Ordered Map)
+//T.C : O(n * log(3)) ~ O(n) -> Map size never exceeds 3 
+//S.C : ~O(1) - Map size never exceeds 3, hence constant
+class Solution {
+    public long continuousSubarrays(int[] nums) {
+        long ans=0;
+        int n=nums.length;
+        TreeMap<Integer,Integer> map=new TreeMap<>(); // ordered map did the trick, as we also need to store frequency in case of multiple elements
+        int start=0;
+        int end=0;
+        
+        while(end<n){
+            map.put(nums[end],map.getOrDefault(nums[end],0)+1);
+            
+            while(map.lastKey()-map.firstKey()>2){  // Get the highest and lowest element from map
+                if(map.get(nums[start])>1){
+                    map.put(nums[start],map.get(nums[start])-1);
+                }else{
+                    map.remove(nums[start]);
+                }
+                
+                start++;
+            }
+            
+            ans+=end-start+1;
+            end++;
+        }
+
+        return ans;
+    }
+}
