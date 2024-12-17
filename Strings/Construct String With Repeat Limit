@@ -1,0 +1,45 @@
+class Solution {
+    public String repeatLimitedString(String s, int repeatLimit) {
+        int n=s.length();
+        StringBuilder ans=new StringBuilder();
+        
+        int[] freq=new int[26];
+        for(int i=0;i<n;i++){
+            freq[s.charAt(i)-'a']++;
+        }
+        
+        for(int i=25;i>=0;i--){
+            int val=repeatLimit;
+            
+            while(freq[i]>0){
+                if(val>0){
+                    char ch=(char)(i+'a');
+                    ans.append(ch);
+                    val--;
+                    freq[i]--;
+                }else{
+                    int j=i-1;
+                    for(;j>=0;j--){
+                        if(freq[j]>0) break;
+                    }
+                    
+                    char ch;
+                    
+                    if(j<0) break;
+                    
+                    if(freq[j]>0){
+                        ch=(char)(j+'a');
+                        freq[j]--;
+                        ans.append(ch);
+                    }
+                    
+                    val=repeatLimit;
+                }
+                
+            }
+        }
+        
+        String finalAns=ans.toString();
+        return finalAns;
+    }
+}
