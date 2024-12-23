@@ -1,0 +1,95 @@
+Approach 1 : Self 
+145 / 146 test cases passed   Status: Time Limit Exceeded
+class Solution {
+    private int ans=0;
+    
+    private void bfs(TreeNode root){
+        Queue<TreeNode> q=new LinkedList<>();
+        q.add(root);
+        
+        while(!q.isEmpty()){
+            int currSize=q.size();
+            List<Integer> list=new ArrayList<>();
+            for(int i=0;i<currSize;i++){
+                TreeNode node=q.remove();
+                list.add(node.val);
+                if(node.left!=null) q.add(node.left);
+                if(node.right!=null) q.add(node.right);
+            }
+            
+            for(int i=0;i<currSize;i++){
+                int currMinIndex=i;
+                for(int j=i+1;j<currSize;j++){
+                    if(list.get(j)<list.get(currMinIndex)){
+                        currMinIndex=j;
+                    }
+                }
+                
+                if(currMinIndex!=i){
+                    ans++;
+                    int temp=list.get(i);
+                    list.set(i,list.get(currMinIndex));
+                    list.set(currMinIndex,temp);
+                }
+            }
+        }
+    }
+    
+    public int minimumOperations(TreeNode root) {
+        bfs(root);
+        return ans;
+        
+    }
+}
+
+Approach 2:
+class Solution {
+    private int ans=0;
+    
+    private void bfs(TreeNode root){
+        Queue<TreeNode> q=new LinkedList<>();
+        q.add(root);
+        
+        while(!q.isEmpty()){
+            int currSize=q.size();
+            
+            List<Integer> list=new ArrayList<>();
+            
+            for(int i=0;i<currSize;i++){
+                TreeNode node=q.remove();
+                list.add(node.val);
+                if(node.left!=null) q.add(node.left);
+                if(node.right!=null) q.add(node.right);
+            }
+            
+            List<Integer> sortedList=new ArrayList<>(list);
+            Collections.sort(sortedList);
+            Map<Integer,Integer> map=new HashMap<>();
+            
+            for(int i=0;i<currSize;i++){
+                map.put(list.get(i),i);  //No getOrDefault, as all elements are unique. So we need to store index
+            }
+            
+             for(int i=0;i<currSize;i++){
+                if(list.get(i)!=sortedList.get(i)){
+                    ans++;
+                    int unsortedValue=list.get(i);
+                    int sortedValue=sortedList.get(i);
+                    int indexOfSortedValue=map.get(sortedValue);
+                    Collections.swap(list,i,indexOfSortedValue);  // Use this for swap, and not the below one. This works for all usecases
+                    // list.set(i,sortedValue);
+                    // list.set(indexOfSortedValue, unsortedValue);
+                    map.put(sortedValue,i);
+                    map.put(unsortedValue,indexOfSortedValue);
+                } 
+            }
+            
+        }
+    }
+    
+    public int minimumOperations(TreeNode root) {
+        bfs(root);
+        return ans;
+        
+    }
+}
