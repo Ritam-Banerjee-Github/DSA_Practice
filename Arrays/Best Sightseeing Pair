@@ -1,0 +1,36 @@
+Approach 1 : TC - O(N^2)
+Time Limit Exceeded : 50 / 55 testcases passed
+class Solution {
+    public int maxScoreSightseeingPair(int[] values) {
+        int ans=Integer.MIN_VALUE;
+        int n=values.length;
+        for(int i=0;i<n;i++){
+            for(int j=i+1;j<n;j++){
+                ans=Math.max(ans,values[i]+values[j]+i-j);
+            }
+        }
+
+        return ans;
+    }
+}
+
+Approach 2 : Store prev max till Values[i]+i upto (i-1). Basically, max(values[i]+values[j]+i-j)
+class Solution {
+    public int maxScoreSightseeingPair(int[] values) {
+        int n=values.length;
+        int[] prevMax=new int[n];
+        prevMax[0]=values[0]+0;
+        prevMax[1]=values[0]+0;
+
+        for(int i=2;i<n;i++){
+            prevMax[i]=Math.max(prevMax[i-1],values[i-1]+i-1);
+        }
+
+        int ans=Integer.MIN_VALUE;
+        for(int i=1;i<n;i++){
+            ans=Math.max(ans,prevMax[i]+values[i]-i);
+        }
+
+        return ans;
+    }
+}
