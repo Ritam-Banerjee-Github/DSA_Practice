@@ -1,0 +1,19 @@
+class Solution {
+    public int waysToSplitArray(int[] nums) {
+        int n=nums.length;
+        int ans=0;  //long as exceeding integer range while adding up sum
+        long total=0;
+        for(int i=0;i<n;i++){
+            total+=nums[i];
+        }
+        
+        long currSum=0;
+        for(int i=0;i<n-1;i++){
+           currSum+=nums[i];
+           long remainingSum=total-currSum;
+           if(currSum>=remainingSum) ans++;
+        }
+
+        return ans;
+    }
+}
