@@ -1,0 +1,114 @@
+Approach 1 : Time Limit Exceeded - 38 / 39 testcases passed
+class Solution {
+    public String shiftingLetters(String s, int[][] shifts) {
+        int n=s.length();
+        int[] count=new int[n];
+
+        char [] wrap=new char [52];
+        for(int i=0;i<26;i++){
+            wrap[i]=(char)(i+'a');
+            wrap[i+26]=(char)(i+'a');
+        }
+
+        for(int[] shift:shifts){
+            int start=shift[0];
+            int end=shift[1];
+            int direction=shift[2];
+
+            for(int i=start;i<=end;i++){
+                if(direction==1){
+                   count[i]++;
+                }else{
+                   count[i]--;
+                }
+            }
+        }
+
+        char[] charArray=s.toCharArray();
+
+            for(int i=0;i<charArray.length;i++){
+                int shiftCount=count[i]%26;
+                if(shiftCount<0){
+                    char currChar=charArray[i];
+                    int indexLast=(currChar-'a')+26;
+                    int newIndex=indexLast-Math.abs(shiftCount);
+                    charArray[i]=wrap[newIndex];
+
+                }else{
+                    char currChar=charArray[i];
+                    int indexFirst=currChar-'a';
+                    int newIndex=indexFirst+shiftCount;
+                    charArray[i]=wrap[newIndex];
+                }
+            }
+
+           StringBuilder ans=new StringBuilder();
+           for(char ch: charArray){
+            ans.append(ch);
+           }
+
+           return ans.toString();
+    }
+}
+
+Aproach 2 : Differene Array Solution
+class Solution {
+    public String shiftingLetters(String s, int[][] shifts) {
+        int n=s.length();
+        int[] count=new int[n];
+
+        char [] wrap=new char [52];
+        for(int i=0;i<26;i++){
+            wrap[i]=(char)(i+'a');
+            wrap[i+26]=(char)(i+'a');
+        }
+
+        for(int[] shift:shifts){
+            int start=shift[0];
+            int end=shift[1];
+            int direction=shift[2];
+
+            if (direction == 1) { // Forward shift
+                count[start] += 1;
+                if (end + 1 < n) {
+                    count[end + 1] -= 1;
+                }
+            } else { // Backward shift
+                count[start] -= 1;
+                if (end + 1 < n) {
+                    count[end + 1] += 1;
+                }
+            }
+        }
+
+        // Step 2: Compute the prefix sum to get the net shifts for each character
+        for (int i = 1; i < n; i++) {
+            count[i] += count[i - 1]; // Add the value from the previous index
+        }
+
+        char[] charArray=s.toCharArray();
+
+            for(int i=0;i<charArray.length;i++){
+                int shiftCount=count[i]%26;
+                if(shiftCount<0){
+                    char currChar=charArray[i];
+                    int indexLast=(currChar-'a')+26;
+                    int newIndex=indexLast-Math.abs(shiftCount);
+                    charArray[i]=wrap[newIndex];
+
+                }else{
+                    char currChar=charArray[i];
+                    int indexFirst=currChar-'a';
+                    int newIndex=indexFirst+shiftCount;
+                    charArray[i]=wrap[newIndex];
+                }
+            }
+
+           StringBuilder ans=new StringBuilder();
+           for(char ch: charArray){
+            ans.append(ch);
+           }
+
+           return ans.toString();
+    }
+}
