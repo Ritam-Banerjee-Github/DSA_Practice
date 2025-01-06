@@ -1,0 +1,22 @@
+Approcha 1: Brute Force
+class Solution {
+    public int[] minOperations(String boxes) {
+        int n=boxes.length();
+        int[] ans=new int[n];
+
+        Set<Integer> set=new HashSet<>();
+        for(int i=0;i<n;i++){
+            if(boxes.charAt(i)=='1') set.add(i);
+        }
+
+        for(int i=0;i<n;i++){
+            int sum=0;
+            for(int index:set){
+                sum+=Math.abs(i-index);
+            }
+            ans[i]=sum;
+        }
+
+        return ans;
+    }
+}
