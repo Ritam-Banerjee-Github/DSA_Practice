@@ -1,0 +1,27 @@
+Wonderful Discussion - Just imagine if we have  a string and we have to check palindrome so the number of odd frequency of a character should be 0 or 1
+class Solution {
+    public boolean canConstruct(String s, int k) {
+
+        if(k>s.length()) return false;
+        if(s.length()==k) return true;
+        int[] frequency=new int[26];
+
+        for(int i=0;i<s.length();i++){
+            char ch=s.charAt(i);
+            frequency[ch-'a']++;
+        }
+
+        int evenCount=0;
+        int oddCount=0;
+
+        for(int i=0;i<26;i++){
+            if(frequency[i]%2==0){
+                evenCount++;
+            }else{
+                oddCount++;
+            }
+        }
+
+        return oddCount<=k;
+    }
+}
