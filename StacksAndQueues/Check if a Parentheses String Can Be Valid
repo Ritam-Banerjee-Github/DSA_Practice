@@ -1,0 +1,39 @@
+class Solution {
+    public boolean canBeValid(String s, String locked) {
+        int n=s.length();
+        if(n%2!=0) return false;
+
+        Stack<Integer> open=new Stack<>();
+        Stack<Integer> openClosed=new Stack<>();
+
+        for(int i=0;i<n;i++){
+            char ch=s.charAt(i);
+            char isLock=locked.charAt(i);
+
+            if(isLock=='1'){
+                 if(ch=='('){
+                    open.add(i);
+                 }else if(ch==')') {
+                    if(!open.isEmpty()){
+                        open.pop();
+                    }else if(!openClosed.isEmpty()){
+                        openClosed.pop();
+                    }else{
+                        return false;
+                    }
+                 }
+            }else{
+               openClosed.add(i);
+            }
+        }
+
+
+        while(!open.isEmpty() && !openClosed.isEmpty() && open.peek()<openClosed.peek()){
+            open.pop();
+            openClosed.pop();
+        }
+
+        return open.isEmpty();  //As the ramaining in openClosed will always be even (Even-even) as the removal from open stack wil be in pairs. And since it is a pair of open and closed in openClose stack, it will always be valid
+
+    }
+}
