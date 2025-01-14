@@ -1,0 +1,49 @@
+Approach 1 : Brute Force
+class Solution {
+    public int[] findThePrefixCommonArray(int[] A, int[] B) {
+        int n=A.length;
+        Set<Integer> setA=new HashSet<>();
+        Set<Integer> setB=new HashSet<>();
+        int[] ans=new int[n];
+        for(int i=0;i<n;i++){
+            setA.add(A[i]);
+            setB.add(B[i]);
+            int count=0;
+            for(int num:setA){
+                if(setB.contains(num)) count++;
+            }
+
+            ans[i]=count;
+        }
+
+        return ans;
+    }
+}
+
+Approach 2 : Since at a time, only two new elements are added. We can add to prev count
+TC : O(N)
+SC : O(N)
+class Solution {
+    public int[] findThePrefixCommonArray(int[] A, int[] B) {
+        int n=A.length;
+        Set<Integer> setA=new HashSet<>();
+        Set<Integer> setB=new HashSet<>();
+        int[] ans=new int[n];
+        int count=0;
+
+        for(int i=0;i<n;i++){
+            setA.add(A[i]);
+            setB.add(B[i]);
+
+            if(setA.contains(B[i])) count++;
+            if(setB.contains(A[i])) count++;
+
+            if(A[i]==B[i]) count--; // If same elements, then we would have added twice. So, need to decrease 1 count
+
+
+            ans[i]=count;
+        }
+
+        return ans;
+    }
+}
