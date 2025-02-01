@@ -1,0 +1,85 @@
+Optimal Approach - Form groups. Replace each 1 with unique groupIds, and then store the count for each group in a map.
+Then another traversal to get the DISTINCT(Set) group wise counts(4-directional) and add 1(for current 0 to 1)
+class Solution {
+    public int largestIsland(int[][] grid) {
+        int n=grid.length;
+        int ans=0;
+        Map<Integer,Integer> groupSizeMap=new HashMap<>();
+        int groupId=2;
+        int[][] visited=new int[n][n];
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+               if(grid[i][j]==1 && visited[i][j]==0){
+                 int size=dfsGroupSizeMapping(i,j,groupId,n,grid,visited);
+                 groupSizeMap.put(groupId,size);
+                 groupId++;
+               }
+            }
+        }
+
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==0){
+                    int top=0;
+                    int down=0;
+                    int right=0;
+                    int left=0;
+                    
+                    Set<Integer> groupIdSet=new HashSet<>();
+
+                    if(i-1>=0 && !groupIdSet.contains(grid[i-1][j])){
+                        top=groupSizeMap.getOrDefault(grid[i-1][j],0);
+                        groupIdSet.add(grid[i-1][j]);
+                    }
+
+                    if(j+1<n && !groupIdSet.contains(grid[i][j+1])){
+                        right=groupSizeMap.getOrDefault(grid[i][j+1],0);
+                        groupIdSet.add(grid[i][j+1]);
+                    }
+
+                    if(i+1<n && !groupIdSet.contains(grid[i+1][j])){
+                        down=groupSizeMap.getOrDefault(grid[i+1][j],0);
+                        groupIdSet.add(grid[i+1][j]);
+                    }
+
+                    if(j-1>=0 && !groupIdSet.contains(grid[i][j-1])){
+                        left=groupSizeMap.getOrDefault(grid[i][j-1],0);
+                        groupIdSet.add(grid[i][j-1]);
+                    }
+
+                    int currAns=top+right+down+left+1;
+                    ans=Math.max(ans,currAns);
+                }
+            }
+
+        }
+
+
+        return ans==0? n*n : ans;
+    }
+
+
+    private int dfsGroupSizeMapping(int row,int col,int groupId,int n, int[][] grid, int[][] visited){
+        int count=1;
+        visited[row][col]=1;
+        grid[row][col]=groupId;
+
+        int[] delRow=new int[]{0,1,0,-1};
+        int[] delCol=new int[]{1,0,-1,0};
+
+        for(int i=0;i<4;i++){
+            int nrow=row+delRow[i];
+            int ncol=col+delCol[i];
+
+            if(nrow>=0 && nrow<n && ncol>=0 && ncol<n && grid[nrow][ncol]==1 && visited[nrow][ncol]==0){
+                count+=dfsGroupSizeMapping(nrow,ncol,groupId,n,grid,visited);
+            }
+        }
+
+        return count;
+    }
+
+
+}
