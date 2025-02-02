@@ -1,0 +1,28 @@
+Approach 1 : TC - O(N)+O(N)+O(NlogN)+O(N)
+class Solution {
+    public boolean check(int[] nums) {
+        int n=nums.length;
+        int pivotIndex=-1;
+        for(int i=0;i<n-1;i++){
+           if(nums[i]>nums[i+1] && pivotIndex!=-1) return false;
+
+           if(nums[i]>nums[i+1]) pivotIndex=i;
+        }
+
+        if(pivotIndex==-1) return true; // All sorted
+
+        int[] sortedNums=Arrays.copyOf(nums,nums.length);
+        Arrays.sort(sortedNums);
+
+        int i=pivotIndex+1;
+        int j=0;
+
+        while(j<n){
+            if(nums[i%n]!=sortedNums[j]) return false;
+            i++;
+            j++;
+        }
+
+        return true;
+    }
+}
