@@ -1,0 +1,23 @@
+Optimal : Math Approach
+For each pair of product, do nC2 (n > 1), and multiply by 8. As each tuple can have 8 pemutations
+class Solution {
+    public int tupleSameProduct(int[] nums) {
+        int n=nums.length;
+        int ans=0;
+        Map<Integer,Integer> map=new HashMap<>();
+
+        for(int i=0;i<n;i++){
+         for(int j=i+1;j<n;j++){
+            map.put(nums[i]*nums[j],map.getOrDefault(nums[i]*nums[j],0)+1);
+         }
+        }
+
+        for(int value:map.values()){
+            if(value>1){
+                ans+=((value*(value-1)/2)*8);
+            }
+        }
+      
+        return ans;
+    }
+}
