@@ -1,0 +1,32 @@
+Approach 1 : HashMap with HashSet simulation
+class Solution {
+    public int[] queryResults(int limit, int[][] queries) {
+        Map<Integer,Set<Integer>> colorMap=new HashMap<>();
+        Map<Integer,Integer> labelMap=new HashMap<>();
+        int[] ans=new int[queries.length];
+        int index=0;
+
+        for(int[] query : queries){
+           int number=query[0];
+           int color=query[1];
+
+           if(labelMap.containsKey(number)){
+              int colorKey=labelMap.get(number);
+              if(colorMap.get(colorKey).size()>1){
+                colorMap.get(colorKey).remove(number);
+              }else{
+                colorMap.remove(colorKey);
+              }
+              labelMap.remove(number);
+           }
+
+           colorMap.computeIfAbsent(color,x->new HashSet<>()).add(number);
+           labelMap.put(number,color);
+
+           ans[index]=colorMap.size();
+           index++;
+        }
+
+        return ans;
+    }
+}
