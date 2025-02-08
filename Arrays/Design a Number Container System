@@ -1,0 +1,71 @@
+Approach 1 : TLE - 44/45 test cases passed.
+class NumberContainers {
+    private Map<Integer,Integer> indexMap;
+    private Map<Integer,PriorityQueue<Integer>> numberMap;
+
+
+    public NumberContainers() {
+        this.indexMap=new HashMap<>();
+        this.numberMap=new HashMap<>();
+    }
+    
+    public void change(int index, int number) {
+
+        if(indexMap.containsKey(index)){
+            int existingNumber=indexMap.get(index);
+            numberMap.get(existingNumber).remove(index);
+
+            if(numberMap.get(existingNumber).size()==0) numberMap.remove(existingNumber);
+        }
+
+        indexMap.put(index,number);
+        
+        numberMap.computeIfAbsent(number,x->new PriorityQueue<Integer>()).add(index);
+        
+    }
+    
+    public int find(int number) {
+        if(numberMap.containsKey(number)) return numberMap.get(number).peek();
+        
+        return -1;
+    }
+}
+
+Approach 2 : Optimal (TreeSet instead of PQ)
+class NumberContainers {
+    private Map<Integer, Integer> indexMap; // Maps index -> number
+    private Map<Integer, TreeSet<Integer>> numberMap; // Maps number -> sorted set of indices
+
+    public NumberContainers() {
+        this.indexMap = new HashMap<>();
+        this.numberMap = new HashMap<>();
+    }
+
+    public void change(int index, int number) {
+        // If index already has a number, remove it from its TreeSet
+        if (indexMap.containsKey(index)) {
+            int existingNumber = indexMap.get(index);
+            TreeSet<Integer> indices = numberMap.get(existingNumber);
+            indices.remove(index);
+
+            // If TreeSet is empty after removal, remove the entry from numberMap
+            if (indices.isEmpty()) {
+                numberMap.remove(existingNumber);
+            }
+        }
+
+        // Update indexMap with new number
+        indexMap.put(index, number);
+
+        // Insert index into the TreeSet for the given number
+        numberMap.computeIfAbsent(number, x -> new TreeSet<>()).add(index);
+    }
+
+    public int find(int number) {
+        // Ensure number exists in numberMap and its TreeSet is not empty
+        if (numberMap.containsKey(number) && !numberMap.get(number).isEmpty()) {
+            return numberMap.get(number).first(); // Get the smallest index
+        }
+        return -1; // If number is not present or set is empty
+    }
+}
