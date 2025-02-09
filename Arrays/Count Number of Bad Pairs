@@ -1,0 +1,36 @@
+Brute Force - 
+Normal O(n^2) solution. You can think on your own. But will give TLE, so jump to Optimal solution
+
+Optimal Solution -
+Change the equation in such scenarios where relation b/w element and index is given :
+j - i != nums[j] - nums[i] =>  nunm[i] - i != nums[j] - j
+The store and fetch count from map.
+
+class Solution {
+    public long countBadPairs(int[] nums) {
+        int n=nums.length;
+        int[] modifiedArray=new int[n];
+        long ans=0;
+
+        for(int i=0;i<n;i++){
+            modifiedArray[i]=nums[i]-i;
+        }
+
+        Map<Integer,Integer> countMap=new HashMap<>();
+
+        for(int i=0;i<n;i++){
+            if(i==0){
+                countMap.put(modifiedArray[i],1);
+                continue;
+            }
+
+            int totalPairsTillNow=i;
+            int prevSameCount=countMap.getOrDefault(modifiedArray[i],0);
+            ans+=totalPairsTillNow-prevSameCount;
+
+            countMap.put(modifiedArray[i],countMap.getOrDefault(modifiedArray[i],0)+1);
+        }
+
+        return ans;
+    }
+}
