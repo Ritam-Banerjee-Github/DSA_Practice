@@ -1,0 +1,72 @@
+BackTracking Template -
+Approach 1 : My Original Code (Take/Not-take). All Passed.
+class Solution {
+    private Set<String> ans;
+    
+    private void compute(int i, int n, String sequence, Set<Integer> index, String tiles){
+        if(i>=n){
+            if(sequence.length()>0) ans.add(sequence);
+
+            return;
+        }
+
+//Not take
+        compute(i+1,n,sequence,index,tiles);
+
+//Take any 1 
+        for(int j=0;j<n;j++){
+            if(index.contains(j)) continue;
+
+            index.add(j);
+            sequence+=tiles.charAt(j);
+
+            compute(i+1,n,sequence,index,tiles);
+
+            index.remove(j);
+            sequence=sequence.substring(0,sequence.length()-1);
+        }
+    }
+    
+    public int numTilePossibilities(String tiles) {
+     this.ans=new HashSet<>();
+     int n=tiles.length();
+     Set<Integer> index=new HashSet<>();
+
+     compute(0,n,"",index,tiles);
+
+     return ans.size();    
+    }
+}
+
+Approach 2 -
+ T.C : O(n!)
+ S.C : O(n * n!), total possible sequences = n! and each having n length
+class Solution {
+    private Set<String> ans;
+    
+    private void compute(int i, int n, String sequence, Set<Integer> index, String tiles){
+        if(sequence.length()>0) ans.add(sequence);
+
+        for(int j=0;j<n;j++){
+            if(index.contains(j)) continue;
+
+            index.add(j);
+            sequence+=tiles.charAt(j);
+
+            compute(i+1,n,sequence,index,tiles);
+
+            index.remove(j);
+            sequence=sequence.substring(0,sequence.length()-1);
+        }
+    }
+
+    public int numTilePossibilities(String tiles) {
+     this.ans=new HashSet<>();
+     int n=tiles.length();
+     Set<Integer> index=new HashSet<>();
+
+     compute(0,n,"",index,tiles);
+
+     return ans.size();    
+    }
+}
