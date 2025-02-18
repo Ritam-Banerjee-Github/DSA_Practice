@@ -1,0 +1,99 @@
+My Code : Accepted
+Approach : BackTracking
+
+class Solution {
+    List<String> ans=new ArrayList<>();
+
+    public String smallestNumber(String pattern) {
+        int n=pattern.length();
+        Set<Integer> set=new HashSet<>();
+        compute(0,0,n,"",pattern,set);
+
+        return ans.get(0);
+    }
+
+    private void compute(int i,int count, int length,String temp, String pattern, Set<Integer> set){
+        if(count==length+1){
+            if(ans.size()==0 && temp.length()==length+1){
+                ans.add(temp);
+            }
+
+            return;
+        }
+
+        for(int j=1;j<=9;j++){
+            if(i==0){
+
+              temp=temp+j;
+              set.add(j);
+              compute(i+1,count+1,length,temp,pattern,set);
+              temp=temp.substring(0,temp.length()-1);
+              set.remove(j);
+
+            }else{
+               if(pattern.charAt(i-1)=='I' && (temp.charAt(count-1)-'0' <j && !set.contains(j))){
+
+                temp=temp+j;
+                set.add(j);
+                compute(i+1,count+1,length,temp,pattern,set);
+                temp=temp.substring(0,temp.length()-1);
+                set.remove(j);
+
+
+               }else if(pattern.charAt(i-1)=='D' && (temp.charAt(count-1)-'0' >j && !set.contains(j) )){
+                   temp=temp+j;
+                   set.add(j);
+                   compute(i+1,count+1,length,temp,pattern,set);
+                   temp=temp.substring(0,temp.length()-1);
+                   set.remove(j);
+               }
+            }
+            
+        }
+    }
+}
+
+Approach 2 : Better (Faster)
+Backtracking
+class Solution {
+    List<String> ans = new ArrayList<>();
+
+    public String smallestNumber(String pattern) {
+        int n = pattern.length();
+        Set<Integer> set = new HashSet<>();
+        compute(0, 0, n, new StringBuilder(), pattern, set);
+        return ans.get(0);
+    }
+
+    private void compute(int i, int count, int length, StringBuilder temp, String pattern, Set<Integer> set) {
+        if (count == length + 1) {
+            if (ans.isEmpty()) {
+                ans.add(temp.toString());
+            }
+            return;
+        }
+
+        for (int j = 1; j <= 9; j++) {
+            if (!set.contains(j)) {
+                if (i == 0 || (pattern.charAt(i - 1) == 'I' && temp.charAt(count - 1) - '0' < j)
+                        || (pattern.charAt(i - 1) == 'D' && temp.charAt(count - 1) - '0' > j)) {
+
+                    temp.append(j);
+                    set.add(j);
+                    compute(i + 1, count + 1, length, temp, pattern, set);
+                    temp.deleteCharAt(temp.length() - 1);
+                    set.remove(j);
+                    
+                    // Ensure that the first valid solution is found (lexicographically smallest)
+                    if (!ans.isEmpty()) return;
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+        System.out.println(sol.smallestNumber("IIIDIDDD")); // Expected: "123549876"
+        System.out.println(sol.smallestNumber("DDD")); // Expected: "4321"
+    }
+}
