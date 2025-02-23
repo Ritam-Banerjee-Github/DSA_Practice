@@ -1,0 +1,30 @@
+class Solution {
+    public TreeNode constructFromPrePost(int[] preorder, int[] postorder) {
+        int n=preorder.length;
+        
+        return compute(0,n-1,0,preorder,postorder);  //PostEnd not required
+    }
+
+    private TreeNode compute(int preStart, int preEnd, int postStart, int[] preorder, int[] postorder){
+        if(preStart>preEnd) return null;
+
+        if(preStart==preEnd){
+            TreeNode root=new TreeNode(preorder[preStart]);
+            return root;
+        }
+
+        TreeNode root=new TreeNode(preorder[preStart]);
+        int leftRoot=preorder[preStart+1];
+        int j=postStart;
+        while(postorder[j]!=leftRoot){
+            j++;
+        }
+
+        int leftSubtreeCount=j-postStart+1;
+
+        root.left=compute(preStart+1,preStart+leftSubtreeCount,postStart,preorder,postorder);
+        root.right=compute(preStart+leftSubtreeCount+1,preEnd,j+1,preorder,postorder);
+
+        return root;
+    }
+}
