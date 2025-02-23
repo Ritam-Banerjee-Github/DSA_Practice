@@ -1,5 +1,5 @@
 TC - O(n*n)
-SC - O(n)
+SC - O(n) : Stack Space
 
 class Solution {
     public TreeNode constructFromPrePost(int[] preorder, int[] postorder) {
