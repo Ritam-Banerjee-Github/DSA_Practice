@@ -1,3 +1,6 @@
+TC - O(n*n)
+SC - O(n)
+
 class Solution {
     public TreeNode constructFromPrePost(int[] preorder, int[] postorder) {
         int n=preorder.length;
