@@ -1,0 +1,24 @@
+class Solution {
+    public int maxAbsoluteSum(int[] nums) {
+        int n = nums.length;
+
+        int currSubSum = nums[0];
+        int maxSubSum = nums[0];
+
+        //Kadane's Algo for finding max subarray sum - Should I start a new subarray from here, or keep adding on prev subarray?
+        for (int i = 1; i < n; i++) {
+            currSubSum = Math.max(nums[i], currSubSum + nums[i]);
+            maxSubSum = Math.max(maxSubSum, currSubSum);
+        }
+
+        //Kadane's Algo for finding min subarray sum
+        int minSubSum = nums[0];
+        currSubSum = nums[0];
+        for (int i = 1; i < n; i++) {
+            currSubSum = Math.min(nums[i], currSubSum + nums[i]);
+            minSubSum = Math.min(minSubSum, currSubSum);
+        }
+
+        return Math.max(maxSubSum, Math.abs(minSubSum));
+    }
+}
