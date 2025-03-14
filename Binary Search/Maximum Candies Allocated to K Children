@@ -1,0 +1,36 @@
+class Solution {
+    public int maximumCandies(int[] candies, long k) {
+        int ans=0;
+        int high=Integer.MIN_VALUE;
+        int low=1;
+
+        int n=candies.length;
+        for(int i=0;i<n;i++){
+            high=Math.max(high,candies[i]);
+        }
+
+        while(low<=high){
+            int mid=low+(high-low)/2;
+
+            if(isPossible(mid,candies,k,n)){
+                ans=mid;
+                low=mid+1;
+            }else{
+                high=mid-1;
+            }
+        }
+
+        return ans;
+    }
+
+    private boolean isPossible(int number,int[] candies, long k, int n){
+        long count=0;
+        for(int i=0;i<n;i++){
+            count+=candies[i]/number;
+
+            if(count>=k) return true;
+        }
+
+        return false;
+    }
+}
