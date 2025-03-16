@@ -1,0 +1,41 @@
+//Formula : Time=Rank*(Number of Cars)^2
+
+class Solution {
+    public long repairCars(int[] ranks, int cars) {
+      long ans=0;
+      int n=ranks.length;
+      long mini=Integer.MAX_VALUE;
+      long maxi=Integer.MIN_VALUE;
+
+      for(int i=0;i<n;i++){
+        mini=Math.min(mini,ranks[i]);
+        maxi=Math.max(maxi,ranks[i]);
+      } 
+
+      long low=mini;
+      long high=maxi*cars*cars;
+
+      while(low<=high){
+        long mid=low+(high-low)/2;
+
+        if(isPossible(mid,ranks,cars,n)){
+            ans=mid;
+            high=mid-1;
+        }else{
+            low=mid+1;
+        }
+      }
+      return ans;
+
+    }
+
+    private boolean isPossible(long time, int[] ranks, int cars,int n){
+        int number=0;
+        for(int i=0;i<n;i++){
+          number+=(int)(Math.sqrt(time/ranks[i]));  
+          if(number>=cars) return true;
+        }
+
+        return false;
+    }
+}
