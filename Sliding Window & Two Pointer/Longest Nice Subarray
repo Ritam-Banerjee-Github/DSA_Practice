@@ -1,0 +1,27 @@
+class Solution {
+    public int longestNiceSubarray(int[] nums) {
+        int ans=1; //Given in question
+        int n=nums.length;
+        
+        int start=0;
+        int end=0;
+        int mask=0;
+
+        while(end<n){
+           
+           if((mask&nums[end]) == 0 ){
+            ans=Math.max(ans,end-start+1);
+           }
+
+           while((mask&nums[end]) !=0 ){
+            mask=mask^nums[start];
+            start++;
+           }
+           
+           mask=mask|nums[end];
+           end++;
+        }
+
+        return ans;
+    }
+}
