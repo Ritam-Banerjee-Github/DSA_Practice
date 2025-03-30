@@ -1,0 +1,33 @@
+class Solution {
+    public List<Integer> partitionLabels(String s) {
+        List<Integer> ans=new ArrayList<>();
+        int n=s.length();
+        int[] lastIndex=new int[26];
+
+        for(int i=0;i<n;i++){
+            lastIndex[s.charAt(i)-'a']=i;
+        }
+
+        int start=0;
+        int end=0;
+        int pointer=0;
+
+        while(start<n){
+          end=lastIndex[s.charAt(start)-'a'];
+
+           //It is double loops, but all elements will be visited only 1 time. so, TC = O(N) 
+           //end will always point to the last occurence index of any character. It won't be any new character.
+          while(pointer<end){
+            end=Math.max(end,lastIndex[s.charAt(pointer)-'a']);
+            pointer++;
+          }
+           
+          ans.add(pointer-start+1);
+          start=pointer+1; 
+          pointer++;
+        }
+
+        return ans;
+
+    }
+}
