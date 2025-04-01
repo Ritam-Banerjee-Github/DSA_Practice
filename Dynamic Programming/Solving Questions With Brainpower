@@ -1,0 +1,21 @@
+Approach 1 : Recursion + Memoization (Self Solve)
+class Solution {
+    public long mostPoints(int[][] questions) {
+        int n=questions.length;
+        long[] dp=new long[n+1];
+        Arrays.fill(dp,-1);
+
+        return solve(0,n,dp,questions);
+    }
+
+    private long solve(int i, int n, long[] dp, int[][] questions){
+        if(i>=n) return 0;
+
+        if(dp[i]!=-1) return dp[i];
+
+        long take=questions[i][0] + solve(i+questions[i][1]+1,n,dp,questions);
+        long notTake=solve(i+1,n,dp,questions);
+
+        return dp[i]=Math.max(take,notTake);
+    }
+}
