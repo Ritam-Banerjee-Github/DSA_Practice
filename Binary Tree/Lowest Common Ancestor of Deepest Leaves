@@ -1,0 +1,34 @@
+class Solution {
+    private Map<Integer,Integer> depthMap=new HashMap<>();
+    int maxDepth=0;
+
+    private void depth(TreeNode root, int currDepth){
+        if(root==null) return;
+        if(root.left==null && root.right==null) depthMap.put(root.val,currDepth);
+
+        maxDepth=Math.max(maxDepth,currDepth);
+
+        depth(root.left,currDepth+1);
+        depth(root.right,currDepth+1);
+    }
+
+
+    private TreeNode LCA(TreeNode root){
+    if (root == null) return null;
+
+    // If it's a leaf at max depth, return it
+    if (root.left == null && root.right == null && depthMap.getOrDefault(root.val, -1) == maxDepth)
+        return root;
+
+    TreeNode left = LCA(root.left);
+    TreeNode right = LCA(root.right);
+
+    if (left != null && right != null) return root;
+    return (left != null) ? left : right;
+}
+    public TreeNode lcaDeepestLeaves(TreeNode root) {
+        depth(root,0);
+
+        return LCA(root);
+    }
+}
