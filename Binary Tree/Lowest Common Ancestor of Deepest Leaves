@@ -14,11 +14,7 @@ class Solution {
 
 
     private TreeNode LCA(TreeNode root){
-    if (root == null) return null;
-
-    // If it's a leaf at max depth, return it
-    if (root.left == null && root.right == null && depthMap.getOrDefault(root.val, -1) == maxDepth)
-        return root;
+    if (root == null || depthMap.getOrDefault(root.val, -1) == maxDepth) return root;
 
     TreeNode left = LCA(root.left);
     TreeNode right = LCA(root.right);
