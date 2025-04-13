@@ -1,0 +1,31 @@
+// Even digits - 0,2,4,6,8 (5)
+// Prime digits - 2,3,5,7 (4)
+// findPower(a,b) - When the power is very high for any multiplication (Math.pow(a,b)), use Binary Exponentiation function to calculate 
+//                  the answer of power. In log(b) Time Complexity. Here, in this question, 1 <= n <= 10^15
+          
+class Solution {
+    int mod=(int)(1e9+7);
+
+    public int countGoodNumbers(long n) {
+        long result=0;
+        long evenDigitCount=(n+1)/2;
+        long oddDigitCount=n/2;
+
+        result=(findPower(5,evenDigitCount)*findPower(4,oddDigitCount))%mod;
+        return (int)result;
+    }
+
+// Binary Exponentiation function to calculate answer of power -
+    private long findPower(long a, long b){
+        if(b==0) return 1;
+        long half=findPower(a,b/2);
+
+        long result=(half*half)%mod;
+
+        if(b%2==1){
+           result=(result*a)%mod;
+        }
+
+        return result;
+    }
+}
