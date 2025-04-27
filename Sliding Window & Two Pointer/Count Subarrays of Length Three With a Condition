@@ -1,0 +1,29 @@
+Approach - Three Pointer
+TC - O(N)
+class Solution {
+    public int countSubarrays(int[] nums) {
+        int n=nums.length;
+        int start=0;
+        int mid=1;
+        int end=2;
+        int ans=0;
+
+        while(end<n){
+
+          if (nums[mid] % 2 == 0) { // Only proceed if mid is even, as problem states "exactly divides"
+                int half = nums[mid] / 2;
+                if (nums[start] + nums[end] == half) {
+                    ans++;
+                }
+            }
+
+         start=mid;
+         mid=end;
+         end++;
+
+        }
+
+
+        return ans;
+    }
+}
