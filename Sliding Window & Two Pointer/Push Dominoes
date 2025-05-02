@@ -1,0 +1,47 @@
+class Solution {
+    public String pushDominoes(String dominoes) {
+        String ans="";
+        int n=dominoes.length();
+
+        int[] leftToRightR=new  int[n];
+        int[] rightToLeftL=new int[n];
+
+        for(int i=0;i<n;i++){
+            if(dominoes.charAt(i)=='L'){
+                leftToRightR[i]=-1;
+            }else if(dominoes.charAt(i)=='R'){
+                leftToRightR[i]=i;
+            }else{
+                leftToRightR[i]=i>0? leftToRightR[i-1]:-1;
+            }
+        }
+
+        for(int i=n-1;i>=0;i--){
+            if(dominoes.charAt(i)=='R'){
+                rightToLeftL[i]=-1;
+            }else if(dominoes.charAt(i)=='L'){
+               rightToLeftL[i]=i; 
+            }else{
+                rightToLeftL[i]=i<n-1?rightToLeftL[i+1]:-1;
+            }
+        }
+
+        for(int i=0;i<n;i++){
+            int distLeftToRightR= leftToRightR[i] == -1 ? Integer.MAX_VALUE :  Math.abs(i-leftToRightR[i]);
+            int distRightToLeftR= rightToLeftL[i] == -1 ? Integer.MAX_VALUE : Math.abs(i-rightToLeftL[i]);
+
+            if(distLeftToRightR==distRightToLeftR || leftToRightR[i]==rightToLeftL[i]){
+                ans+=".";
+            }else if(leftToRightR[i]==-1){
+                ans+="L";
+            }else if(rightToLeftL[i]==-1){
+                 ans+="R";
+            }else if(distLeftToRightR>distRightToLeftR){
+                  ans+="L";
+            }else{
+                ans+="R";
+            }
+        }
+        return ans;
+    }
+}
