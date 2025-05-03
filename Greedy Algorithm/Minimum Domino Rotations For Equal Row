@@ -1,0 +1,44 @@
+class Solution {
+    public int minDominoRotations(int[] tops, int[] bottoms) {
+        int ans=Integer.MAX_VALUE;
+        int n=tops.length;
+
+        for(int value=1;value<=6;value++){
+
+            int countTop=0;
+            int countBottom=0;
+            boolean isPossible=true;
+
+            for(int i=0;i<n;i++){
+                if(tops[i]==value) continue;
+
+                if(bottoms[i]==value){
+                    countTop++;
+                }else{
+                    countTop=0;
+                    isPossible=false;
+                    break;
+                }
+            }
+
+            if(isPossible) ans=Math.min(ans,countTop);
+            isPossible=true;
+
+            for(int i=0;i<n;i++){
+                if(bottoms[i]==value) continue;
+
+                if(tops[i]==value){
+                    countBottom++;
+                }else{
+                    countBottom=0;
+                    isPossible=false;
+                    break;
+                }
+            }
+
+            if(isPossible) ans=Math.min(ans,countBottom);
+        }
+
+        return ans==Integer.MAX_VALUE?-1:ans;
+    }
+}
