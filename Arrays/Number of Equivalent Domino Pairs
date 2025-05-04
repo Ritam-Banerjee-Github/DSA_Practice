@@ -1,0 +1,30 @@
+class Solution {
+    public int numEquivDominoPairs(int[][] dominoes) {
+        int ans=0;
+        int n=dominoes.length;
+        Map<String,Integer> map=new HashMap<>();
+
+        for(int i=0;i<n;i++){
+            int first=dominoes[i][0];
+            int second=dominoes[i][1];
+            String value="";
+
+            if(first<second){
+               value+=first+"#"+second;
+            }else{
+             value+=second+"#"+first;
+            }
+
+            map.put(value,map.getOrDefault(value,0)+1);
+        }
+
+        for(String key:map.keySet()){
+            if(map.get(key)>1){
+                int num=map.get(key);
+                ans+=(num*(num-1))/2;
+            }
+        }
+        
+        return ans;
+    }
+}
