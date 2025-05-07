@@ -1,0 +1,65 @@
+// Dijkstar's Algoritm
+class Data{
+    int row;
+    int col;
+    int time;
+
+    public Data(int row,int col, int time){
+        this.row=row;
+        this.col=col;
+        this.time=time;
+    }
+}
+
+class Solution {
+    public int minTimeToReach(int[][] moveTime) {
+        int ans=0;
+        int n=moveTime.length;
+        int m=moveTime[0].length;
+
+        int[][] distance=new int[n][m];
+        for(int[] row:distance){
+            Arrays.fill(row,Integer.MAX_VALUE);
+        }
+
+        PriorityQueue<Data> pq=new PriorityQueue<Data>(new Comparator<Data>(){
+            public int compare(Data a, Data b){
+                if(a.time<b.time) return -1;
+                if(a.time>b.time) return 1;
+                return 0;
+            }
+        });
+        
+        distance[0][0]=0;
+        pq.add(new Data(0,0,0));
+
+        while(!pq.isEmpty()){
+            Data d=pq.remove();
+            int row=d.row;
+            int col=d.col;
+            int currTime=d.time;
+
+            if(row==n-1 && col==m-1) return currTime;
+
+            int[] delrow={0,1,0,-1};
+            int[] delcol={1,0,-1,0};
+
+            for(int i=0;i<4;i++){
+                int nrow=row+delrow[i];
+                int ncol=col+delcol[i];
+
+                if(nrow>=0 && nrow<n && ncol>=0 && ncol<m){
+
+                    int waitTime=Math.max(moveTime[nrow][ncol]-currTime,0); //In case currTime is less or during start
+                    int arrivalTime=currTime+waitTime+1;
+
+                    if(arrivalTime>=moveTime[nrow][ncol] && distance[nrow][ncol]> arrivalTime){
+                         distance[nrow][ncol]=arrivalTime;
+                         pq.add(new Data(nrow,ncol,arrivalTime));
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+}
