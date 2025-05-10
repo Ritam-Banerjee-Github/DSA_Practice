@@ -1,0 +1,36 @@
+// Approach : First replace all 0s by 1 and add to sum, Then check the conditions with updated sum
+class Solution {
+    public long minSum(int[] nums1, int[] nums2) {
+        int n=nums1.length;
+        int m=nums2.length;
+
+        long sum1=0;
+        long countZero1=0;
+
+        long sum2=0;
+        long countZero2=0;
+
+        for(int i=0;i<n;i++){
+            if(nums1[i]==0){
+              countZero1++;
+              sum1+=1;
+              continue;
+            } 
+            sum1+=nums1[i];
+        }
+
+        for(int i=0;i<m;i++){
+            if(nums2[i]==0){
+               countZero2++;
+               sum2+=1;
+               continue;
+            } 
+            sum2+=nums2[i];
+        }
+
+        if(sum1<sum2 && countZero1==0) return -1;
+        if(sum2<sum1 && countZero2==0) return -1;
+
+        return Math.max(sum1,sum2);
+    }
+}
