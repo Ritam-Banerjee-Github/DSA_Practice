@@ -1,0 +1,44 @@
+Approach 1 - Recursion + Bactracking 
+             TC - O(n^3)
+class Solution {
+    Set<Integer> set=new HashSet<>();
+    
+    private void solve(int i,int n, int sum,int[] digits, Set<Integer> indexSet){
+       if(i==3){
+          if(sum%2==0) set.add(sum);
+          return;
+       }
+
+       for(int j=0;j<n;j++){
+        if(i==0 && digits[j]==0) continue;
+
+        int temp=(sum*10) + digits[j];
+
+        if(!indexSet.contains(j)){
+            indexSet.add(j);
+            solve(i+1,n,temp,digits,indexSet);
+            indexSet.remove(j);
+        }
+
+       }
+    }
+
+    public int[] findEvenNumbers(int[] digits) {
+        int n=digits.length;
+        Set<Integer> indexSet=new HashSet<>();
+        solve(0,n,0,digits,indexSet);
+
+
+        int m=set.size();
+        int[] ans=new int[m];
+        int index=0;
+        for(int num:set){
+          ans[index]=num;
+          index++; 
+        }
+
+        Arrays.sort(ans);
+        return ans;
+        
+    }
+}
