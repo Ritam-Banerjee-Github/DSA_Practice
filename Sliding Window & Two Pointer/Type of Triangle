@@ -1,0 +1,21 @@
+class Solution {
+    public String triangleType(int[] nums) {
+        int firstSide=nums[0];
+        int secondSide=nums[1];
+        int thirdSide=nums[2];
+
+        if(firstSide>=(secondSide+thirdSide) || secondSide>=(firstSide+thirdSide) || thirdSide>=(secondSide+firstSide)) return "none";
+
+        String ans="";
+
+        if(firstSide==secondSide && secondSide==thirdSide){
+            ans="equilateral";
+        }else if(firstSide==secondSide || secondSide==thirdSide || firstSide==thirdSide){
+            ans="isosceles";
+        }else{
+            ans="scalene";
+        }
+
+        return ans;
+    }
+}
