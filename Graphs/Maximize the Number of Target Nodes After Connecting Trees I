@@ -1,0 +1,72 @@
+class Solution {
+    int maxCount=0;
+    public int[] maxTargetNodes(int[][] edges1, int[][] edges2, int k) {
+        int n=edges1.length+1;
+        int m=edges2.length+1;
+
+        List<List<Integer>> adj1=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            adj1.add(new ArrayList<>());
+        }
+
+        List<List<Integer>> adj2=new ArrayList<>();
+        for(int i=0;i<m;i++){
+            adj2.add(new ArrayList<>());
+        }
+
+        for(int[] edge1:edges1){
+            int u=edge1[0];
+            int v=edge1[1];
+
+            adj1.get(u).add(v);
+            adj1.get(v).add(u);
+        }
+
+        for(int[] edge2:edges2){
+            int u=edge2[0];
+            int v=edge2[1];
+
+            adj2.get(u).add(v);
+            adj2.get(v).add(u);
+        }
+
+        int[] ans=new int[n];
+        int[] computeTree2=new int[m];
+
+        for(int i=0;i<m;i++){
+            computeTree2[i]=dfsHelper(i,adj2,k-1);
+        }
+
+        int maxTree2=0;
+        for(int i=0;i<m;i++){
+            maxTree2=Math.max(maxTree2,computeTree2[i]);
+        }
+
+        for(int i=0;i<n;i++){
+            ans[i]=maxTree2+dfsHelper(i,adj1,k);
+        }
+
+        return ans;
+    }
+
+    private int dfsHelper(int node, List<List<Integer>> adj, int maxDistance){
+        maxCount=0;
+        int[] visited=new int[adj.size()];  
+        dfs(node,adj,visited,0,maxDistance);
+        int count=maxCount;
+        maxCount=0;
+        return count;
+    }
+
+    private void dfs(int node, List<List<Integer>> adj, int[] visited, int currLevel, int maxDistance){
+        if(currLevel>maxDistance) return;
+        visited[node]=1;
+         maxCount++;
+
+         for(int next:adj.get(node)){
+            if(visited[next]!=1) dfs(next,adj,visited,currLevel+1,maxDistance);
+         }
+    
+
+    }
+}
