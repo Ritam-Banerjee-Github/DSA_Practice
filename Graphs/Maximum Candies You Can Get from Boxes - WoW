@@ -1,0 +1,46 @@
+TC - O(N) DFS
+
+class Solution {
+    public int maxCandies(int[] status, int[] candies, int[][] keys, int[][] containedBoxes, int[] initialBoxes) {
+        int ans=0;
+        int n=status.length;
+
+        Set<Integer> visited=new HashSet<>();
+        Set<Integer> lockedBoxes=new HashSet<>();
+
+        for(int i=0;i<initialBoxes.length;i++){
+            if(!visited.contains(initialBoxes[i])){
+                ans+= dfs(initialBoxes[i],status,candies,keys,containedBoxes,visited,lockedBoxes);
+            }
+        }
+
+        return ans;
+    }
+
+    private int dfs(int num, int[] status, int[] candies, int[][] keys, int[][] containedBoxes, Set<Integer> visited, Set<Integer> lockedBoxes){
+        if(visited.contains(num)){
+            return 0;
+        }
+        
+        if(status[num]==0){
+           lockedBoxes.add(num);
+           return 0;
+        }
+
+        int candy=candies[num];
+        visited.add(num);
+
+        for(int i=0;i<containedBoxes[num].length;i++ ){
+            candy+=dfs(containedBoxes[num][i],status,candies,keys,containedBoxes,visited,lockedBoxes);
+        }
+
+        for(int boxKey : keys[num]){
+            status[boxKey]=1;
+            if(lockedBoxes.contains(boxKey)){
+                candy+=dfs(boxKey,status,candies,keys,containedBoxes,visited,lockedBoxes);
+            }
+        }
+        
+        return candy;
+    }
+}
