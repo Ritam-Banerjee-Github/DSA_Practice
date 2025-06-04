@@ -1,0 +1,49 @@
+// Two Pointers
+// Lexicographically largest means furthest/largest/last coming in an english dictionary
+
+class Solution {
+    public String answerString(String word, int numFriends) {
+        String ans="";
+        int n=word.length();
+        if(numFriends==1) return word;
+
+        int bestStart=bestStart(word,n);
+        int longestPossible=n-(numFriends-1);
+
+        int length=Math.min(longestPossible,n-bestStart);
+
+        while(length>0){
+          ans+=word.charAt(bestStart);
+          length--;
+          bestStart++;
+        }
+
+        return ans;
+    }
+
+    private int bestStart(String word, int n){
+        int i=0;
+        int j=1;
+
+        while(j<n){
+            if(word.charAt(j)>word.charAt(i)){
+                i=j;
+            }
+            
+            if(word.charAt(i)==word.charAt(j)){
+                int k=1;
+
+                while(j+k<n && word.charAt(j+k)==word.charAt(i+k)){
+                    k++;
+                }
+
+                if(j+k<n && word.charAt(j+k)>word.charAt(i+k)){
+                    i=j;
+                }
+            }
+            j++;
+        }
+
+        return i;
+    }
+}
